@@ -7,3 +7,9 @@ and include it here.
  */
 //my-new-custom-style style:
 //@import "custom/my-new-custom-style";
+
+@import "helper";
+@import "layout";
+@import "header";
+@import "menu";
+@import "buttons";

@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <main id="main" <?php post_class( 'site-main' ); ?> role="main">
 
-	<header class="page-header">
+	<!-- <header class="page-header">
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-	</header>
+	</header> -->
 
 	<div class="page-content">
 		<?php the_content(); ?>
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<?php comments_template(); ?>
+	<?php /* comments_template(); */ ?>
 </main>
 
 <?php endwhile;

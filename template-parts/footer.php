@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <footer id="site-footer" class="site-footer" role="contentinfo">
 
-	<?php // footer ?>
+	<?php if ( function_exists( 'hfe_render_footer' ) ) : ?>
+		<?php hfe_render_footer(); ?>
+	<?php endif; ?>
 
 </footer>

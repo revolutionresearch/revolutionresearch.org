@@ -1,0 +1,103 @@
+#menu-main {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    user-select: none;
+
+    @media(max-width: $desktop-width) {
+        overflow: hidden;
+        transition: 0.2s ease-out;
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+
+        .mobile-menu-open & {
+            max-height: 200px;
+            margin-top: 2rem;
+            opacity: 1;
+        }
+    }
+
+    .menu-item {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-family: "Oswald", sans-serif;
+        font-weight: 500;
+        letter-spacing: -0.2px;
+        font-size: 1rem;
+        line-height: 1;
+
+        a {
+            color: #fff;
+        }
+        
+        &:hover,
+        &.current-menu-item {
+            a {
+                color: $yellow;
+            }
+        }
+
+        @media(min-width: $desktop-width) {
+            margin: 0;
+            display: inline-block;
+        
+            &:not(:first-child) {
+                margin-left: 1.5rem;
+            }
+        }
+    }
+}
+
+#mobile-menu-button {
+    cursor: pointer;
+    user-select: none;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+
+    &:hover .bar {
+        background-color: $yellow;
+    }
+
+    .bar-wrapper {
+        position: relative;
+        height: 1.25rem;
+    }
+    
+    .bar {
+        $height: 2px;
+        $dur: 0.1s;
+
+        position: absolute;
+        width: 1.75rem;
+        height: $height;
+        background-color: #fff;
+        transition:
+            top $dur ease-in $dur,
+            transform $dur ease-in,
+            opacity 0s $dur;
+
+        &--1 { top: 0; }
+        &--2 { top: calc(50% - #{$height / 2}); }
+        &--3 { top: calc(100% - #{$height}); }
+
+        .mobile-menu-open & {
+            transition:
+                top $dur ease-in,
+                transform $dur ease-in $dur,
+                opacity 0s $dur;
+        
+            &--1 {
+                top: calc(50% - #{$height / 2});
+                transform: rotate(45deg);
+            }
+            &--3 {
+                top: calc(50% - #{$height / 2});
+                transform: rotate(-45deg);
+            } 
+            &--2 { opacity: 0; }
+        }
+    }
+}

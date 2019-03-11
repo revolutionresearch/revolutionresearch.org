@@ -1,0 +1,59 @@
+.button {
+    &--arrow {
+
+        .elementor-button {
+            position: relative;
+            z-index: 0;
+            transition: 0.3s;
+    
+            &:before {
+                content: url('data:image/svg+xml; utf8, <svg height="13" width="33" preserveAspectRatio="none" data-bbox="13.182 67.842 173.636 64.317" viewBox="13.182000160217285 67.84199523925781 173.635986328125 64.31700134277344" xmlns="http://www.w3.org/2000/svg" data-type="shape" role="img" style="stroke-width: 0px;"> <g> <path d="M186.818 100l-32.156 32.159-10.523-10.523 14.192-14.193H13.182V92.558H158.33l-14.192-14.193 10.523-10.523L186.818 100z"></path> </g> </svg>');
+                background-color: #fff;
+                position: absolute;
+                z-index: -1;
+                top: 50%;
+                right: 1rem;
+                transform: translateY(-50%);
+                height: 2rem;
+                width: calc(100% + 72px);
+                display: flex;
+                align-items: center;
+                padding-left: 1.5rem;
+                transition: width 0.3s ease-out;
+
+                @media(max-width: $tablet-width) {
+                    width: calc(100% + 48px);
+                }
+            }
+
+            &:after {
+                content: '';
+                width: calc(100% + 2 * 3px);
+                height: calc(100% + 2 * 3px);
+                position: absolute;
+                z-index: -1;
+                top: -3px;
+                left: -3px;
+                right: 3px;
+                bottom: 3px;
+                background-color: $bg-color;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            &:hover{
+                &:before {
+                    width: 140%;
+
+                    @media(max-width: $tablet-width) {
+                        width: calc(100% + 3px);
+                    }
+                }
+
+                &:after {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

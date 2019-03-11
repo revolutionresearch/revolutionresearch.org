@@ -91,3 +91,38 @@ if ( ! function_exists( 'hello_elementor_theme_register_elementor_locations' ) )
 	}
 }
 add_action( 'elementor/theme/register_locations', 'hello_elementor_theme_register_elementor_locations' );
+
+
+/*** CUSTOM FUNCTIONS ***/
+
+/**
+ * Load js files
+ */
+add_action( 'wp_head', 'project_zukunft_scripts', 100);
+function project_zukunft_scripts() {
+    $ver = wp_get_theme()->get('Version');
+    $dir = get_stylesheet_directory_uri();
+
+    // SCRIPTS
+    wp_enqueue_script( 'functions', $dir . '/js/mobile-menu.js', array(), $ver );
+}
+
+/**
+ * Remove jQuery
+ */
+// add_filter( 'wp_default_scripts', 'remove_jquery' );
+/* add_filter( 'wp_default_scripts', 'remove_jquery' );
+function remove_jquery( &$scripts){
+	echo '<h1 style="color: red;">PREVIEW: ';
+	echo \Elementor\Plugin::$instance->preview->is_preview_mode() ? 'TRUE' : 'FALSE';
+	echo '</h1>';
+	echo '<hr />';
+	echo '<h1 style="color: red;">EDITOR: ';
+	echo \Elementor\Plugin::$instance->editor->is_edit_mode() ? 'TRUE' : 'FALSE';
+	echo '</h1>';
+	// $is_edit_mode = \Elementor\Plugin::$instance->preview->is_preview_mode() || \Elementor\Plugin::$instance->editor->is_edit_mode();
+    // if(!is_admin() && !$is_edit_mode){
+    //     $scripts->remove( 'jquery');
+    //     // $scripts->add( 'jquery', false, array( 'jquery-core' ), '1.10.2' );
+    // }
+} */
