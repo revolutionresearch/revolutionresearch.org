@@ -17,20 +17,161 @@ const apiUrl = 'http://projekt-zukunft.hhc-duesseldorf.de/wp-json/zukunft/v1';
 
 class Post {
     constructor(post) {
-        this.postId = post.postId;
-        this.type = post.type;
-        this.createdAt = post.createdAt;
-        this.content = post.content;
-        this.mediaUrl = post.mediaUrl;
-        this.mediaType = post.mediaType;
-        this.author = post.author;
-        this.title = post.title;
-        this.postUrl = post.postUrl;
-        this.profileImageUrl = post.profileImageUrl;
+        this.post = post;
+        this.postId = this.post.post_id;
+        this.type = this.post.type;
+        this.title = this.post.title;
+        this.ratings = this.getRatings(this.post.rating);
+        this.ratingValue = this.calcRatingValue();
+        this.ratingText = this.generateRatingText();
+
+        this.timeCreated = '';
+        this.timeCreatedFormatted = '';
+        this.text = '';
+        this.mediaUrl = '';
+        this.mediaType = '';
+        this.mediaSourceUrl = '';
+        this.author = '';
+        this.postUrl = '';
+        this.profileImageUrl = '';
+
+        this.normalizePostData();
     }
 
+    normalizePostData() {
+        switch (this.post.type) {
+            case 'tweet': {
+                const { tweet } = this.post.attachments;
 
-    
+                if (tweet.text.startsWith('Twitter http')) {
+                    const sharedLink = tweet.text.split('Twitter ')[1];
+                    this.text = `Twitter: <a href="${sharedLink}" target="_blank">${sharedLink}</a>`;
+                } else {
+                    this.text = tweet.text;
+                }
+                
+                this.timeCreated = new Date(tweet.created_at);
+                this.timeCreatedFormatted = formatDateTime(tweet.created_at);
+                this.mediaUrl = tweet.media_url;
+                this.mediaType = 'image';
+                this.mediaSourceUrl = this.postUrl;
+                this.author = `${tweet.name} (@${tweet.screen_name})`;
+                this.postUrl = `https://twitter.com/${this.post.screen_name}/status/${tweet.tweet_id_str}`;
+                this.profileImageUrl = tweet.profile_image_url;
+                break;
+            }
+
+            case 'facebook_post': {
+                const { facebook_post } = this.post.attachments;
+
+                this.timeCreated = new Date(facebook_post.created_time);
+                this.timeCreatedFormatted = formatDateTime(facebook_post.created_time);
+                this.text = facebook_post.message;
+                this.author = facebook_post.from_name;
+                this.mediaUrl = facebook_post.picture;
+                this.mediaSourceUrl = facebook_post.link;
+                this.mediaType = facebook_post.post_type;
+                this.postUrl = `https://www.facebook.com/${facebook_post.post_id_str}`;
+                this.profileImageUrl = `https://graph.facebook.com/${facebook_post.from_id_str}/picture?type=square`;
+                break;
+            }
+
+            case 'article': {
+                this.timeCreated = new Date(this.post.published_at);
+                this.timeCreatedFormatted = formatDateTime(this.post.published_at);
+                this.text = this.post.body;
+                this.author = this.post.author;
+                this.postUrl = this.post.url;
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
+
+    createElement(index = 0) {
+        this.element = document.createElement('div');
+
+        this.element.className = 'feedItem';
+        this.element.style.animationDelay = `${index * 50}ms`
+        this.element.dataset.rating = this.ratingValue;
+        this.element.innerHTML = this.generateHtml();
+
+        return this.element;
+    }
+
+    generateHtml() {
+        return `
+            <h3 class="feedItem__title">
+                <a href="${this.postUrl}" target="_blank">
+                    ${this.title}
+                </a>
+            </h3>
+            
+            <div class="feedItem__meta">
+                <div class="feedItem__profileImage" style="background-image: url('${this.profileImageUrl}')"></div>
+                <div class="feedItem__date">${this.timeCreatedFormatted}</div>
+            </div>
+
+            ${this.mediaUrl ? `
+                <a class="feedItem__imageLink feedItem__imageLink--${this.mediaType}" href="${this.mediaSourceUrl}" target="_blank">    
+                    <img class="feedItem__image" src="${this.mediaUrl}" />
+                </a>
+            ` : ''}
+
+            <div class="feedItem__content">${this.text}</div>
+
+            <div class="rating">
+                <label for="${this.postId}" class="rating__label">
+                    Wie sinnvoll findest Du diesen Beitrag?
+                </label>
+                <div class="rating__wrapper">
+                    <span class="rating__emoji">😒</span>
+                    <input class="rating__input" value="0" id="${this.postId}" data-id="${this.postId}" type="range" min="-4" max="4" step="1" />
+                    <span class="rating__emoji">😊</span>
+                </div>
+                <div class="rating__text">
+                    ${this.ratingText}
+                </div>
+            </div>
+        
+            <div class="feedItem__sharing">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${this.postUrl}" title="Auf Facebook teilen!" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/home?status=${this.postUrl}" title="Auf Twitter teilen!" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </div>
+        `;
+    }
+
+    getRatings(ratingsString) {
+        if (ratingsString === null || ratingsString === '') {
+            return [];
+        }
+        return ratingsString.split(';');
+    }
+
+    calcRatingValue() {
+        return this.ratings.reduce((acc, curr) => (
+            acc + parseInt(curr, 10)
+        ), 0);
+    }
+
+    generateRatingText() {
+        return `${this.ratings.length} Bewertung${this.ratings.length !== 1 ? 'en' : ''}: ${this.ratingValue || 0}`;
+    }   
+
+    updateRating(ratingString) {
+        this.ratings = this.getRatings(ratingString);
+        this.ratingValue = this.calcRatingValue();
+        this.ratingText = this.generateRatingText();
+
+        this.element.dataset.rating = this.ratingValue;
+        this.element.querySelector('.rating__text').innerHTML = this.ratingText;
+    }
 }
 
 
@@ -47,6 +188,7 @@ class Feed {
         this.hasMoreItems = true;
         this.isFetching = false;
         this.items = [];
+        this.itemsElements = [];
 
         // binding
         this.updateItems = this.updateItems.bind(this);
@@ -86,9 +228,8 @@ class Feed {
         for (let i = 0; i < oldItems.length; i++) {
             oldItems[i].remove();
         }
-        const sortedItems = this.items.sort((a, b) => parseInt(b.dataset.rating, 10) - parseInt(a.dataset.rating, 10));
+        const sortedItems = this.itemsElements.sort((a, b) => parseInt(b.dataset.rating, 10) - parseInt(a.dataset.rating, 10));
         this.colcade.append(sortedItems);
-        console.log(sortedItems.map(i => i.dataset.rating));
     }
 
     async fetchItems() {
@@ -106,8 +247,12 @@ class Feed {
     async renderItems(data) {
         // create items
         const items = data.map(async (itemData, index) => {
-            const itemElement = await this.createItem(itemData, index);
-            this.items.push(itemElement);
+            const item = new Post(itemData);
+            this.items.push(item);
+            
+            const itemElement = item.createElement(index);
+            this.itemsElements.push(itemElement);
+            
             return itemElement;
         });
         
@@ -117,187 +262,9 @@ class Feed {
         );
     }
 
-    generatePostLink(postData) {
-        switch (postData.type) {
-            case 'tweet':
-                return `https://twitter.com/${postData.screen_name}/status/${postData.attachments.tweet.tweet_id_str}`;
-            case 'facebook_post':
-                return `https://www.facebook.com/${postData.attachments.facebook_post.post_id_str}`;
-            case 'article':
-                return postData.url;
-            default:
-                return '#';
-        }
-    }
-
-    async twitterHTML(twitterData, postData) {
-        const { screen_name, tweet_id_str, profile_image_url, created_at, text, name, media_url} = twitterData;
-        const post_link = this.generatePostLink(postData);
-        const date_formatted = formatDateTime(created_at);
-
-        let content = text;
-
-        if (text.startsWith('Twitter http')) {
-            const link = text.split('Twitter ')[1];
-            content = `Twitter: <a href="${link}" target="_blank">${link}</a>`;
-        }
-
-        return `
-            <h3 class="feedItem__title">
-                <a href="${post_link}" target="_blank">
-                    Tweet von ${name} (@${screen_name})
-                </a>
-            </h3>
-            <div class="feedItem__meta">
-                <div class="feedItem__profileImage" style="background-image: url('${profile_image_url}')"></div>
-                <div class="feedItem__date">${date_formatted}</div>
-            </div>
-            ${media_url ? `
-                <a class="feedItem__imageLink" href="${post_link}" target="_blank">
-                    <img class="feedItem__image" src="${media_url}" />
-                </a>
-            ` : ''}
-            <p class="feedItem__content">${content}</p>
-            `;
-        }
-        
-        facebookHTML(facebookData, postData) {
-            const { post_id_str, from_id_str, message, from_name, created_time, picture, link, post_type} = facebookData;
-            const post_link = this.generatePostLink(postData);
-            const profile_image_url = `https://graph.facebook.com/${from_id_str}/picture?type=square`;
-            const date_formatted = formatDateTime(created_time);
-
-            const picture_link = link;
-            
-            return `
-            <h3 class="feedItem__title">
-                <a href="${post_link}" target="_blank">
-                    Facebook-Post von ${from_name}
-                </a>
-            </h3>
-            <div class="feedItem__meta">
-                <div class="feedItem__profileImage" style="background-image: url('${profile_image_url}')"></div>
-                <div class="feedItem__date">${date_formatted}</div>
-            </div>
-            ${picture ? `
-                <a class="feedItem__imageLink feedItem__imageLink--${post_type}" href="${picture_link}" target="_blank">    
-                    <img class="feedItem__image" src="${picture}" />
-                </a>
-            ` : ''}
-            <p class="feedItem__content">${message}</p>
-        `;
-    }
-
-    flocklerArticleHTML(data) {
-        const { title, body, author, published_at, url } = data;
-        const date_formatted = formatDateTime(published_at);
-
-        return `
-            <h3 class="feedItem__title">
-                <a href="${url}" target="_blank">
-                    ${title}
-                </a>
-            </h3>
-            <div class="feedItem__meta">
-                <div style="margin-right: 1rem;">${author}</div>
-                <div class="feedItem__date">${date_formatted}</div>
-            </div>
-            <di class="feedItem__content">${body}</div>
-        `;
-    }
-
-    async generateItemContent(itemData) {
-        switch (itemData.type) {
-            case 'tweet':
-                return await this.twitterHTML(itemData.attachments.tweet, itemData);
-            case 'facebook_post':
-                return await this.facebookHTML(itemData.attachments.facebook_post, itemData);
-            case 'article':
-                return await this.flocklerArticleHTML(itemData);
-            default:
-                return itemData.type;
-        }
-    }
-
-    calcRatingValue(ratingString) {
-        if (ratingString === null || ratingString === '') {
-            return { ratingValue: 0, ratingCount: 0 };
-        }
-
-        const ratings = ratingString.split(';');
-        const ratingValue = ratings.reduce((acc, curr) => (
-            acc + parseInt(curr, 10)
-        ), 0);
-
-        return {
-            ratingValue,
-            ratingCount: ratings.length // .split() returns always at least 1
-        };
-    }
-
-    generateRatingValue(ratingString) {
-        const { ratingValue, ratingCount } = this.calcRatingValue(ratingString);
-
-        return `${ratingCount} Bewertung${ratingCount !== 1 ? 'en' : ''}: ${ratingValue || 0}`;
-    }
-
-    generateRatingWidget(ratingString, post_id) {
-        const ratingValue = this.generateRatingValue(ratingString);
-        return `
-            <div class="rating">
-                <label for="${post_id}" class="rating__label">
-                    Wie sinnvoll findest Du diesen Beitrag?
-                </label>
-                <div class="rating__wrapper">
-                    <span class="rating__emoji">😒</span>
-                    <input class="rating__input" value="0" id="${post_id}" data-id="${post_id}" type="range" min="-4" max="4" step="1" />
-                    <span class="rating__emoji">😊</span>
-                </div>
-                <div class="rating__value">
-                    ${ratingValue}
-                </div>
-            </div>
-        `;
-    }
-
-    generateShareWidget(data) {
-        const link = this.generatePostLink(data);
-        return `
-            <div class="feedItem__sharing">
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${link}" title="Auf Facebook teilen!" target="_blank" rel="noopener noreferrer"><i class="fa fa-facebook"></i></a>
-                <a href="https://twitter.com/home?status=${link}" title="Auf Twitter teilen!" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter"></i></a>
-            </div>
-        `;
-        // <a href="https://wa.me/?text=Auf%20Gaddit.de%20findest%20Du%20die%20besten%20Amazon%20Deals%20und%20Rabatte%3A%20https%3A//gaddit.de/" title="Auf WhatsApp teilen!" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        // <a href="mailto:?&subject=Hier findest Du die besten Deals auf Amazon - Gaddit! Clever kaufen bei Amazon&body=Auf%20Gaddit.de%20findest%20Du%20die%20besten%20Amazon%20Deals%20und%20Rabatte%3A%20https%3A//gaddit.de/" title="Per E-Mail teilen!" target="_blank" rel="noopener noreferrer">E-Mail</a>
-        // <a href="http://www.reddit.com/submit?url=https://gaddit.de/&title=Auf%20Gaddit.de%20findest%20Du%20die%20besten%20Amazon%20Deals%20und%20Rabatte!" title="Auf Reddit teilen!" target="_blank" rel="noopener noreferrer">Reddit</a>
-        // <a href="https://telegram.me/share/url?url=https://gaddit.de&text=Auf%20Gaddit.de%20findest%20Du%20die%20besten%20Amazon%20Deals%20und%20Rabatte!" title="Auf Telegram teilen!" target="_blank" rel="noopener noreferrer">Telegram</a>
-    }
-
-    async createItem(itemData, index) {
-        const { rating, id, post_id } = itemData;
-
-        const itemElement = document.createElement('div');
-        itemElement.className = 'feedItem';
-        itemElement.style.animationDelay = `${index * 50}ms`
-        itemElement.dataset.rating = this.calcRatingValue(rating).ratingValue;
-        
-        const content = await this.generateItemContent(itemData);
-        const ratingWidget = this.generateRatingWidget(rating, post_id);
-        const shareWidget = this.generateShareWidget(itemData);
-
-        itemElement.innerHTML = `
-            ${content}
-            ${ratingWidget}
-            ${shareWidget}
-        `;
-
-        return itemElement;
-    }
-
     async updateItems() {
         if (!this.isFetching && this.page < 10) {
-            const triggerItem = this.items[this.items.length - 11]; // tenth last items
+            const triggerItem = this.itemsElements[this.items.length - 11]; // tenth last items
             if (triggerItem && triggerItem.getBoundingClientRect().top <= window.innerHeight) {
                 const items = await this.fetchItems();
                 this.renderItems(items);
@@ -308,7 +275,7 @@ class Feed {
     async updateRating({ target }) {
         if (target.classList.contains('rating__input')) {
             // read post id and rating value from dom
-            const id = parseInt(target.dataset.id);
+            const id = parseInt(target.dataset.id, 10);
             const value = parseInt(target.value, 10);
             
             // validate rating value
@@ -323,12 +290,11 @@ class Feed {
                     body: JSON.stringify({ value })
                 });
                 const newRatingString = await res.json();
-                
-                // update dom
-                target.parentNode.parentNode.querySelector('.rating__value')
-                      .innerHTML = this.generateRatingValue(newRatingString);
 
-                target.parentNode.parentNode.parentNode.dataset.rating = this.calcRatingValue(newRatingString).ratingValue;
+                // update dom
+                const feedItem = target.closest('.feedItem');
+                const itemIndex = this.itemsElements.indexOf(feedItem);
+                this.items[itemIndex].updateRating(newRatingString)
             }
         }
     }
