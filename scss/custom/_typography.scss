@@ -1,0 +1,10 @@
+a {
+    &, &:link, &:visited {
+        text-decoration: none;
+        color: $pink;
+    }
+
+    &:hover {
+        color: $yellow;
+    }
+}

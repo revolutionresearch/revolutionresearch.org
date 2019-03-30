@@ -10,19 +10,19 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
 
     &:before {
         content: '';
+        position: absolute;
         width: $pattern-width;
         height: 100%;
-        // background: repeating-linear-gradient(
-        //       45deg,
-        //       $pink,
-        //       $pink 1px,
-        //       #000 1px,
-        //       #000 3px
-        // );
         // Pattern Generator: http://www.patternify.com/
-        background: $pattern__diagonal-lines--pink;
-        background-repeat: repeat;
-        position: absolute;
+        // background: $pattern__diagonal-lines--pink;
+        // background-repeat: repeat;
+        background: repeating-linear-gradient(
+              45deg,
+              $pink,
+              $pink 1px,
+              #000 1px,
+              #000 3px
+        );
     }
 
     &-right:before {
@@ -31,6 +31,24 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
 
     &-left:before {
         left: -1 * $pattern-width;
+    }
+}
+
+.fill {
+    &__pattern {
+        &--yellow {
+            .elementor-divider-separator {
+                border: none !important;
+                height: 14px;
+                background: repeating-linear-gradient(
+                    45deg,
+                    $yellow,
+                    $yellow 1px,
+                    #000 1px,
+                    #000 3px
+                );
+            }
+        }
     }
 }
 

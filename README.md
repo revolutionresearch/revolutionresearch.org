@@ -9,5 +9,5 @@
 A plain-vanilla & lightweight theme for Elementor page builder based on Hello Elementor 1.2.0 .
 
 * Place custom SCSS code inside `./assets/scss/custom`
-* Compile SCSS code into `./styles.css` (live-sass) (use VS Code extension ritwickdey.live-sass)
-* Upload Everything except the assets folder to the theme folder (use VSCode extension liximomo/sftp)
+* Compile SCSS code into `./styles.css` (e.g. with VS Code extension ritwickdey.live-sass)
+* Upload everything except the scss folder to the theme folder on the server (e.g. with VS Code extension liximomo/sftp)

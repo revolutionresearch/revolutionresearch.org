@@ -98,31 +98,88 @@ add_action( 'elementor/theme/register_locations', 'hello_elementor_theme_registe
 /**
  * Load js files
  */
-add_action( 'wp_head', 'project_zukunft_scripts', 100);
+add_action( 'wp_enqueue_scripts', 'project_zukunft_scripts');
 function project_zukunft_scripts() {
     $ver = wp_get_theme()->get('Version');
     $dir = get_stylesheet_directory_uri();
+	$namespace = 'projekt_zukunft_';
+	$in_footer = true;
 
-    // SCRIPTS
-    wp_enqueue_script( 'functions', $dir . '/js/mobile-menu.js', array(), $ver );
+	// SCRIPTS
+    // wp_enqueue_script('twitter', 'https://platform.twitter.com/widgets.js', array(), null, $in_footer );
+    wp_enqueue_script( 'colcade', $dir . '/js/modules/colcade.js', null, null, $in_footer );
+	
+	wp_enqueue_script( $namespace.'utils', $dir . '/js/utils.js', array(), null, $in_footer );
+	wp_enqueue_script( $namespace.'mobile_menu', $dir . '/js/mobile-menu.js', array($namespace.'utils'), null, $in_footer );
+    wp_enqueue_script( $namespace.'feed', $dir . '/js/feed.js', array('colcade', $namespace.'utils'), null, $in_footer );
 }
 
+
 /**
- * Remove jQuery
+ * Feed API
  */
-// add_filter( 'wp_default_scripts', 'remove_jquery' );
-/* add_filter( 'wp_default_scripts', 'remove_jquery' );
-function remove_jquery( &$scripts){
-	echo '<h1 style="color: red;">PREVIEW: ';
-	echo \Elementor\Plugin::$instance->preview->is_preview_mode() ? 'TRUE' : 'FALSE';
-	echo '</h1>';
-	echo '<hr />';
-	echo '<h1 style="color: red;">EDITOR: ';
-	echo \Elementor\Plugin::$instance->editor->is_edit_mode() ? 'TRUE' : 'FALSE';
-	echo '</h1>';
-	// $is_edit_mode = \Elementor\Plugin::$instance->preview->is_preview_mode() || \Elementor\Plugin::$instance->editor->is_edit_mode();
-    // if(!is_admin() && !$is_edit_mode){
-    //     $scripts->remove( 'jquery');
-    //     // $scripts->add( 'jquery', false, array( 'jquery-core' ), '1.10.2' );
-    // }
-} */
+/**
+ * Grab latest post title by an author!
+ *
+ * @param array $data Options for the function.
+ * @return string|null Post title for the latest author or null if none.
+ */
+function get_flockler_posts( $request ) {
+	$page = $_GET['page'];
+
+	if (isset($page)) {
+		$posts_per_page = 20;
+		$post_offset = $page * $posts_per_page;
+	} else {
+		$posts_per_page = -1;
+		$post_offset = 0;
+	}
+
+	$posts = get_posts(array(
+		'post_type' => FLOCKLER_POST_TYPE_NAME,
+		'posts_per_page' => $posts_per_page,
+		'offset' => $post_offset,
+		// 'orderby' => 'rand'
+	));
+
+	$full_posts = array_map(function($post) {
+		$data = get_post_meta($post->ID, 'flockler_post_full_data', true);
+		$data['rating'] = get_post_meta($post->ID, 'rating', true );
+		$data['post_id'] = $post->ID;
+		return $data;
+	}, $posts);
+   
+	return $full_posts;
+}
+
+function add_flockler_rating( $request ) {
+	$value = $request->get_param('value');
+	$id = $request->get_param('id');
+
+	$posts = get_posts(array(
+		'post_type' => FLOCKLER_POST_TYPE_NAME,
+		'p' => $id // p = post id
+	));
+	 
+	if ( empty($posts) ) {
+		return null;
+	}
+
+	$current_rating = get_field('rating', $posts[0]->ID);
+	$next_rating = isset($current_rating) ? "$current_rating;$value" : $value;
+	update_field('rating', $next_rating, $posts[0]->ID);
+
+	return get_post_meta($posts[0]->ID, 'rating', true);
+}
+
+add_action('rest_api_init', function () {
+	register_rest_route('zukunft/v1', '/flockler', array(
+		'methods' => 'GET',
+		'callback' => 'get_flockler_posts',
+	));
+
+	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
+		'methods' => 'POST',
+		'callback' => 'add_flockler_rating',
+	));
+});

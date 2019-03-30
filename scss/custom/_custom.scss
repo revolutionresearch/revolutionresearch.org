@@ -9,7 +9,9 @@ and include it here.
 //@import "custom/my-new-custom-style";
 
 @import "helper";
+@import "typography";
 @import "layout";
-@import "header";
-@import "menu";
-@import "buttons";
+@import "components/header";
+@import "components/menu";
+@import "components/buttons";
+@import "components/feed";
