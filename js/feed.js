@@ -189,6 +189,9 @@ class Feed {
         this.isFetching = false;
         this.items = [];
         this.itemsElements = [];
+        this.questions = [];
+        this.questionIndex = 0;
+        this.youIndex = 0;
 
         // binding
         this.updateItems = this.updateItems.bind(this);
@@ -205,7 +208,7 @@ class Feed {
        // event listeners
         document.addEventListener('scroll', this.updateItems);
         this.root.addEventListener('change', this.updateRating);
-        this.root.addEventListener('click', this.testReordering);
+        // this.root.addEventListener('click', this.testReordering);
 
         // init masonry layout with Colcade
         this.colcade = new Colcade(this.root, {
@@ -214,8 +217,13 @@ class Feed {
         });
 
         // fetch and render first items
-        const items = await this.fetchItems();
-        this.renderItems(items);
+        Promise.all([
+            this.fetchItems(),
+            this.fetchQuestions()
+        ]).then(([ items]) => {
+            this.renderItems(items);
+        });
+
     }
 
     testReordering({ target }) {
@@ -237,29 +245,76 @@ class Feed {
 
         const results = await fetch(`${apiUrl}/flockler?page=${this.page}`);
         const json = await results.json();
-        
+
         this.page += 1;
         this.isFetching = false;
 
         return json;
     }
 
+    async fetchQuestions() {
+        const results = await fetch(`${apiUrl}/questions`);
+        const questions = await results.json();
+        this.questions = questions;
+    }
+
     async renderItems(data) {
         // create items
-        const items = data.map(async (itemData, index) => {
+        data.forEach((itemData, index) => {
             const item = new Post(itemData);
             this.items.push(item);
             
             const itemElement = item.createElement(index);
             this.itemsElements.push(itemElement);
+
+            this.colcade.append(itemElement);
+
+            // you
+            if (index % 10 === 0) {
+                const youTile = this.youTile();
+                this.colcade.append(youTile);
+                this.youIndex += 1;
+                // this.itemsElements.push(youTile);
+            }
+
+            // question
+            if (index % 15 === 0 && this.questionIndex < this.questions.length) {
+                const questionTile = this.questionTile();
+                this.colcade.append(questionTile);
+                // this.itemsElements.push(questionTile);
+                this.questionIndex += 1;
+            }
             
-            return itemElement;
+            // return itemElement;
         });
         
         // add items to feed
-        Promise.all(items).then(items =>
-            this.colcade.append(items)
-        );
+        // Promise.all(items).then(items => {
+        //     this.colcade.append(items);
+        //     this.colcade.append(this.youTile());
+        // });
+    }
+
+    youTile() {
+        const element = document.createElement('div');
+        element.className = 'feedItem feedItem--you';
+        element.id = `you-${this.youIndex}`;
+        element.innerHTML = `
+            <h3>Was denkst DU?</h3>
+            <textarea></textarea>
+            <button onclick="document.querySelector('#you-${this.youIndex} textarea').value = '';">Senden</button>
+        `;
+        return element;
+    }
+
+    questionTile() {
+        const question = this.questions[this.questionIndex];
+        const element = document.createElement('div');
+        element.className = 'feedItem feedItem--question';
+        element.innerHTML = `
+            <h3>${question.post_title}</h3>
+        `;
+        return element;
     }
 
     async updateItems() {
@@ -292,6 +347,9 @@ class Feed {
                 const newRatingString = await res.json();
 
                 // update dom
+                target.disabled = true;
+                target.parentNode.style.display = 'none';
+                target.parentNode.previousElementSibling.style.display = 'none';
                 const feedItem = target.closest('.feedItem');
                 const itemIndex = this.itemsElements.indexOf(feedItem);
                 this.items[itemIndex].updateRating(newRatingString)

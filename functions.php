@@ -139,6 +139,7 @@ function get_flockler_posts( $request ) {
 		'post_type' => FLOCKLER_POST_TYPE_NAME,
 		'posts_per_page' => $posts_per_page,
 		'offset' => $post_offset,
+		'order' => 'ASC'
 		// 'orderby' => 'rand'
 	));
 
@@ -150,6 +151,16 @@ function get_flockler_posts( $request ) {
 	}, $posts);
    
 	return $full_posts;
+}
+
+function get_questions( $request ) {
+	$posts = get_posts(array(
+		// 'post_type' => 'posts',
+		'posts_per_page' => -1,
+		'category_name' => 'frage'
+	));
+
+	return $posts;
 }
 
 function add_flockler_rating( $request ) {
@@ -181,5 +192,10 @@ add_action('rest_api_init', function () {
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
 		'methods' => 'POST',
 		'callback' => 'add_flockler_rating',
+	));
+
+	register_rest_route('zukunft/v1', '/questions', array(
+		'methods' => 'GET',
+		'callback' => 'get_questions',
 	));
 });

@@ -32,6 +32,50 @@
         margin-bottom: 1rem;
     }
 
+    &--question {
+        background-color: $pink;
+        color: #fff;
+        padding: 2rem;
+
+        h3 {
+            margin: 0;
+            font-size: 2rem;
+            text-align: center;
+        }
+    }
+
+    &--you {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        color: $yellow;
+        border: 2px solid $yellow;
+
+        h3 {
+            margin: 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            margin: 1rem 0;
+            border: 1px solid $yellow;
+            border-radius: 0;
+            background-color: rgba($yellow, 0.1);
+            color: #fff;
+
+            &:focus {
+                background-color: transparent;
+            }
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+
     &__title {
         margin: 0 0 0.5rem;
         font-size: 1.25rem;
