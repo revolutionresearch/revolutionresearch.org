@@ -76,6 +76,11 @@
         }
     }
 
+    &__debugInfos {
+        font-size: 0.75rem;
+        opacity: 0.5;
+    }
+
     &__title {
         margin: 0 0 0.5rem;
         font-size: 1.25rem;

@@ -1328,6 +1328,11 @@ body {
   width: 100%;
 }
 
+.feedItem__debugInfos {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
 .feedItem__title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;

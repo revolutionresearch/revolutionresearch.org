@@ -19,11 +19,10 @@ class Post {
     constructor(post) {
         this.post = post;
         this.postId = this.post.post_id;
-        this.type = this.post.type;
-        this.title = this.post.title;
-        this.ratings = this.getRatings(this.post.rating);
-        this.ratingValue = this.calcRatingValue();
-        this.ratingText = this.generateRatingText();
+        this.type = this.post.post_type;
+        this.title = this.post.post_title;
+        this.ratingValue = this.post.rating.value;
+        this.ratingCount = this.post.rating.count;
 
         this.timeCreated = '';
         this.timeCreatedFormatted = '';
@@ -39,50 +38,68 @@ class Post {
     }
 
     normalizePostData() {
-        switch (this.post.type) {
-            case 'tweet': {
-                const { tweet } = this.post.attachments;
-
-                if (tweet.text.startsWith('Twitter http')) {
-                    const sharedLink = tweet.text.split('Twitter ')[1];
-                    this.text = `Twitter: <a href="${sharedLink}" target="_blank">${sharedLink}</a>`;
-                } else {
-                    this.text = tweet.text;
+        switch (this.post.post_type) {
+            case 'post': {
+                const categories = this.post.categories.map(cat => cat.slug)
+                if (categories.includes('featured')) {
+                    console.log('featured post', this.post);
+                } else if (categories.includes('frage')) {
+                    console.log('fragen post', this.post);
                 }
-                
-                this.timeCreated = new Date(tweet.created_at);
-                this.timeCreatedFormatted = formatDateTime(tweet.created_at);
-                this.mediaUrl = tweet.media_url;
-                this.mediaType = 'image';
-                this.mediaSourceUrl = this.postUrl;
-                this.author = `${tweet.name} (@${tweet.screen_name})`;
-                this.postUrl = `https://twitter.com/${this.post.screen_name}/status/${tweet.tweet_id_str}`;
-                this.profileImageUrl = tweet.profile_image_url;
                 break;
             }
-
-            case 'facebook_post': {
-                const { facebook_post } = this.post.attachments;
-
-                this.timeCreated = new Date(facebook_post.created_time);
-                this.timeCreatedFormatted = formatDateTime(facebook_post.created_time);
-                this.text = facebook_post.message;
-                this.author = facebook_post.from_name;
-                this.mediaUrl = facebook_post.picture;
-                this.mediaSourceUrl = facebook_post.link;
-                this.mediaType = facebook_post.post_type;
-                this.postUrl = `https://www.facebook.com/${facebook_post.post_id_str}`;
-                this.profileImageUrl = `https://graph.facebook.com/${facebook_post.from_id_str}/picture?type=square`;
-                break;
-            }
-
-            case 'article': {
-                this.timeCreated = new Date(this.post.published_at);
-                this.timeCreatedFormatted = formatDateTime(this.post.published_at);
-                this.text = this.post.body;
-                this.author = this.post.author;
-                this.postUrl = this.post.url;
-                break;
+            case 'flockler_post': {
+                const flockler = this.post.flockler;
+                switch (flockler.type) {
+                    case 'tweet': {
+                        const { tweet } = flockler.attachments;
+            
+                        if (tweet.text.startsWith('Twitter http')) {
+                            const sharedLink = tweet.text.split('Twitter ')[1];
+                            this.text = `Twitter: <a href="${sharedLink}" target="_blank">${sharedLink}</a>`;
+                        } else {
+                            this.text = tweet.text;
+                        }
+                        
+                        this.timeCreated = new Date(tweet.created_at);
+                        this.timeCreatedFormatted = formatDateTime(tweet.created_at);
+                        this.mediaUrl = tweet.media_url;
+                        this.mediaType = 'image';
+                        this.mediaSourceUrl = this.postUrl;
+                        this.author = `${tweet.name} (@${tweet.screen_name})`;
+                        this.postUrl = `https://twitter.com/${this.post.screen_name}/status/${tweet.tweet_id_str}`;
+                        this.profileImageUrl = tweet.profile_image_url;
+                        break;
+                    }
+        
+                    case 'facebook_post': {
+                        const { facebook_post } = flockler.attachments;
+        
+                        this.timeCreated = new Date(facebook_post.created_time);
+                        this.timeCreatedFormatted = formatDateTime(facebook_post.created_time);
+                        this.text = facebook_post.message;
+                        this.author = facebook_post.from_name;
+                        this.mediaUrl = facebook_post.picture;
+                        this.mediaSourceUrl = facebook_post.link;
+                        this.mediaType = facebook_post.post_type;
+                        this.postUrl = `https://www.facebook.com/${facebook_post.post_id_str}`;
+                        this.profileImageUrl = `https://graph.facebook.com/${facebook_post.from_id_str}/picture?type=square`;
+                        break;
+                    }
+        
+                    case 'article': {
+                        const article = flockler;
+                        this.timeCreated = new Date(article.published_at);
+                        this.timeCreatedFormatted = formatDateTime(article.published_at);
+                        this.text = article.body;
+                        this.author = article.author;
+                        this.postUrl = article.url;
+                        break;
+                    }
+        
+                    default:
+                        break;
+                }
             }
 
             default:
@@ -103,6 +120,11 @@ class Post {
 
     generateHtml() {
         return `
+            <div class="feedItem__debugInfos">
+                Rating: ${this.ratingValue},
+                Count: ${this.ratingCount},
+                Created: ${this.timeCreatedFormatted}
+            </div>
             <h3 class="feedItem__title">
                 <a href="${this.postUrl}" target="_blank">
                     ${this.title}
@@ -132,7 +154,7 @@ class Post {
                     <span class="rating__emoji">😊</span>
                 </div>
                 <div class="rating__text">
-                    ${this.ratingText}
+                    ${this.generateRatingText()}
                 </div>
             </div>
         
@@ -147,30 +169,16 @@ class Post {
         `;
     }
 
-    getRatings(ratingsString) {
-        if (ratingsString === null || ratingsString === '') {
-            return [];
-        }
-        return ratingsString.split(';');
-    }
-
-    calcRatingValue() {
-        return this.ratings.reduce((acc, curr) => (
-            acc + parseInt(curr, 10)
-        ), 0);
-    }
-
     generateRatingText() {
-        return `${this.ratings.length} Bewertung${this.ratings.length !== 1 ? 'en' : ''}: ${this.ratingValue || 0}`;
+        return `${this.ratingCount} Bewertung${this.ratingsCount !== 1 ? 'en' : ''}: ${this.ratingValue || 0}`;
     }   
 
-    updateRating(ratingString) {
-        this.ratings = this.getRatings(ratingString);
-        this.ratingValue = this.calcRatingValue();
-        this.ratingText = this.generateRatingText();
+    updateRating({ value, count }) {
+        this.ratingValue = value;
+        this.ratingCount = count;
 
         this.element.dataset.rating = this.ratingValue;
-        this.element.querySelector('.rating__text').innerHTML = this.ratingText;
+        this.element.querySelector('.rating__text').innerHTML = this.generateRatingText();
     }
 }
 
@@ -217,13 +225,8 @@ class Feed {
         });
 
         // fetch and render first items
-        Promise.all([
-            this.fetchItems(),
-            this.fetchQuestions()
-        ]).then(([ items]) => {
-            this.renderItems(items);
-        });
-
+        const firstItems = await this.fetchItems();
+        this.renderItems(firstItems);
     }
 
     testReordering({ target }) {
@@ -242,8 +245,7 @@ class Feed {
 
     async fetchItems() {
         this.isFetching = true;
-
-        const results = await fetch(`${apiUrl}/flockler?page=${this.page}`);
+        const results = await fetch(`${apiUrl}/social-wall?page=${this.page}`);
         const json = await results.json();
 
         this.page += 1;
@@ -252,13 +254,8 @@ class Feed {
         return json;
     }
 
-    async fetchQuestions() {
-        const results = await fetch(`${apiUrl}/questions`);
-        const questions = await results.json();
-        this.questions = questions;
-    }
-
     async renderItems(data) {
+        console.log('render items', data);
         // create items
         data.forEach((itemData, index) => {
             const item = new Post(itemData);
@@ -318,7 +315,7 @@ class Feed {
     }
 
     async updateItems() {
-        if (!this.isFetching && this.page < 10) {
+        if (!this.isFetching && this.page < 4) {
             const triggerItem = this.itemsElements[this.items.length - 11]; // tenth last items
             if (triggerItem && triggerItem.getBoundingClientRect().top <= window.innerHeight) {
                 const items = await this.fetchItems();
