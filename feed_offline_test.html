@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed Offline Test</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .container {
+            max-width: 1600px;
+            padding: 2rem;
+            margin: 1rem auto;
+        }
+    
+        .heading {
+            color: #fff;
+            text-align: center;
+        } 
+
+        img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Feed Offline Test</h1>
+        <button id="feed-reload-button">Aktualisieren</button>
+        <div id="feed">
+            <div class="grid-col grid-col--1"></div>
+            <div class="grid-col grid-col--2"></div>
+            <div class="grid-col grid-col--3"></div>
+            <div class="grid-col grid-col--4"></div>
+        </div>
+    </div>
+    
+    <script src="test_data/social-wall-test-data.js"></script>
+    <script src="js/modules/colcade.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/feed.js"></script>
+</body>
+</html>
