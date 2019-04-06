@@ -35,6 +35,7 @@
 .feedItem {
     padding: 1rem;
     background-color: #fff;
+    color: $text-color;
 
     opacity: 0;
     transform: translateY(2rem);
@@ -83,7 +84,7 @@
 
         textarea {
             width: 100%;
-            min-height: 200px;
+            min-height: 360px;
             margin: 1rem 0;
             border-radius: 0;
         }
@@ -101,6 +102,7 @@
     }
 
     &__debugInfos {
+        display: none;
         font-size: 0.75rem;
         opacity: 0.5;
     }

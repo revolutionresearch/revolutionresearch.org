@@ -1,3 +1,9 @@
+body {
+    font-family: "Avenir", sans-serif;
+    font-weight: 400;
+    color: #fff;
+}
+
 a {
     &, &:link, &:visited {
         text-decoration: none;
@@ -7,4 +13,8 @@ a {
     &:hover {
         color: $yellow;
     }
+}
+
+p:not(:last-child) {
+    margin-bottom: 1.5rem;
 }

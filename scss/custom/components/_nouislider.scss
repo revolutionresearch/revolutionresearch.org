@@ -1,0 +1,111 @@
+.noUi {
+    $bar-height: 0.1rem;
+    $handle-height: 0.75rem;
+
+    &-target {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        position: relative;
+
+        &:before,
+        &:after {
+            display: block;
+            width: 1.25rem;
+            height: 1.25rem;
+            // border: $bar-height solid $text-color;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'FontAwesome';
+            line-height: 1;
+            font-size: 0.75rem;
+        }
+
+        &:before { content: '\f068'; }
+        &:after { content: '\f067'; }
+    }
+ 
+    &-base {
+        position: relative;
+        z-index: 1;
+
+        flex: 1;
+        margin: 0.5rem;
+        width: 100%;
+        height: $bar-height;
+        background-color: $text-color;
+
+        .fake-fill {
+            position: absolute;
+            top: calc(50% - #{$bar-height * 1 / 2}); 
+            height: 1 * $bar-height;
+            z-index: 1;
+            background: $pink;
+            z-index: 0;
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: calc(50% - #{$bar-height / 2});
+            top: calc(50% - #{0.5rem / 2});
+            height: 0.5rem;
+            width: $bar-height;
+            background-color: $text-color;
+            z-index: 2;
+        }
+    }
+
+    &-origin {
+        will-change: transform;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: auto;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        transform-origin: 0 0;
+        transform-style: flat;
+    }
+
+    &-handle {
+        position: absolute;
+        top: calc(-#{$handle-height / 2} + #{$bar-height / 2});
+        right: -1 * $handle-height / 2;
+        left: auto;
+
+        width: $handle-height;
+        height: $handle-height;
+        line-height: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        outline: none;
+        color: #aaa;
+
+        &:before {
+            content: '\f004';
+            font-family: 'FontAwesome';
+            font-size: 1.25rem;
+            transition: transform 0.15s ease-in-out;
+            text-shadow:
+                1px 0px 0 #fff,
+                -1px 0px 0 #fff;
+        }
+
+        .noUi-target.set & {
+            color: $pink;
+        }
+
+        &:hover,
+        &.noUi-active {
+            &:before {
+                transform: scale(1.2);
+            }
+        }
+    }
+}
