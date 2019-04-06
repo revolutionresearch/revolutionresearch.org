@@ -15,9 +15,16 @@ function add_rating_controller($value, $id) {
 		return null;
 	}
 
-	$current_rating = get_field('rating', $posts[0]->ID);
-	$next_rating = isset($current_rating) ? "$current_rating;$value" : $value;
-    return update_field('rating', $next_rating, $posts[0]->ID);
+	$post_id = $posts[0]->ID;
+
+	$current_ratings = get_field('ratings', $post_id);
+	$current_rating_value = get_field('rating_value', $post_id);
+	$current_rating_count = get_field('rating_count', $post_id);
+	
+	$next_ratings = isset($current_ratings) ? "$current_ratings;$value" : $value;
+	update_field('ratings', $next_ratings, $post_id);
+	update_field('rating_value', $current_rating_value + (int)$value, $post_id);
+	update_field('rating_count', $current_rating_count + 1, $post_id);
 }
 
 
@@ -29,8 +36,9 @@ function social_wall_controller($page) {
 			'query' => [
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
-				'order' => 'DESC',
-				'orderby ' => 'date' // TODO: rating
+				'meta_key' => 'rating_value',
+				'orderby ' => 'meta_value_num',
+				'order' => 'DESC'
 			]
 		],
 		'flockler_worst_rated' => [
@@ -39,8 +47,9 @@ function social_wall_controller($page) {
 			'query' => [
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
-				'order' => 'ASC',
-				'orderby ' => 'date' // TODO: rating
+				'meta_key' => 'rating_value',
+				'orderby ' => 'meta_value_num',
+				'order' => 'ASC'
 			]
 		],
 		'flockler_controversial' => [
@@ -49,8 +58,14 @@ function social_wall_controller($page) {
 			'query' => [
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
-				'order' => 'DESC', // TODO: change to DESC
-				'orderby ' => 'date' // TODO: mosts rating with rating sum near 0
+				'meta_key' => 'rating_value',
+				'orderby' => 'meta_value_count',
+				'order' => 'DESC',
+				'meta_query' => [[
+					'key'     => 'rating_value',
+					'value'   => [-1, 1],
+					'compare' => 'BETWEEN',
+				]]
 			]
 		],
 		'flockler_newests' => [
@@ -64,23 +79,27 @@ function social_wall_controller($page) {
 			]
 		],
 		'questions' => [
-			'count' => 2,
+			'count' => 20, //2
 			'next_index' => 0,
 			'query' => [
-				// 'post_type' => 'posts',
+				'post_type' => 'post',
 				'posts_per_page' => -1,
 				'category_name' => 'frage',
-				'orderby ' => 'date' // and rating
+				// 'meta_key' => 'rating_value',
+				// 'orderby ' => 'meta_value_num',
+				// 'order' => 'ASC',
 			]
 		],
 		'features' => [
-			'count' => 2,
+			'count' => 20, //2
 			'next_index' => 0,
 			'query' => [
-				// 'post_type' => 'posts',
+				'post_type' => 'post',
 				'posts_per_page' => -1,
 				'category_name' => 'featured',
-				'orderby ' => 'date' // and rating
+				// 'meta_key' => 'rating_value',
+				// 'orderby ' => 'date meta_value_num',
+				// 'order' => 'DESC'
 			]
 		]
 	];
@@ -91,17 +110,9 @@ function social_wall_controller($page) {
 		];
 	}
 
-	// return all posts if no page is set
-	/* if ( !isset($page) ) {
-		return array_merge(
-			// $best_rated_flockler_posts,
-			// $worst_rated_flockler_posts,
-			// $controversial_flockler_posts,
-			// $newest_flockler_posts,
-			$question_posts,
-			$featured_posts
-		);
-	} */
+	if ( !isset($page) ) {
+		$page = 0;
+	}
 
     $posts_per_page = 39;
 	$posts_count = 0;
@@ -121,7 +132,8 @@ function social_wall_controller($page) {
 				$posts,
 				$config['next_index'],
 				$config['count'],
-				$post_ids
+				$post_ids,
+				$key
 			);
 
 			// store unique posts, their indicies and the next index
@@ -145,11 +157,9 @@ function social_wall_controller($page) {
 		}, $category_ids);
 		
 		// rating
-		$rating_string = get_post_meta($post->ID, 'rating', true );
-		$ratings = explode(';', $rating_string);
-		$rating_value = array_reduce($ratings, function($acc, $r) {
-			return $acc + (int)$r;
-		}, 0);
+		
+		$rating_value = 
+		$rating_count = get_field('rating_count', $post->ID);
 		
 		// author
 		$author = get_field('author', $post->ID)->data;
@@ -163,10 +173,12 @@ function social_wall_controller($page) {
 			'post_status' => $post->post_status,
 			'guid' => $post->guid,
 			'post_type' => $post->post_type,
+			'post_thumbnail_url' => wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'single-post-thumbnail' )[0],
 			'categories' => $categories,
+			'order_type' => $post->order_type,
 			'rating' => [
-				'value' =>  $rating_value,
-				'count' => count($ratings)
+				'value' =>  get_field('rating_value', $post->ID),
+				'count' => get_field('rating_count', $post->ID)
 			],
 			'author' => [
 				'display_name' => $author->display_name,

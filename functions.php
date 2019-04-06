@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-/* Includes */
+/*** Includes ***/
 require_once(__DIR__ . '/includes/elementor_hello_theme_setup.php');
 require_once(__DIR__ . '/includes/feed_api/feed_api.php');
 
 
-/** Load JS files */
+/*** Load JS files ***/
 add_action( 'wp_enqueue_scripts', 'project_zukunft_scripts');
 function project_zukunft_scripts() {
     $ver = wp_get_theme()->get('Version');
@@ -20,9 +20,20 @@ function project_zukunft_scripts() {
 
 	// third party scripts
     wp_enqueue_script( 'colcade', $dir . '/js/modules/colcade.js', null, null, $in_footer );
+    wp_enqueue_script( 'nouislider', $dir . '/js/modules/nouislider.min.js', null, null, $in_footer );
+    // wp_enqueue_style( 'nouislider-css', $dir . '/js/modules/nouislider.min.css', null, null );
 	
 	// custom scripts
 	wp_enqueue_script( $namespace.'utils', $dir . '/js/utils.js', array(), null, $in_footer );
 	wp_enqueue_script( $namespace.'mobile_menu', $dir . '/js/mobile-menu.js', array($namespace.'utils'), null, $in_footer );
-    wp_enqueue_script( $namespace.'feed', $dir . '/js/feed.js', array('colcade', $namespace.'utils'), null, $in_footer );
+	wp_enqueue_script( $namespace.'event_loop', $dir . '/js/event-loop.js', array($namespace.'utils'), null, $in_footer );
+	wp_enqueue_script( $namespace.'collapsible', $dir . '/js/collapsible.js', array($namespace.'utils'), null, $in_footer );
+    
+    // feed scripts
+    wp_enqueue_script( $namespace.'components', $dir . '/js/feed/components.js', array('nouislider', $namespace.'utils'), null, $in_footer );
+    wp_enqueue_script( $namespace.'flockler_post', $dir . '/js/feed/FlocklerPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
+    wp_enqueue_script( $namespace.'feature_post', $dir . '/js/feed/FeaturePost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
+    wp_enqueue_script( $namespace.'question_post', $dir . '/js/feed/QuestionPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
+    wp_enqueue_script( $namespace.'feed', $dir . '/js/feed/Feed.js', array('colcade', $namespace.'utils', $namespace.'flockler_post', $namespace.'feature_post', $namespace.'question_post'), null, $in_footer );
+}
 }

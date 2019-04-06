@@ -37,5 +37,8 @@ function add_flockler_rating( $request ) {
 
 	add_rating_controller($value, $id);
 
-	return get_post_meta($id, 'rating', true);
+	return [
+		'rating_value' => get_field('rating_value', $id),
+		'rating_count' => get_field('rating_count', $id)
+	];
 }

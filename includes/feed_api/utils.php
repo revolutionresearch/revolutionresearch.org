@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-function extract_unique_posts($posts, $start_index, $target_count, $post_ids) {
+function extract_unique_posts($posts, $start_index, $target_count, $post_ids, $key) {
 	$unique_posts = [];
 	$current_index =  $start_index;
 	$current_count = 0;
@@ -14,6 +14,7 @@ function extract_unique_posts($posts, $start_index, $target_count, $post_ids) {
 	while (($current_count < $target_count) && ($current_index < $posts_count)) {
 		$post = $posts[$current_index];
 		if (!in_array($post->ID, $post_ids)) {
+			$post->order_type = $key;
 			array_push($unique_posts, $post);
 			array_push($post_ids, $post->ID);
 			$current_count += 1;
