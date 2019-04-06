@@ -1,0 +1,87 @@
+.event-list {
+    .event:not(:first-child) {
+        border-top: 2px solid #fff;
+    }
+
+    .event:hover {
+        &,
+        & + .event {
+            border-color: $pink;
+        }
+
+        .event-loop__title {
+            .elementor-heading-title {
+                color: $pink !important;
+            }
+            
+            &:after {
+                visibility: visible;
+            }
+        }
+
+    }
+}
+
+
+.event-loop {
+    &__overview {
+        user-select: none;
+        cursor: pointer;
+    }
+
+    &__date {
+        font-family: "Anton";
+        display: flex;
+        align-items: center;
+
+        &-left {
+            padding-right: 0.75rem;
+        }
+
+        &-day {
+            font-size: 2.5rem;
+        }
+
+        &-wekday,
+        &-month {
+            font-size: 0.85rem;
+        }
+
+        &-weekday {
+            color: $light-grey;
+        }
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+
+        &:after {
+            content: "\f078";
+            font-family: "FontAwesome";
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+            visibility: hidden;
+            color: $pink;
+        }
+
+        .event-loop__overview--open & {
+            .elementor-heading-title {
+                color: $pink !important;
+            }
+
+            &:after {
+                visibility: visible;
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    &__details {
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.2s linear;
+
+        &--open {}
+    }
+}

@@ -36,4 +36,34 @@ function project_zukunft_scripts() {
     wp_enqueue_script( $namespace.'question_post', $dir . '/js/feed/QuestionPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
     wp_enqueue_script( $namespace.'feed', $dir . '/js/feed/Feed.js', array('colcade', $namespace.'utils', $namespace.'flockler_post', $namespace.'feature_post', $namespace.'question_post'), null, $in_footer );
 }
+
+
+/*** Shortcodes ***/
+
+add_shortcode( 'event_single_date', 'event_single_date_func' );
+function event_single_date_func( $attributes, $content ){
+    $timestamp = strtotime(do_shortcode($content));
+    $date = date("d. M. Y", $timestamp);
+	return "$date,&nbsp;";
+}
+
+add_shortcode( 'event_loop_date', 'event_loop_date_func' );
+function event_loop_date_func( $attributes, $content ){
+    $timestamp = strtotime(do_shortcode($content));
+    
+    $day = date("d", $timestamp);
+    $weekday = date("D", $timestamp);
+    $month = date("M", $timestamp);
+    
+    return "
+        <div class='event-loop__date'>
+            <div class='event-loop__date-left'>
+                <div class='event-loop__date-day'>$day</div>
+            </div>
+            <div class='event-loop__date-right'>
+                <div class='event-loop__date-weekday'>$weekday</div>
+                <div class='event-loop__date-month'>$month</div>
+            </div>
+        </div>
+    ";
 }
