@@ -68,3 +68,16 @@ function event_loop_date_func( $attributes, $content ){
         </div>
     ";
 }
+
+add_shortcode( 'wolfram_alpha_search_box', 'wolfram_alpha_search_box_func' );
+function wolfram_alpha_search_box_func( $attributes, $content ){    
+    return `
+        <div class="wa_search-box">
+            <div class="wa__input-container">
+                <input class="wa__input" type="text" placeholder="Was willst Du wissen?" />
+                <button class="wa__input-icon" type="submit">=</button>
+            </div>
+            <div class="wa__output"></div>
+        </div>
+    `;
+}
