@@ -8,16 +8,3 @@ body {
 .site-footer {
     overflow: hidden;
 }
-
-#masthead {
-    position: fixed !important;
-    width: 100%;
-    top: 0;
-    left: 0;
-    line-height: 1;
-}
-
-#main,
-#masthead + div {
-    margin-top: 65px; // adjust for fixed header
-}
