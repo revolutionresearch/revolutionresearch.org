@@ -77,7 +77,7 @@
         }
     }
 
-    &__details {
+    body:not(.elementor-editor-active) &__details {
         max-height: 0;
         overflow: hidden;
         transition: 0.2s linear;

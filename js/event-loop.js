@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {object} event click event
  */
 function toggleEventDetails({ target, currentTarget }) {
-    if (target.closest('.event-loop__button')) {
+    if (
+        target.closest('.event-loop__button') ||
+        document.body.classList.contains('.elementor-editor.active')
+    ) {
        return; 
     }
 

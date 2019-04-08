@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function toggleCollapsible(e) {
+    if (document.body.classList.contains('.elementor-editor.active')) {
+        return;
+    }
+
     e.preventDefault();
 
     const trigger = e.currentTarget;
