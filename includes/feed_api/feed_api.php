@@ -19,7 +19,15 @@ add_action('rest_api_init', function () {
 
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
 		'methods' => 'POST',
-		'callback' => 'add_flockler_rating',
+		'callback' => 'add_rating',
+	));
+	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
+		'methods' => '\DELETE',
+		'callback' => 'remove_rating',
+	));
+	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
+		'methods' => 'PUT',
+		'callback' => 'update_rating',
 	));
 });
 
@@ -31,11 +39,36 @@ function get_posts_for_social_wall( $request ) {
 	return social_wall_controller($page);
 }
 
-function add_flockler_rating( $request ) {
+function add_rating( $request ) {
 	$value = $request->get_param('value');
 	$id = $request->get_param('id');
 
 	add_rating_controller($value, $id);
+
+	return [
+		'rating_value' => get_field('rating_value', $id),
+		'rating_count' => get_field('rating_count', $id)
+	];
+}
+
+function remove_rating( $request ) {
+	$value = $request->get_param('value');
+	$id = $request->get_param('id');
+
+	remove_rating_controller($value, $id);
+
+	return [
+		'rating_value' => get_field('rating_value', $id),
+		'rating_count' => get_field('rating_count', $id)
+	];
+}
+
+function update_rating( $request ) {
+	$old_value = $request->get_param('old_value');
+	$new_value = $request->get_param('new_value');
+	$id = $request->get_param('id');
+
+	update_rating_controller($old_value, $new_value, $id);
 
 	return [
 		'rating_value' => get_field('rating_value', $id),

@@ -110,12 +110,13 @@ class Feed {
 
     async renderItems(data) {
         // create items
+        console.log(data);
         data.forEach((itemData, index) => {
             switch (itemData.post_type) {
                 case 'post': {
                     const categories = itemData.categories.map(cat => cat.slug)
-                    if (categories.includes('featured')) {
-                        const item = new FeaturePost(itemData);
+                    if (categories.includes('act')) {
+                        const item = new ActPost(itemData);
                         this.appendItem(item, index);
                     } else if (categories.includes('frage')) {
                         const item = new QuestionPost(itemData);
@@ -128,16 +129,39 @@ class Feed {
                     this.appendItem(item, index);
                     break;
                 }
+                case 'user_submitted_posts_form': {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'feedItem feedItem--form';
+                    itemElement.innerHTML = `
+                        <div class="feedItem__body">
+                            <div class="feedItem__form-teaser">
+                                <h3>Was denkst DU?</h3>
+                                <button class="feedItem__teaser-button">Teile Deine Gedanken!</button>
+                            </div>
+                            ${itemData.html}
+                        </div>
+                    `;
+                    itemElement.addEventListener('click', ({ target }) => {
+                        if (target.classList.contains('feedItem__teaser-button')) {
+                            target.parentNode.style.display = 'none';
+                            target.parentNode.parentNode.querySelector('form')
+                                .style.display = 'block';
+                        }
+                    })
+                    this.items.push(itemData);
+                    this.itemsElements.push(itemElement);
+                    this.colcade.append(itemElement);
+                }
                 default:
                     break;
             }
 
             // you
-            if (index % 10 === 0) {
-                const youTile = this.youTile();
-                this.colcade.append(youTile);
-                this.youIndex += 1;
-            }
+            // if (index % 10 === 0) {
+            //     const youTile = this.youTile();
+            //     this.colcade.append(youTile);
+            //     this.youIndex += 1;
+            // }
         });
     }
 
@@ -155,9 +179,11 @@ class Feed {
         element.className = 'feedItem feedItem--you';
         element.id = `you-${this.youIndex}`;
         element.innerHTML = `
-            <h3>Was denkst DU?</h3>
-            <textarea></textarea>
-            <button onclick="document.querySelector('#you-${this.youIndex} textarea').value = '';">Senden</button>
+            <div class="feedItem__body">
+                <h3>Was denkst DU?</h3>
+                <textarea></textarea>
+                <button onclick="document.querySelector('#you-${this.youIndex} textarea').value = '';">Senden</button>
+            </div>
         `;
         return element;
     }

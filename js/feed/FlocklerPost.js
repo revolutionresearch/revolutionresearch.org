@@ -1,3 +1,13 @@
+/*
+    Pseudo imports for reference
+    import { urlify } from '../utils.js';
+*/
+
+const featuredAuthorIds = [
+    '603671170098955', // Projekt Zukunft Test (Facebook)
+    '1104029858848489473' // TestZukunft (Twitter)
+];
+
 class FlocklerPost {
     constructor(post) {
         this.post = post;
@@ -14,6 +24,7 @@ class FlocklerPost {
         this.mediaType = '';
         this.mediaSourceUrl = '';
         this.author = '';
+        this.authorId = '';
         this.postUrl = '';
         this.profileImageUrl = '';
 
@@ -26,21 +37,21 @@ class FlocklerPost {
             case 'tweet': {
                 const { tweet } = flockler.attachments;
     
-                if (tweet.text.startsWith('Twitter http')) {
-                    const sharedLink = tweet.text.split('Twitter ')[1];
-                    this.text = `Twitter: <a href="${sharedLink}" target="_blank">${sharedLink}</a>`;
-                } else {
-                    this.text = tweet.text;
-                }
-                
+                this.text = tweet.text;
                 this.timeCreated = new Date(tweet.created_at);
                 this.timeCreatedFormatted = formatDateTime(tweet.created_at);
+                this.postUrl = `https://twitter.com/${this.post.screen_name}/status/${tweet.tweet_id_str}`;
                 this.mediaUrl = tweet.media_url;
-                this.mediaType = 'image';
+                this.mediaType = tweet.media_url && tweet.media_url.indexOf('youtu') !== -1 ? 'youtube' : 'image';
                 this.mediaSourceUrl = this.postUrl;
                 this.author = `${tweet.name} (@${tweet.screen_name})`;
-                this.postUrl = `https://twitter.com/${this.post.screen_name}/status/${tweet.tweet_id_str}`;
+                this.authorId = tweet.user_id_str;
                 this.profileImageUrl = tweet.profile_image_url;
+
+                if (this.mediaType === 'youtube') {
+                    const urlParts = this.mediaUrl.split('/');
+                    this.youtubeId =  urlParts[urlParts.length - 1];
+                }
                 break;
             }
 
@@ -51,6 +62,7 @@ class FlocklerPost {
                 this.timeCreatedFormatted = formatDateTime(facebook_post.created_time);
                 this.text = facebook_post.message;
                 this.author = facebook_post.from_name;
+                this.authorId = facebook_post.from_id_str;
                 this.mediaUrl = facebook_post.picture;
                 this.mediaSourceUrl = facebook_post.link;
                 this.mediaType = facebook_post.post_type;
@@ -78,13 +90,20 @@ class FlocklerPost {
         this.element = document.createElement('div');
 
         this.element.className = `feedItem feedItem--flockler feedItem--${this.type}`;
+        if (this.isFeatured()) {
+            this.element.classList.add('feedItem--featured')
+        }
         this.element.style.animationDelay = `${index * 50}ms`
         this.element.dataset.rating = this.ratingValue;
         this.element.innerHTML = this.generateHtml();
 
-        appendNoUiSlider(this.element, this.postId);
+        appendRating(this.element, this.postId);
 
         return this.element;
+    }
+
+    isFeatured() {
+        return featuredAuthorIds.includes(this.authorId);
     }
 
     generateHtml() {
@@ -95,26 +114,33 @@ class FlocklerPost {
                 timeCreatedFormatted: this.timeCreatedFormatted
             })}
 
-            ${SharingComponent(this.postUrl)}
-
-            <h3 class="feedItem__title">
-                <a href="${this.postUrl}" target="_blank">
-                    ${this.title}
-                </a>
-            </h3>
-            
-            <div class="feedItem__meta">
-                <div class="feedItem__profileImage" style="background-image: url('${this.profileImageUrl}')"></div>
-                <div class="feedItem__date">${this.timeCreatedFormatted}</div>
-            </div>
-
-            ${this.mediaUrl ? `
+            ${(this.mediaUrl) ? `
                 <a class="feedItem__imageLink feedItem__imageLink--${this.mediaType}" href="${this.mediaSourceUrl}" target="_blank">    
-                    <img class="feedItem__image" src="${this.mediaUrl}" />
+                    ${this.mediaType === 'youtube' ? `
+                        <iframe
+                            frameborder="0"
+                            scrolling="no"
+                            marginheight="0"
+                            marginwidth="0"
+                            height="240"
+                            type="text/html"
+                            src="https://www.youtube.com/embed/${this.youtubeId}?autoplay=0&fs=1"
+                        >
+                        </iframe>
+                    ` : `
+                        <img class="feedItem__image" src="${this.mediaUrl}" />
+                    `}
                 </a>
             ` : ''}
+            <div class="feedItem__body">
+                <div class="feedItem__meta">
+                    <div class="feedItem__profileImage" style="background-image: url('${this.profileImageUrl}')"></div>
+                    <div class="feedItem__author">${this.author}</div>
+                    ${SharingComponent(this.postUrl)}
+                </div>
 
-            <div class="feedItem__content">${this.text}</div>
+                <div class="feedItem__content">${urlify(this.text)}</div>
+            </div>
         `;
     } 
 

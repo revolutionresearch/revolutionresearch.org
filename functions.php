@@ -30,11 +30,12 @@ function project_zukunft_scripts() {
 	wp_enqueue_script( $namespace.'collapsible', $dir . '/js/collapsible.js', array($namespace.'utils'), null, $in_footer );
     
     // feed scripts
-    wp_enqueue_script( $namespace.'components', $dir . '/js/feed/components.js', array('nouislider', $namespace.'utils'), null, $in_footer );
+    wp_enqueue_script( $namespace.'rating', $dir . '/js/feed/rating.js', array('nouislider', $namespace.'utils'), null, $in_footer );
+    wp_enqueue_script( $namespace.'components', $dir . '/js/feed/components.js', array($namespace.'utils', $namespace.'rating'), null, $in_footer );
     wp_enqueue_script( $namespace.'flockler_post', $dir . '/js/feed/FlocklerPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
-    wp_enqueue_script( $namespace.'feature_post', $dir . '/js/feed/FeaturePost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
+    wp_enqueue_script( $namespace.'act_post', $dir . '/js/feed/ActPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
     wp_enqueue_script( $namespace.'question_post', $dir . '/js/feed/QuestionPost.js', array($namespace.'utils', $namespace.'components'), null, $in_footer );
-    wp_enqueue_script( $namespace.'feed', $dir . '/js/feed/Feed.js', array('colcade', $namespace.'utils', $namespace.'flockler_post', $namespace.'feature_post', $namespace.'question_post'), null, $in_footer );
+    wp_enqueue_script( $namespace.'feed', $dir . '/js/feed/Feed.js', array('colcade', $namespace.'utils', $namespace.'flockler_post', $namespace.'act_post', $namespace.'question_post'), null, $in_footer );
 }
 
 

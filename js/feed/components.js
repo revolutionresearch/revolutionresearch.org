@@ -1,27 +1,27 @@
-function RatingComponent(postId) {
-    return `
-        <div class="rating">
-            <label for="${postId}" class="rating__label">
-                Wie sinnvoll findest Du diesen Beitrag?
-            </label>
-            <div class="rating__wrapper">
-                <span class="rating__emoji">😒</span>
-                <input
-                    class="rating__input"
-                    value="0"
-                    id="${postId}"
-                    data-id="${postId}"
-                    type="range"
-                    min="-4"
-                    max="4"
-                    step="1"
-                />
-                <span class="rating__emoji">😊</span>
-            </div>
-            <div className='rating__nouislider'></div>
-        </div>
-    `;
-}
+// function RatingComponent(postId) {
+//     return `
+//         <div class="rating">
+//             <label for="${postId}" class="rating__label">
+//                 Wie sinnvoll findest Du diesen Beitrag?
+//             </label>
+//             <div class="rating__wrapper">
+//                 <span class="rating__emoji">😒</span>
+//                 <input
+//                     class="rating__input"
+//                     value="0"
+//                     id="${postId}"
+//                     data-id="${postId}"
+//                     type="range"
+//                     min="-4"
+//                     max="4"
+//                     step="1"
+//                 />
+//                 <span class="rating__emoji">😊</span>
+//             </div>
+//             <div className='rating__nouislider'></div>
+//         </div>
+//     `;
+// }
 
 
 function SharingComponent(postUrl) {
