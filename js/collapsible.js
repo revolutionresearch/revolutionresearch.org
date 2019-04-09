@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // setup trigger events
     const triggers = document.querySelectorAll('.collapsible__trigger');
     triggers.forEach(trigger => {
         trigger.addEventListener('click', toggleCollapsible);
     });
+
+    // setup initial content transition speed
+    const contents = document.querySelectorAll('.collapsible__content');
+    contents.forEach(content => {
+        content.style.transitionDuration = calcTransitionSpeed(content); 
+    });
 });
+
+function calcTransitionSpeed(content) {
+    return `${content.scrollHeight * 0.8}ms`;
+}
 
 
 function toggleCollapsible(e) {
@@ -20,10 +31,9 @@ function toggleCollapsible(e) {
     // toggle content collapse
     if (content.style.maxHeight === '') {
         content.style.maxHeight = `${content.scrollHeight}px`;
-        content.style.transitionDuration = `${content.scrollHeight * 0.8}ms`; 
+        content.style.transitionDuration = calcTransitionSpeed(content); 
     } else {
         content.style.maxHeight = '';
-        content.style.transitionDuration = '';
     }
 
     // toggle trigger text
