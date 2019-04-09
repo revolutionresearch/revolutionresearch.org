@@ -135,8 +135,8 @@ class Feed {
                     itemElement.innerHTML = `
                         <div class="feedItem__body">
                             <div class="feedItem__form-teaser">
-                                <h3>Was denkst DU?</h3>
-                                <button class="feedItem__teaser-button">Teile Deine Gedanken!</button>
+                                <h3>DU</h3>
+                                <button class="feedItem__teaser-button">Hier kannst Du posten!</button>
                             </div>
                             ${itemData.html}
                         </div>

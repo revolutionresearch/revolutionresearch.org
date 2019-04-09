@@ -36,6 +36,13 @@
     padding: 0;
     background-color: #fff;
     color: $text-color;
+    
+
+    &, img {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
 
     // opacity: 0;
     // transform: translateY(2rem);
@@ -73,7 +80,9 @@
     &--form {
         
         .feedItem__body {
-            min-height: 513px;
+            min-height: calc(513px + 2rem);
+            padding-bottom: 2rem;
+            // padding: 7rem 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -81,6 +90,17 @@
         }
 
         .feedItem__form-teaser {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+
+            h3 {
+                font-size: 16rem;
+                text-align: center;
+                color: #aaa;
+                font-family: "Anton", Sans-serif;
+            }
             button {
                 &, &:focus {
                     color: $text-color;

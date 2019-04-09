@@ -7,7 +7,7 @@
 $pattern-width: 20px;
 $line-height: 0.5em;
 $line-width: 8em;
-$inline-offset: 4px;
+$inline-offset: 5px;
 
 $pattern__diagonal-lines--pink: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQYV2P8U3nzP0u7OgMMMDIwMPz/U3mTASYIFgDJwgThAjBBAC4nD09U3pjpAAAAAElFTkSuQmCC);
 $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2P88Y3hPwcXAxwwMjAw/P/xjYEBJggWAEnDBOECMEEAsU0L77Qpo2sAAAAASUVORK5CYII=);
@@ -53,7 +53,7 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
         &--yellow {
             .elementor-divider-separator {
                 border: none !important;
-                height: 14px;
+                height: 12px;
                 background: repeating-linear-gradient(
                     49deg,
                     $yellow,

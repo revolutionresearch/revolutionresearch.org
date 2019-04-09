@@ -1,10 +1,63 @@
 .elementor-button {
     transition-duration: 0.1s;
+    cursor: pointer;
 }
 
 .button {
-    &--arrow {
+    &--line-right {
+        .elementor-button {
+            position: relative;
+            z-index: 0;
 
+            &:before {
+                content: '';
+                background-color: #fff;
+                position: absolute;
+                z-index: -1;
+                top: 50%;
+                left: 0.5rem;
+                transform: translateY(-50%);
+                height: 1.5rem;
+                width: calc(100% + 72px);
+                transition: width 0.3s ease-out;
+
+                @media(max-width: $tablet-width) {
+                    width: calc(100% + 48px);
+                }
+            }
+
+            &:after {
+                content: '';
+                width: calc(100% + 2 * 2px);
+                height: calc(100% + 2 * 2px);
+                position: absolute;
+                z-index: -1;
+                top: -2px;
+                left: -2px;
+                right: 2px;
+                bottom: 2px;
+                background-color: $dark-grey;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            &:hover{
+                &:before {
+                    width: 140%;
+
+                    @media(max-width: $tablet-width) {
+                        width: calc(100% + 32px);
+                    }
+                }
+
+                &:after {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &--arrow {
         .elementor-button {
             position: relative;
             z-index: 0;

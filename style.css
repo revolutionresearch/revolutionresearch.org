@@ -929,8 +929,8 @@ and include it here.
 }
 
 .pattern.inline-text:before {
-  height: calc(100% - 4px);
-  top: 2px;
+  height: calc(100% - 5px);
+  top: 2.5px;
 }
 
 .pattern-right:before {
@@ -943,7 +943,7 @@ and include it here.
 
 .fill__pattern--yellow .elementor-divider-separator {
   border: none !important;
-  height: 14px;
+  height: 12px;
   background: repeating-linear-gradient(49deg, #f8f600, #f8f600 1px, #000 1px, #000 3px);
 }
 
@@ -968,7 +968,7 @@ and include it here.
 }
 
 .white-line-top.inline-text:after {
-  top: calc(-0.5em + 2px);
+  top: calc(-0.5em + 2.5px);
 }
 
 .white-line-right:after {
@@ -1021,19 +1021,6 @@ body {
 .site-main,
 .site-footer {
   overflow: hidden;
-}
-
-#masthead {
-  position: fixed !important;
-  width: 100%;
-  top: 0;
-  left: 0;
-  line-height: 1;
-}
-
-#main,
-#masthead + div {
-  margin-top: 65px;
 }
 
 #menu-main {
@@ -1164,6 +1151,63 @@ body {
 .elementor-button {
   -webkit-transition-duration: 0.1s;
           transition-duration: 0.1s;
+  cursor: pointer;
+}
+
+.button--line-right .elementor-button {
+  position: relative;
+  z-index: 0;
+}
+
+.button--line-right .elementor-button:before {
+  content: '';
+  background-color: #fff;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 0.5rem;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  height: 1.5rem;
+  width: calc(100% + 72px);
+  -webkit-transition: width 0.3s ease-out;
+  transition: width 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .button--line-right .elementor-button:before {
+    width: calc(100% + 48px);
+  }
+}
+
+.button--line-right .elementor-button:after {
+  content: '';
+  width: calc(100% + 2 * 2px);
+  height: calc(100% + 2 * 2px);
+  position: absolute;
+  z-index: -1;
+  top: -2px;
+  left: -2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: #181818;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+
+.button--line-right .elementor-button:hover:before {
+  width: 140%;
+}
+
+@media (max-width: 768px) {
+  .button--line-right .elementor-button:hover:before {
+    width: calc(100% + 32px);
+  }
+}
+
+.button--line-right .elementor-button:hover:after {
+  opacity: 1;
 }
 
 .button--arrow .elementor-button {
@@ -1287,6 +1331,12 @@ body {
   color: #333333;
 }
 
+.feedItem, .feedItem img {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 @-webkit-keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1336,7 +1386,8 @@ body {
 }
 
 .feedItem--form .feedItem__body {
-  min-height: 513px;
+  min-height: calc(513px + 2rem);
+  padding-bottom: 2rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1350,6 +1401,29 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.feedItem--form .feedItem__form-teaser {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.feedItem--form .feedItem__form-teaser h3 {
+  font-size: 16rem;
+  text-align: center;
+  color: #aaa;
+  font-family: "Anton", Sans-serif;
 }
 
 .feedItem--form .feedItem__form-teaser button, .feedItem--form .feedItem__form-teaser button:focus {
@@ -1825,4 +1899,13 @@ body:not(.elementor-editor-active) .collapsible__content {
   -webkit-transition: 0.2s;
   transition: 0.2s;
   position: relative;
+}
+
+.wa__input-container {
+  position: relative;
+}
+
+.wa__input {
+  width: 100%;
+  padding-right: 3rem;
 }
