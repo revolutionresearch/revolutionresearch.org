@@ -1,17 +1,113 @@
 .wa {
     &__search-box {
-
+        max-width: 640px;
+        margin: 0 auto;
     }
 
-    &__input-container {
+    &__form {
         position: relative;
     }
 
-    &__input {
-        width: 100%;
-        padding-right: 3rem;
+    &__input[type='text'] {
+        &, &:focus {
+            width: 100%;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            padding-right: 3rem;
+            border: 1px solid $yellow;
+            background-color: transparent;
+            color: #fff;
+            border-radius: 0;
+        }
+
+        &::placeholder {
+            color: $yellow;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+
+        .wa__form--loading & {
+            opacity: 0.25;
+        }
     }
-    &__input-button {
-        
+
+    &__submit {
+        &, &:focus {
+            border: none;
+            border-radius: 0;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+            line-height: 0;
+            outline: 0;
+            background-color: transparent;
+            color: $pink;
+        }
+
+        &:hover {
+            background-color: $pink;
+            color: #fff;
+        }
+
+
+
+        &:before {
+            content: '=';
+
+            .wa__form--loading & {
+                content: '\f110';
+                font-family: 'FontAwesome';
+                animation: rotate 0.5s infinite linear;
+
+                @keyframes rotate {
+                    from { transform: rotate(0deg) }
+                    to { transform: rotate(360deg) }
+                }
+            }
+        }
+    }
+
+    &__output {
+        margin-top: 1.5rem;
+
+        .wa__pod {
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 0.25rem;
+
+            &:not(:last-child) {
+                // border-bottom: 1px solid $light-grey;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .wa__pod-title {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: $light-grey;
+        }
+
+        .wa__sub-pod {
+            padding-top: 0.75rem;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $light-grey;
+                padding-bottom: 0.75rem;
+            }
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
     }
 }

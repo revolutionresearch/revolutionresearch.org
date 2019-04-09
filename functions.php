@@ -25,9 +25,15 @@ function project_zukunft_scripts() {
 	
 	// custom scripts
 	wp_enqueue_script( $namespace.'utils', $dir . '/js/utils.js', array(), null, $in_footer );
-	wp_enqueue_script( $namespace.'mobile_menu', $dir . '/js/mobile-menu.js', array($namespace.'utils'), null, $in_footer );
-	wp_enqueue_script( $namespace.'event_loop', $dir . '/js/event-loop.js', array($namespace.'utils'), null, $in_footer );
+	// wp_enqueue_script( $namespace.'mobile_menu', $dir . '/js/mobile_menu.js', array($namespace.'utils'), null, $in_footer );
+	wp_enqueue_script( $namespace.'event_loop', $dir . '/js/event_loop.js', array($namespace.'utils'), null, $in_footer );
 	wp_enqueue_script( $namespace.'collapsible', $dir . '/js/collapsible.js', array($namespace.'utils'), null, $in_footer );
+    
+    // wolfram alpha
+    wp_enqueue_script( $namespace.'wolfram_alpha', $dir . '/js/wolfram_alpha.js', array($namespace.'utils'), null, $in_footer );
+	wp_localize_script( $namespace.'wolfram_alpha', 'ajax_object', [
+        'ajax_url' => admin_url( 'admin-ajax.php' ) // accesses as ajax_object.ajax_url in JavaScript
+    ]);
     
     // feed scripts
     wp_enqueue_script( $namespace.'rating', $dir . '/js/feed/rating.js', array('nouislider', $namespace.'utils'), null, $in_footer );
@@ -71,13 +77,31 @@ function event_loop_date_func( $attributes, $content ){
 
 add_shortcode( 'wolfram_alpha_search_box', 'wolfram_alpha_search_box_func' );
 function wolfram_alpha_search_box_func( $attributes, $content ){    
-    return `
-        <div class="wa_search-box">
-            <div class="wa__input-container">
-                <input class="wa__input" type="text" placeholder="Was willst Du wissen?" />
-                <button class="wa__input-icon" type="submit">=</button>
-            </div>
-            <div class="wa__output"></div>
+    return "
+        <div class='wa__search-box'>
+            <form class='wa__form'>
+                <input class='wa__input' type='text' placeholder='Was willst Du wissen?' />
+                <button class='wa__submit' type='submit'></button>
+            </form>
+            <div class='wa__output'></div>
         </div>
-    `;
+    ";
+}
+
+
+add_action( 'wp_ajax_simple_wa_api_request', 'simple_wa_api_request' );
+add_action( 'wp_ajax_nopriv_simple_wa_api_request', 'simple_wa_api_request' );
+function simple_wa_api_request() {
+    $app_id = '9G45XV-5W3KPX5WQH';
+    // $query = rawurlencode(str_replace('+','%2B', $_POST['query']));
+    $query = rawurlencode($_POST['query']);
+    $url = "http://api.wolframalpha.com/v2/query?input=$query&appid=$app_id&format=image&maxwidth=600";
+    
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    $result = curl_exec($curl);
+    curl_close($curl);
+
+    echo $result;
+    wp_die(); // this is required to terminate immediately and return a proper response
 }
