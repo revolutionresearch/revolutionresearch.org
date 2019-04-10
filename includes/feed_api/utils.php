@@ -87,3 +87,33 @@ function replace_last_match($search, $replace, $subject) {
 
     return $subject;
 }
+
+
+function user_submit_form($index) {
+	return "
+		<form class='user-submit-form' id='user-submit-form-$index' data-id='$index' onsubmit='userFormSubmitHandler(event)'>
+
+			<label for='content-$index'>Text (<span class='content-chars'>0</span> von 280 Zeichen)</label>
+			<textarea class='field' name='content' id='content-$index' rows='10' maxlength='280' oninput='userFormContentInputHandler(event)'></textarea>
+
+			<label for='media-type-$index'>Bild oder YouTube-Video</label>
+			<select class='field' name='media-type' id='media-type-$index' data-id='$index' onchange='userFormMediaTypeChangeHandler(event)'>
+				<option value='image'>Bild</option>
+				<option value='youtube'>YouTube</option>
+			</select>
+			
+			<div class='image-wrapper' id='image-wrapper-$index'>
+				<label id='image-label-$index'>Bitte lade eine Bilddatei hoch</label>
+				<input type='file' accept='image/*' name='image' id='image-$index' style='display: none;' onchange='userFormImageChangeHandler(event)'/>
+				<input class='image-button' type='button' value='Bild auswählen...' onclick='document.getElementById(\"image-$index\").click();' />
+			</div>
+
+			<div class='youtube-wrapper' id='youtube-wrapper-$index' style='display: none;'>
+				<label id='youtube-label-$index'>Bitte füge einen YouTube-Link ein</label>
+				<input type='url' name='youtube' id='youtube-$index' placeholder='https://www.youtube.com/watch?v=HZhFC11uB3Q' />
+			</div>
+
+			<button type='submit'>Senden!</button>
+		</form>
+	";
+}

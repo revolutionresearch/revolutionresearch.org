@@ -28,6 +28,7 @@ function project_zukunft_scripts() {
 	// wp_enqueue_script( $namespace.'mobile_menu', $dir . '/js/mobile_menu.js', array($namespace.'utils'), null, $in_footer );
 	wp_enqueue_script( $namespace.'event_loop', $dir . '/js/event_loop.js', array($namespace.'utils'), null, $in_footer );
 	wp_enqueue_script( $namespace.'collapsible', $dir . '/js/collapsible.js', array($namespace.'utils'), null, $in_footer );
+	wp_enqueue_script( $namespace.'user_submit_form', $dir . '/js/user_submit_form.js', array($namespace.'utils'), null, $in_footer );
     
     // wolfram alpha
     wp_enqueue_script( $namespace.'wolfram_alpha', $dir . '/js/wolfram_alpha.js', array($namespace.'utils'), null, $in_footer );
@@ -80,7 +81,7 @@ function wolfram_alpha_search_box_func( $attributes, $content ){
     return "
         <div class='wa__search-box'>
             <form class='wa__form'>
-                <input class='wa__input' type='text' placeholder='Was willst Du wissen?' />
+                <input class='wa__input' type='text' placeholder='Was möchtest Du wissen?' />
                 <button class='wa__submit' type='submit'></button>
             </form>
             <div class='wa__output'></div>

@@ -201,6 +201,7 @@ function social_wall_controller($page) {
 
     // insert question at position 4 and -4
 	array_splice( $page_posts, 4, 0, [ $question ]);
+	array_splice( $page_posts, ceil(count($page_posts) / 2), 0, [ $question ]);
 	array_splice( $page_posts, -4, 0, [ $question ]);
     
 
@@ -211,17 +212,17 @@ function social_wall_controller($page) {
 	// insert forms
 	if (function_exists('user_submitted_posts')) {
 		// get form
-		ob_start();
-		user_submitted_posts();
-		$form_html = ob_get_clean();
-		$form = [
-			'post_type' => 'user_submitted_posts_form',
-			'html' => $form_html
-		];
+		// ob_start();
+		// user_submitted_posts();
+		// $form_html = ob_get_clean();
 
 		// insert 4 forms starting from the end
 		$interval = floor(count($page_posts) / 4);
 		for ($i = 0; $i < 5; $i++) { 
+            $form = [
+                'post_type' => 'user_submitted_posts_form',
+                'html' => user_submit_form($i)
+            ];
 			array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
 		}
 	};
