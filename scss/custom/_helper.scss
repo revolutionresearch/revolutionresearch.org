@@ -7,15 +7,17 @@
 $pattern-width: 20px;
 $line-height: 0.5em;
 $line-width: 8em;
-$inline-offset: 5px;
 
 $pattern__diagonal-lines--pink: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQYV2P8U3nzP0u7OgMMMDIwMPz/U3mTASYIFgDJwgThAjBBAC4nD09U3pjpAAAAAElFTkSuQmCC);
 $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2P88Y3hPwcXAxwwMjAw/P/xjYEBJggWAEnDBOECMEEAsU0L77Qpo2sAAAAASUVORK5CYII=);
 
 .pattern {
-    position: relative;
 
-    &:before {
+    .elementor-widget-container {
+        position: relative;
+    }
+
+    .elementor-widget-container:before {
         content: '';
         position: absolute;
         width: $pattern-width;
@@ -34,16 +36,16 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
         );
     }
 
-    &.inline-text:before {
-        height: calc(100% - #{$inline-offset});
-        top: $inline-offset / 2;
+    &.inline-text .elementor-widget-container:before {
+        height: 100%;
+        top: 0;
     }
 
-    &-right:before {
+    &-right .elementor-widget-container:before {
         right: -1 * $pattern-width;
     }
 
-    &-left:before {
+    &-left .elementor-widget-container:before {
         left: -1 * $pattern-width;
     }
 }
@@ -67,9 +69,10 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
 }
 
 .white-line {
+
     position: relative;
 
-    &:after {
+    .elementor-widget-container:after {
         content: '';
         width: $line-width;
         height: $line-height;
@@ -79,20 +82,20 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
 
     &-bottom:after  { bottom: -1 * $line-height; }
     &-top {
-        &:after {
+        .elementor-widget-container:after {
             top: -1 * $line-height;
         }
     
-        &.inline-text:after {
-            top: calc(-#{$line-height} + #{$inline-offset / 2});
+        .elementor-widget-container.inline-text:after {
+            top: -1 * $line-height;
         }
     }
 
-    &-right:after { right: 0; }
-    &-right.pattern-right:after { right: -1 * $pattern-width; }
+    &-right .elementor-widget-container:after { right: 0; }
+    &-right.pattern-right .elementor-widget-container:after { right: -1 * $pattern-width; }
     
-    &-left:after { left: 0; }
-    &-left.pattern-left:after { left: -1 * $pattern-width; }
+    &-left .elementor-widget-container:after { left: 0; }
+    &-left.pattern-left .elementor-widget-container:after { left: -1 * $pattern-width; }
 }
 
 .flex {
