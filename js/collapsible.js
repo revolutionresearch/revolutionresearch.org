@@ -24,7 +24,7 @@ function toggleCollapsible(e) {
 
     e.preventDefault();
 
-    const trigger = e.currentTarget;
+    const trigger = e.currentTarget || e.srcElement ;
     const contentId = trigger.dataset.collapsible;
     const content = document.getElementById(contentId);
 
