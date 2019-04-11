@@ -3,6 +3,7 @@ module.exports = {
     output: {
         filename: 'main.js',
     },
+    stats: 'errors-only',
     module: {
         rules: [{
             test: /\.(js)$/,
