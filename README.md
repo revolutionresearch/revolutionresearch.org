@@ -1,13 +1,22 @@
-# Projekt Zukunft WordPress Theme
+# Amazoner
 
-**Requires at least:** WordPress 4.7  
-**Requires PHP:** 5.4  
-**License:** GNU General Public License v3 or later  
-**License URI:** https://www.gnu.org/licenses/gpl-3.0.html  
-**Tags:** flexible-header, accessibility-ready, custom-colors, custom-menu, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready  
+WordPress theme for ProjektZukunft based on the [intentionally-blank](https://wordpress.org/themes/intentionally-blank/) theme
 
-A plain-vanilla & lightweight theme for Elementor page builder based on Hello Elementor 1.2.0 .
+## Instructions
+* install [node.js](https://nodejs.org/en/) version 10.0.0 or higher
+* run `npm install` as admin to install gulp dependencies
+* run `npm start` to watch file changes with gulp
+* run `npm run build` to compile all source files
+* upload the content of `./build` to the theme folder on the server (`/wordpress/wp-content/themes/amazoner`)
 
-* Place custom SCSS code inside `./assets/scss/custom`
-* Compile SCSS code into `./styles.css` (e.g. with VS Code extension ritwickdey.live-sass)
-* Upload everything except the scss folder to the theme folder on the server (e.g. with VS Code extension liximomo/sftp)
+## Styling
+All styles are written in SCSS inside `./src/styles` and compiled to a single styles.css.
+
+## JavaScript
+All JavaScript files inside `./src/js` are compiled with babel.
+
+## PHP and other root files
+All files inside `./src/root` are copied to `./build` without any further processing.
+
+## Images
+All images inside `./src/img` are minimized.
