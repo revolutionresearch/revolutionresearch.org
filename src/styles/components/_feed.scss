@@ -129,6 +129,11 @@
     }
 
     &--form {
+
+        &.hidden .user-submit-form,
+        &:not(.hidden) .feedItem__form-teaser {
+            display: none;
+        }
         
         .feedItem__body {
             min-height: calc(513px + 2rem);

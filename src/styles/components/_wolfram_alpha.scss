@@ -75,8 +75,28 @@
         }
     }
 
+    &__close-button {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: #000;
+        border: none;
+        color: $pink;
+        font-size: 0.85rem;
+        padding: 0;
+        margin-left: auto;
+        outline: none;
+    }
+
     &__output {
         margin-top: 1.5rem;
+        position: relative;
 
         .wa__pod {
             background-color: #fff;

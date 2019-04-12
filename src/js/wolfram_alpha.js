@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     waForms.forEach(waForm => {
         waForm.addEventListener('submit', submitHandler);
     });
+
+    function closeOutput(output, input) {
+        output.innerHTML = '';
+        input.focus();
+    }
     
     function submitHandler(e) {
         e.preventDefault();
@@ -23,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input.disabled = true;
             button.disabled = true;
 
+            // fetch result from wolfram alpha
             fetch(PHP_VARS.AJAX_URL, {
                 credentials: 'same-origin',
                 headers: new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }),
@@ -37,6 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.disabled = false;
 
                 const pods = xmlDocument.querySelectorAll('pod');
+
+                // create close button
+                if (pods.length) {
+                    const closeButton = document.createElement('button');
+                    closeButton.className='wa__close-button';
+                    closeButton.setAttribute('type', 'button');
+                    closeButton.innerHTML = '<i class="fa fa-close"></i>';
+                    closeButton.addEventListener('click', () => closeOutput(output, input));
+                    output.appendChild(closeButton);
+                }
+
                 pods.forEach(pod => {
                     const podEl = document.createElement('div');
                     podEl.className = 'wa__pod';

@@ -8,7 +8,7 @@ class QuestionPost {
         this.index = index;
         this.element = document.createElement('div');
 
-        this.element.className = `feedItem feedItem--form`;
+        this.element.className = `feedItem feedItem--form hidden`;
         this.element.style.animationDelay = `${index * 50}ms`
         this.element.innerHTML = this.generateDefaultHtml();
 
@@ -19,7 +19,8 @@ class QuestionPost {
 
     addEventListeners() {
         // open form
-        this.element.querySelector('.feedItem__teaser-button').addEventListener('click', this.openFormHandler);
+        this.element.querySelector('.feedItem__teaser-button').addEventListener('click', this.toggleFormHandler.bind(this));
+        this.element.querySelector('.hide-form-button').addEventListener('click', this.toggleFormHandler.bind(this));
         this.element.querySelector('.user-submit-form').addEventListener('submit', this.userFormSubmitHandler);
         this.element.querySelector('[name=content]').addEventListener('input', this.userFormContentInputHandler);
         this.element.querySelector('[name=media-type]').addEventListener('change', this.userFormMediaTypeChangeHandler);
@@ -43,6 +44,9 @@ class QuestionPost {
 
         return `
             <form class='user-submit-form' id='user-submit-form-${index}' data-id="${index}">
+                <button class="hide-form-button" type="button">
+                    <i class="fa fa-close"></i>
+                </button>
                 <label for='content-${index}'>Text (<span class='content-chars'>0</span> von 280 Zeichen)</label>
                 <textarea class='field' name='content' id='content-${index}' rows='10' maxlength='280'></textarea>
 
@@ -68,12 +72,8 @@ class QuestionPost {
         `;
     }
 
-    openFormHandler({ target }) {
-        if (target.classList.contains('feedItem__teaser-button')) {
-            target.parentNode.style.display = 'none';
-            target.parentNode.parentNode.querySelector('form')
-                .style.display = 'block';
-        }
+    toggleFormHandler() {
+        this.element.classList.toggle('hidden');
     }
 
     userFormSubmitHandler(e) {
