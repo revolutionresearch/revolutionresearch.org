@@ -123,7 +123,7 @@ function social_wall_controller($page) {
 		]
 	];
 
-  $flockler_posts_per_page = 39 - 3 - 4 - 5; // 3 acts, 4 questions, 4 forms
+  $flockler_posts_per_page = 39 - 3 - 3 - 5; // 3 acts, 3 questions, 5 forms
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
@@ -199,7 +199,7 @@ function social_wall_controller($page) {
     
     $question = get_post_data($questions[0]);
 
-    // insert question at position 4 and -4
+    // insert question at position 4, middle, -4
 	array_splice( $page_posts, 4, 0, [ $question ]);
 	array_splice( $page_posts, ceil(count($page_posts) / 2), 0, [ $question ]);
 	array_splice( $page_posts, -4, 0, [ $question ]);
