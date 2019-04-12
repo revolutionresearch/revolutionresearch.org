@@ -78,5 +78,5 @@ exports.watch = function() {
     gulp.watch(dirs.src + '/js/**/*.js', scripts);
     gulp.watch(dirs.src + '/img/*', images);
     gulp.watch(dirs.src + '/styles/**/*.scss', styles);
-    gulp.watch(dirs.src + '/root/*', copyStatic);
+    gulp.watch(dirs.src + '/root/**', copyStatic);
 };
