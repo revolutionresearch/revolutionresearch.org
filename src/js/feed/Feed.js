@@ -99,7 +99,10 @@ class Feed {
 
     async fetchItems() {
         this.isFetching = true;
-        const results = await fetch(`${PHP_VARS.API_URL}/social-wall?page=${this.page}`);
+        const results = await fetch(
+            `${PHP_VARS.API_URL}/social-wall?page=${this.page}`,
+            { credentials: 'include' }
+        );
         const json = await results.json();
 
         // const json = socialWallTestData[this.page];
@@ -158,6 +161,7 @@ class Feed {
             if (value !== 0 && value >= -4 && value <= 4) {
                 // post request
                 // const res = await fetch(`${PHP_VARS.API_URL}/flockler/${id}/rating`, {
+                //     credentials: 'include',
                 //     headers: {
                 //         'Accept': 'application/json',
                 //         'Content-Type': 'application/json'

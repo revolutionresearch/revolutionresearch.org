@@ -12,11 +12,13 @@ module.exports = {
             query: {
                 presets: [
                     ['@babel/preset-env', {
-                        "targets": {
-                            "node": "current"
+                        'targets': {
+                            'node': 'current',
+                            // 'esmodules': true
                         }
                     }]
-                ]
+                ],
+                plugins: ['@babel/plugin-proposal-object-rest-spread']
             },
         }]
     }
