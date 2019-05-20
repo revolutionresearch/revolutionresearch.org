@@ -123,7 +123,7 @@ function social_wall_controller($page) {
 		]
 	];
 
-  $flockler_posts_per_page = 39 - 3 - 3 - 5; // 3 acts, 3 questions, 5 forms
+  $flockler_posts_per_page = 39 - 3 - 3 - 4; // 3 acts, 3 questions, 4 forms
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
@@ -184,11 +184,11 @@ function social_wall_controller($page) {
 	array_splice( $page_posts, floor($posts_count / 3 * 2), 0, [ get_post_data($acts['three']) ]);
 
 
-    /********************************/
-    /*********** QUESTION ***********/
-    /********************************/
-    
-    // get questions
+	/********************************/
+	/*********** QUESTION ***********/
+	/********************************/
+	
+	// get questions
 	$questions = get_posts([
 		'post_type' => 'post',
 		'posts_per_page' => 4,
@@ -213,7 +213,7 @@ function social_wall_controller($page) {
 	if (function_exists('user_submitted_posts')) {
 		// insert 4 forms starting from the end
 		$interval = floor(count($page_posts) / 4);
-		for ($i = 0; $i < 5; $i++) { 
+		for ($i = 0; $i < 4; $i++) { 
             $form = [ 'post_type' => 'user_submitted_posts_form' ];
 			array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
 		}
