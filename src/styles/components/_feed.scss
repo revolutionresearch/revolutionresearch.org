@@ -87,11 +87,11 @@ $gap: 1em;
     &--question{
         background-color: $pink;
         color: #fff;
-        padding: 4em 2em;
+        padding: 4em 0;
 
         h3 {
             margin: 0;
-            font-size: 2em;
+            font-size: 1.9em;
             text-align: center;
         }
     }
@@ -133,9 +133,10 @@ $gap: 1em;
 
         .title {
             font-size: 1.75em;
-            padding-right: 1.7142em; // 3 / 1.75
+            padding-right: 0.4166em; // 1.25 / 3
             text-transform: lowercase;
             margin: 0;
+            margin-right: 1em;
             margin-left: auto;
         }
     }
