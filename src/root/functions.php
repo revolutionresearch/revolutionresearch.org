@@ -10,6 +10,7 @@ require_once(__DIR__ . '/includes/elementor_hello_theme_setup.php');
 require_once(__DIR__ . '/includes/shortcodes.php');
 require_once(__DIR__ . '/includes/ajax_handler.php');
 require_once(__DIR__ . '/includes/feed_api/feed_api.php');
+require_once(__DIR__ . '/includes/custom_post_queries.php');
 
 
 /*** Load JS files ***/
