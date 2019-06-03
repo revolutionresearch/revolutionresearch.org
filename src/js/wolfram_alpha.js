@@ -30,14 +30,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // fetch result from wolfram alpha
             fetch(PHP_VARS.AJAX_URL, {
-                credentials: 'same-origin',
+                // credentials: 'same-origin',
+                credentials: 'include', // ms edge fix
                 headers: new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }),
                 method: 'POST',
                 body: `action=simple_wa_api_request&query=${query}`, // action = name of the php function
             })
             .then(res => res.text())
-            .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+            .then(str => {
+                // remove invalid '1' at the end of the string
+                const cleanString = str.slice(0, -1);
+                
+                // create dom tree from string
+                const parser = new window.DOMParser();
+                const xmlDocument = parser.parseFromString(cleanString, "text/xml");
+                return xmlDocument;
+            })
             .then(xmlDocument => {
+                console.log({ xmlDocument });
+
                 form.classList.remove('wa__form--loading');
                 input.disabled = false;
                 button.disabled = false;
@@ -47,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // create close button
                 if (pods.length) {
                     const closeButton = document.createElement('button');
-                    closeButton.className='wa__close-button';
+                    closeButton.className = 'wa__close-button';
                     closeButton.setAttribute('type', 'button');
                     closeButton.innerHTML = '<i class="fa fa-close"></i>';
                     closeButton.addEventListener('click', () => closeOutput(output, input));
@@ -65,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     podEl.appendChild(titleEl); 
 
                     // image
-                    const images= pod.querySelectorAll('img');
+                    const images = pod.querySelectorAll('img');
                     images.forEach(image => {
                         const subPodEl = document.createElement('div');
                         subPodEl.className = 'wa__sub-pod';
@@ -77,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         imgEl.height = image.getAttribute('height');
                         imgEl.title = image.getAttribute('title');
                         subPodEl.appendChild(imgEl);
-                        
+
                         podEl.appendChild(subPodEl); 
                     });
 

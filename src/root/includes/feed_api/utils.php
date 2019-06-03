@@ -41,11 +41,6 @@ function get_post_data($post) {
 		];
 	}, $category_ids);
 	
-	// rating
-	
-	$rating_value = 
-	$rating_count = get_field('rating_count', $post->ID);
-	
 	// author
 	$author = get_field('author', $post->ID)->data;
 
@@ -64,6 +59,7 @@ function get_post_data($post) {
 			'value' =>  get_field('rating_value', $post->ID),
 			'count' => get_field('rating_count', $post->ID)
 		],
+		'youtube_url' => get_field('youtube_url', $post->ID),
 		'author' => [
 			'display_name' => $author->display_name,
 			'user_login' => $author->user_login

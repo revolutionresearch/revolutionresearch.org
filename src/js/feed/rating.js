@@ -69,6 +69,7 @@ function appendRating(parent, postId) {
 
         // update database
         fetch(`${PHP_VARS.API_URL}/flockler/${postId}/rating`, {
+            credentials: 'include', // ms edge fix
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
