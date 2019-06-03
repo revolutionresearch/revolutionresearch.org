@@ -4,6 +4,7 @@ const ActPost = require('./ActPost');
 const FlocklerPost = require('./FlocklerPost');
 const QuestionPost = require('./QuestionPost');
 const UserSubmitForm = require('./UserSubmitForm');
+const DuBeitrag = require('./DuBeitrag');
 
 /*
     Tested masonry plugins:
@@ -99,7 +100,10 @@ class Feed {
 
     async fetchItems() {
         this.isFetching = true;
-        const results = await fetch(`${PHP_VARS.API_URL}/social-wall?page=${this.page}`);
+        const results = await fetch(
+            `${PHP_VARS.API_URL}/social-wall?page=${this.page}`,
+            { credentials: 'include' }
+        );
         const json = await results.json();
 
         // const json = socialWallTestData[this.page];
@@ -120,6 +124,9 @@ class Feed {
                         this.appendItem(item, index);
                     } else if (categories.includes('frage')) {
                         const item = new QuestionPost(itemData);
+                        this.appendItem(item, index);
+                    } else if (categories.includes('du-beitrag')) {
+                        const item = new DuBeitrag(itemData);
                         this.appendItem(item, index);
                     }
                     break;
@@ -158,6 +165,7 @@ class Feed {
             if (value !== 0 && value >= -4 && value <= 4) {
                 // post request
                 // const res = await fetch(`${PHP_VARS.API_URL}/flockler/${id}/rating`, {
+                //     credentials: 'include',
                 //     headers: {
                 //         'Accept': 'application/json',
                 //         'Content-Type': 'application/json'

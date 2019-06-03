@@ -21,7 +21,7 @@ class QuestionPost {
         // open form
         this.element.querySelector('.feedItem__teaser-button').addEventListener('click', this.toggleFormHandler.bind(this));
         this.element.querySelector('.hide-form-button').addEventListener('click', this.toggleFormHandler.bind(this));
-        this.element.querySelector('.user-submit-form').addEventListener('submit', this.userFormSubmitHandler);
+        this.element.querySelector('.user-submit-form').addEventListener('submit', this.userFormSubmitHandler.bind(this));
         this.element.querySelector('[name=content]').addEventListener('input', this.userFormContentInputHandler);
         this.element.querySelector('[name=media-type]').addEventListener('change', this.userFormMediaTypeChangeHandler);
         this.element.querySelector('[name=image]').addEventListener('change', this.userFormImageChangeHandler);
@@ -35,6 +35,7 @@ class QuestionPost {
                     <button class="feedItem__teaser-button">Hier kannst Du posten!</button>
                 </div>
                 ${this.generateFormHtml()}
+                ${this.generateSuccessHtml()}
             </div>
         `;
     }
@@ -43,7 +44,7 @@ class QuestionPost {
         const index = this.index;
 
         return `
-            <form class='user-submit-form' id='user-submit-form-${index}' data-id="${index}">
+            <form class='user-submit-form' id='user-submit-form-${index}' data-id="${index}" enctype="multipart/form-data">
                 <button class="hide-form-button" type="button">
                     <i class="fa fa-close"></i>
                 </button>
@@ -67,38 +68,79 @@ class QuestionPost {
                     <input type='url' name='youtube' id='youtube-${index}' placeholder='https://www.youtube.com/watch?v=HZhFC11uB3Q' />
                 </div>
 
+                <!-- <label htmlFor='check'>Ich versichere, dass ich alle Rechte an dem Text und/oder Bild habe und diese auf unserer Webseite und unseren Social Media Kanälen veröffentlicht werden dürfen.</label>
+                <input type='checkbox' name='check' id='check' /> -->
+
+                <div class="error-message">
+                    Bitte schreibe einen Text (maximal 280 Zeichen), lade ein Bild hoch oder verlinke ein YouTube-Video!
+                </div>
+
                 <button type='submit'>Senden!</button>
             </form>
         `;
     }
 
+    generateSuccessHtml() {
+        return `
+            <div class="feedItem__success-message">
+                <h3>Vielen Dank für Deinen Beitrag!</h3>
+                <h4>Deine Eingabe wird von unseren Mitarbeiten überprüft und zeitnah veröffentlicht.</h4>
+            </div>
+        `;
+    }
+
     toggleFormHandler() {
         this.element.classList.toggle('hidden');
+        this.element.classList.remove('show-error');
     }
 
     userFormSubmitHandler(e) {
-        e = e || window.event;
-        const currentTarget = e.currentTarget || e.srcElement;
-    
         e.preventDefault();
-        const form = currentTarget;
-        const formId = form.dataset.id;
-    
-        const content = form.querySelector('[name=content]').value;
-        const media_type = form.querySelector('[name=media-type]').value;
-        const image = form.querySelector('[name=image]').value;
-        const youtube = form.querySelector('[name=youtube]').value;
-    
-        const values = { content, media_type, image, youtube };
-    
-        console.log('submit', values);
+        const target = e.currentTarget || e.srcElement;
+        const data = new FormData(target);
+
+        if (this.validate(data)) {
+            this.element.classList.remove('show-error');
+            this.element.classList.add('sending');
+
+            data.set('action', 'user_post_submit'); // request handler name
+            
+            fetch(PHP_VARS.AJAX_URL, {
+                credentials: 'include', // ms edge fix
+                method: 'POST',
+                body: data,
+            })
+            .then(res => res.text())
+            .then(res => {
+                console.log(res);
+                this.element.classList.remove('sending');
+            })
+            .catch(err => {
+                console.log('ERROR:', err);
+                this.element.classList.remove('sending');
+            });
+        } else {
+            this.element.classList.add('show-error');
+        }
+    }
+
+    validate(formData) {
+        const content = formData.get('content');
+        const mediaType = formData.get('media-type');
+        const image = formData.get('image');
+        const youtube = formData.get('youtube');
+
+        return (
+            (content.length > 0 && content.length < 280) ||
+            (mediaType === 'image' && image.size > 0) ||
+            (mediaType === 'youtube' && youtube.length > 0)
+        );
     }
     
     userFormMediaTypeChangeHandler(e) {
         const target = e.currentTarget || e.srcElement;
         const value = target.value;
         const id = target.dataset.id;
-        console.log('change media type', { id, target });
     
         const youtube = document.getElementById(`youtube-wrapper-${id}`);
         const image = document.getElementById(`image-wrapper-${id}`);

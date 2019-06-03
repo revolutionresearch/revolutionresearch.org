@@ -25,7 +25,7 @@ function add_rating_controller($value, $id) {
 }
 
 function remove_rating_controller($value, $id) {
-    $posts = get_posts(array(
+  $posts = get_posts(array(
 		'post_type' => FLOCKLER_POST_TYPE_NAME,
 		'p' => $id // p = post id
 	));
@@ -69,12 +69,35 @@ function social_wall_controller($page) {
 
 	if ( !isset($page) ) {
 		$page = 0;
-    }
+	}
+
+	// init page posts
+	$page_posts = [];
+		
+
+	/********************************/
+	/************ DU POST ***********/
+	/********************************/
+
+	$du_posts_max_count = 6;
+	
+	// get questions
+	$du_posts = get_posts([
+		'post_type' => 'post',
+		'posts_per_page' => $du_posts_max_count,
+		'category_name' => 'du-beitrag',
+		'orderby ' => 'date',
+		'order' => 'DESC',
+  ]);
+		
+	foreach ($du_posts as $du_post) {
+		array_push($page_posts, get_post_data($du_post));
+	}
     
 
-    /********************************/
-    /*********** FLOCKLER ***********/
-    /********************************/
+	/********************************/
+	/*********** FLOCKLER ***********/
+	/********************************/
 
 	$flockler_posts_configs = [
 		'flockler_best_rated' => [
@@ -123,11 +146,11 @@ function social_wall_controller($page) {
 		]
 	];
 
-  $flockler_posts_per_page = 39 - 3 - 3 - 5; // 3 acts, 3 questions, 5 forms
+  $flockler_posts_per_page = 39 - 3 - 3 - 4 - count($du_posts); // 3 acts, 3 questions, 4 forms, (max. 6) du-posts
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
-	$posts = [];
+	$flockler_posts = [];
 
 	// get all flockler posts
 	foreach ( $flockler_posts_configs as $key => $config ) {
@@ -151,7 +174,7 @@ function social_wall_controller($page) {
 				$post_data['order_type'] = $key;
 				
 				// push post and post id
-				array_push($posts, $post_data);
+				array_push($flockler_posts, $post_data);
 				array_push($flockler_post_ids, $post->ID);
 				
 				// increase post count
@@ -160,17 +183,18 @@ function social_wall_controller($page) {
 		}
 	}
 
-	$page_posts = array_slice($posts, -1 * $flockler_posts_per_page, $flockler_posts_per_page);
+	$flockler_page_posts = array_slice($flockler_posts, -1 * $flockler_posts_per_page, $flockler_posts_per_page);
 
-	// shuffle flockler posts
+	// shuffle flockler- and du-posts
+	$page_posts = array_merge($page_posts, $flockler_page_posts);
 	shuffle($page_posts);
 
 
-    /********************************/
-    /************* ACTS *************/
-    /********************************/
+	/********************************/
+	/************* ACTS *************/
+	/********************************/
 
-    // get acts
+  // get acts
 	$acts = [
 		'one'   => get_posts([ 'post_type' => 'post', 'category_name' => 'act-one'   ])[0],
 		'two'   => get_posts([ 'post_type' => 'post', 'category_name' => 'act-two'   ])[0],
@@ -184,20 +208,20 @@ function social_wall_controller($page) {
 	array_splice( $page_posts, floor($posts_count / 3 * 2), 0, [ get_post_data($acts['three']) ]);
 
 
-    /********************************/
-    /*********** QUESTION ***********/
-    /********************************/
-    
-    // get questions
+	/********************************/
+	/*********** QUESTION ***********/
+	/********************************/
+	
+	// get questions
 	$questions = get_posts([
 		'post_type' => 'post',
-		'posts_per_page' => 4,
+		'posts_per_page' => 3,
 		'category_name' => 'frage',
 		'orderby ' => 'date',
 		'order' => 'DESC',
-    ]);
+  ]);
     
-    $question = get_post_data($questions[0]);
+  $question = get_post_data($questions[0]);
 
     // insert question at position 4, middle, -4
 	array_splice( $page_posts, 4, 0, [ $question ]);
@@ -205,19 +229,16 @@ function social_wall_controller($page) {
 	array_splice( $page_posts, -4, 0, [ $question ]);
     
 
-    /********************************/
-    /************* FORM *************/
-    /********************************/
+	/********************************/
+	/************* FORM *************/
+	/********************************/
 
-	// insert forms
-	if (function_exists('user_submitted_posts')) {
-		// insert 4 forms starting from the end
-		$interval = floor(count($page_posts) / 4);
-		for ($i = 0; $i < 5; $i++) { 
-            $form = [ 'post_type' => 'user_submitted_posts_form' ];
-			array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
-		}
-	};
+	// insert 4 forms starting from the end
+	$interval = floor(count($page_posts) / 4);
+	for ($i = 0; $i < 4; $i++) { 
+		$form = [ 'post_type' => 'user_submitted_posts_form' ];
+		array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
+	}
 	
 	// return [
 	// 	'count' => count($page_posts),

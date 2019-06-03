@@ -137,14 +137,14 @@ $gap: 1rem;
     &--form {
 
         &.hidden .user-submit-form,
-        &:not(.hidden) .feedItem__form-teaser {
+        &:not(.hidden) .feedItem__form-teaser,
+        &:not(.success) .feedItem__success-message {
             display: none;
         }
         
         .feedItem__body {
-            min-height: calc(513px + 2rem);
-            padding-bottom: 2rem;
-            // padding: 7rem 0;
+            min-height: 32em; // 30em + padding-bottom
+            padding-bottom: 2em;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -158,19 +158,19 @@ $gap: 1rem;
             align-items: flex-end;
 
             h3 {
-                font-size: 16rem;
+                font-size: 16em;
+                line-height: 1;
                 text-align: center;
                 color: #aaa;
                 font-family: "Anton", Sans-serif;
             }
             button {
-                &, &:focus {
-                    color: $text-color;
-                    border-color: $text-color;
-                    background-color: transparent;
-                    border-radius: 0;
-                    outline: 0;
-                }
+                color: $text-color;
+                border-color: $text-color;
+                background-color: transparent;
+                border-radius: 0;
+                outline: 0;
+                font-size: 1em;
 
                 &:hover {
                     color: #fff;

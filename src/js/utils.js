@@ -27,8 +27,20 @@ function urlify(text, newTab = true) {
     });
 }
 
+
+/**
+ * Replaces all line breaks with <br /> tags
+ * source: https://stackoverflow.com/a/784547/8936417
+ * @param {string} string 
+ */
+function withLineBreaks(string) {
+    return string.replace(/(?:\r\n|\r|\n)/g, '<br />');
+}
+
+
 module.exports = {
     randomIntFromInterval,
     formatDateTime,
     urlify,
+    withLineBreaks,
 };
