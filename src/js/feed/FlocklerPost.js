@@ -124,6 +124,11 @@ class FlocklerPost {
                             marginwidth="0"
                             height="240"
                             type="text/html"
+                            allowfullscreen="allowfullscreen"
+                            mozallowfullscreen="mozallowfullscreen" 
+                            msallowfullscreen="msallowfullscreen" 
+                            oallowfullscreen="oallowfullscreen" 
+                            webkitallowfullscreen="webkitallowfullscreen"
                             src="https://www.youtube.com/embed/${this.youtubeId}?autoplay=0&fs=1"
                         >
                         </iframe>
