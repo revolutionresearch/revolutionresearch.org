@@ -1,0 +1,77 @@
+@import 'variables';
+
+.login {
+    background-color: $bg-color;
+
+    #login {
+        padding-top: 12%;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .message,
+    #login_error {
+        background-color: $text-color;
+        color: #fff;
+    }
+    
+    .message {
+        border-color: $yellow;
+    }
+    
+    #login_error {
+        border-color: $pink;
+    }
+
+    form {
+        background: transparent;
+
+        input {
+            border: 1px solid $yellow !important;
+            background-color: transparent !important;
+            color: #fff;
+
+            &[type=checkbox]:checked:before {
+                color: $yellow;
+            }
+        }
+
+        .button {
+            border: 1px solid $pink !important;
+            color: $pink;
+            border-radius: 0;
+            text-shadow: none;
+            box-shadow: none;
+            text-transform: uppercase;
+            padding: 0.5rem 1rem !important;
+            height: auto !important;
+            width: auto !important;
+            line-height: 1 !important;
+
+            &:hover {
+                background-color: $pink !important;
+                color: #fff !important;
+            }
+        }
+        
+        label {
+            color: #fff;
+        }
+    }
+
+    #reg_passmail {
+        color: #fff !important;
+        opacity: 0.65;
+    }
+
+    a {
+        color: #fff !important;
+        opacity: 0.65;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

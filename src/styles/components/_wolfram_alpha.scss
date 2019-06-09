@@ -77,7 +77,7 @@
 
     &__close-button {
         position: absolute;
-        right: 0.5rem;
+        right: calc(0.5rem + 2px); // 2px to center the close button to the equal sign
         top: 0.5rem;
         width: 2rem;
         height: 2rem;
@@ -85,10 +85,10 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        background-color: #000;
+        // background-color: #000;
         border: none;
         color: $pink;
-        font-size: 0.85rem;
+        font-size: 1rem;
         padding: 0;
         margin-left: auto;
         outline: none;

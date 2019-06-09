@@ -8,3 +8,23 @@ body {
 .site-footer {
     overflow: hidden;
 }
+
+/* Default Post/Page Layout (if Elementor is not used) */
+#main {
+    max-width: $container-width;
+    margin: 0 auto;
+    padding-top: 4rem;
+
+    .entry-title {
+        font-family: "Anton", Sans-serif
+    }
+}
+
+/* Show fullscreen notive popup only for specific screen sizes */
+#elementor-popup-modal-2438 {
+	display: none !important;
+
+	@media(min-width: 1024px) and (max-width: 1680px) {
+		display: flex !important;
+	}
+}
