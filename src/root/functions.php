@@ -32,36 +32,41 @@ function project_zukunft_scripts() {
 }
 
 
-// append to themes/{your_theme}/functions.php
-
-define('EXCERPT_RARELY', '{[}]');
-define('EXCERPT_BR', nl2br(PHP_EOL));
-
-function wp_trim_excerpt_custom($text = '')
-{
-    add_filter('the_content', 'wp_trim_excerpt_custom_mark', 6);
-
-    // get through origin filter
-    $text = wp_trim_excerpt($text);
-
-    remove_filter('the_content', 'wp_trim_excerpt_custom_mark');
-
-    return wp_trim_excerpt_custom_restore($text);
+/*** Load CSS for login page ***/
+add_action( 'login_enqueue_scripts', 'project_zukunft_login_style' );
+function project_zukunft_login_style() {
+    wp_enqueue_style( 'project_zukunft_login_style', get_stylesheet_directory_uri() . '/style-login.css' );
 }
 
-function wp_trim_excerpt_custom_mark($text)
-{
-    $text = nl2br($text);
-    return str_replace(EXCERPT_BR, EXCERPT_RARELY, $text);
-}
 
-function wp_trim_excerpt_custom_restore($text)
-{
-    return str_replace(EXCERPT_RARELY, EXCERPT_BR, $text);
-}
 
-// remove default filter
+/*** Allow line breaks and html tags in post excerpt ***/
 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+add_filter('get_the_excerpt', 'custom_wp_trim_excerpt');
+function custom_wp_trim_excerpt($custom_excerpt) {
+    $raw_excerpt = $custom_excerpt;
+    
+    if ( $custom_excerpt == '') {
 
-// add custom filter
-add_filter('get_the_excerpt', 'wp_trim_excerpt_custom');
+        $custom_excerpt = get_the_content('');
+        $custom_excerpt = strip_shortcodes( $custom_excerpt );
+        $custom_excerpt = apply_filters('the_content', $custom_excerpt);
+        $custom_excerpt = str_replace(']]>', ']]&gt;', $custom_excerpt);
+        
+        // allow specified html tags in the excerpt
+        $custom_excerpt = strip_tags($custom_excerpt, '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>,<span>,<div>');
+
+        return $custom_excerpt;   
+    } 
+    return apply_filters('custom_wp_trim_excerpt', $custom_excerpt, $raw_excerpt);
+}
+
+
+/*** Change Lost password message ***/
+add_filter( 'login_message', 'password_reset_message_text_change' );
+function password_reset_message_text_change( $message ) {
+    if ($_REQUEST['action'] == 'lostpassword')  {
+        $message = "<p class='message'>Bitte gib Deinen Benutzernamen oder Deine E-Mail-Adresse hier ein. Du bekommst eine E-Mail zugesandt, mit deren Hilfe Du ein neues Passwort erstellen kannst.<p>";
+    }
+    return $message;
+}
