@@ -91,7 +91,7 @@ $gap: 1em;
 
         h3 {
             margin: 0;
-            font-size: 1.9em;
+            font-size: 2em;
             text-align: center;
         }
     }
@@ -144,48 +144,67 @@ $gap: 1em;
     &--form {
 
         &.hidden .user-submit-form,
+        &.success .user-submit-form,
         &:not(.hidden) .feedItem__form-teaser,
-        &:not(.success) .feedItem__success-message {
+        &:not(.success) .feedItem__form-success-message {
             display: none;
         }
         
         .feedItem__body {
-            min-height: 32em; // 30em + padding-bottom
-            padding-bottom: 2em;
+            min-height: 34em; // 30em + padding-bottom
+            padding-bottom: 4em; // 2em
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        .feedItem__form-teaser {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-end;
-
-            h3 {
-                font-size: 16em;
-                line-height: 1;
-                text-align: center;
-                color: #aaa;
-                font-family: "Anton", Sans-serif;
-            }
-            button {
-                color: $text-color;
-                border-color: $text-color;
-                background-color: transparent;
-                border-radius: 0;
-                outline: 0;
-                font-size: 1em;
-
-                &:hover {
-                    color: #fff;
+        .feedItem__form {
+            &-teaser {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-end;
+    
+                h3 {
+                    font-size: 16em;
+                    line-height: 1;
+                    text-align: center;
+                    color: #aaa;
+                    font-family: "Anton", Sans-serif;
+                }
+                button {
+                    color: $text-color;
                     border-color: $text-color;
-                    background-color: $text-color;
+                    background-color: transparent;
+                    border-radius: 0;
+                    outline: 0;
+                    font-size: 1em;
+    
+                    &:hover {
+                        color: #fff;
+                        border-color: $text-color;
+                        background-color: $text-color;
+                    }
+                }
+            }
+
+            &-success-message {
+                text-align: center;
+                padding: 1em;
+
+                h3 {
+                    font-size: 2em;
+                    margin-bottom: 1em;
+                }
+
+                p {
+                    font-size: 1em;
                 }
             }
         }
+
+
     }
 
     &__debugInfos {

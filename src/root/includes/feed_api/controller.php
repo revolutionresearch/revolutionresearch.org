@@ -146,7 +146,7 @@ function social_wall_controller($page) {
 		]
 	];
 
-  $flockler_posts_per_page = 39 - 3 - 3 - 4; // 3 acts, 3 questions, 4 forms
+  $flockler_posts_per_page = 39 - 3 - 3 - 2 - count($page_posts); // 3 acts, 3 questions, 2 forms, (max 6) du_posts
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
@@ -233,22 +233,20 @@ function social_wall_controller($page) {
 	/************* FORM *************/
 	/********************************/
 
-	// insert forms
-	if (function_exists('user_submitted_posts')) {
-		// insert 4 forms starting from the end
-		$interval = floor(count($page_posts) / 4);
-		for ($i = 0; $i < 4; $i++) { 
-            $form = [ 'post_type' => 'user_submitted_posts_form' ];
-			array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
-		}
-	};
-	
-	// return [
-	// 	'count' => count($page_posts),
-	// 	'posts' => array_map(function($post) {
-	// 		return $post['post_type'];
-	// 	}, $page_posts)
-	// ];
+		// insert 2 forms starting from the end
+		$form_number = 2;
+    $interval = floor(count($page_posts) / $form_number);
+    for ($i = 0; $i < $form_number; $i++) { 
+        $form = [ 'post_type' => 'user_submitted_posts_form' ];
+        array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
+    }
 
-	return $page_posts;
+	return json_encode([
+        'post_count' => count($page_posts),
+        'post_types' => array_map(function($post) {
+            return $post['post_type'];
+        }, $page_posts),
+        'data' => $page_posts,
+        'error' => null
+    ]);
 }

@@ -72,7 +72,7 @@ class QuestionPost {
                 <input type='checkbox' name='check' id='check' /> -->
 
                 <div class="error-message">
-                    Bitte schreibe einen Text (maximal 280 Zeichen), lade ein Bild hoch oder verlinke ein YouTube-Video!
+                    Bitte schreibe einen Text (max. 280 Zeichen), lade ein Bild hoch (max. 4 MB) oder verlinke ein YouTube-Video!
                 </div>
 
                 <button type='submit'>Senden!</button>
@@ -82,9 +82,9 @@ class QuestionPost {
 
     generateSuccessHtml() {
         return `
-            <div class="feedItem__success-message">
+            <div class="feedItem__form-success-message">
                 <h3>Vielen Dank für Deinen Beitrag!</h3>
-                <h4>Deine Eingabe wird von unseren Mitarbeiten überprüft und zeitnah veröffentlicht.</h4>
+                <p>Deine Eingabe wird von unseren Mitarbeiten überprüft und zeitnah veröffentlicht.</p>
             </div>
         `;
     }
@@ -110,14 +110,22 @@ class QuestionPost {
                 method: 'POST',
                 body: data,
             })
-            .then(res => res.text())
+            .then(res => res.json())
             .then(res => {
                 console.log(res);
                 this.element.classList.remove('sending');
+                
+                if (res.error) {
+                    this.element.classList.add('show-error');
+                } else {
+                    this.element.classList.add('success');
+                }
+
             })
             .catch(err => {
                 console.log('ERROR:', err);
                 this.element.classList.remove('sending');
+                this.element.classList.add('show-error');
             });
         } else {
             this.element.classList.add('show-error');
@@ -132,7 +140,7 @@ class QuestionPost {
 
         return (
             (content.length > 0 && content.length < 280) ||
-            (mediaType === 'image' && image.size > 0) ||
+            (mediaType === 'image' && image.size > 0 && image.size < 4194304) || // ~ 4 MB
             (mediaType === 'youtube' && youtube.length > 0)
         );
     }

@@ -105,16 +105,17 @@ class Feed {
             { credentials: 'include' }
         );
         const json = await results.json();
+        const parsed_json = JSON.parse(json);
 
         // const json = socialWallTestData[this.page];
         this.isFetching = false;
 
-        return json;
+        console.log(parsed_json);
+        return parsed_json.data;
     }
 
     async renderItems(data) {
         // create items
-        console.log(data);
         data.forEach((itemData, index) => {
             switch (itemData.post_type) {
                 case 'post': {

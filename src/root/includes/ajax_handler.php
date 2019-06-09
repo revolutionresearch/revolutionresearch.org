@@ -26,50 +26,6 @@ function simple_wa_api_request() {
 }
 
 
-
-function validate_image($image) {
-    $validextensions = array("jpeg", "jpg", "png", "gif");
-    $temporary = explode(".", $image["name"]);
-    $file_extension = end($temporary);
-
-    return (
-        (
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif"
-        ) &&
-        //Approx. 100kb files can be uploaded.
-        $image["size"] < 100000 &&
-        in_array($file_extension, $validextensions)
-    );
-}
-
-function sent_error($error_key) {
-    switch ($error_key) {
-        case 'NO_CONTENT_OR_IMAGE':
-            echo 'No content or image found';
-            break;
-        case 'IMAGE_TO_BIG_OR_WRONG_FORMAT':
-            echo 'Image to big (max 100kb) or wrong format (only png, jpg, jpeg, gif)';
-            break;
-        case 'NO_CONTENT_OR_YOUTUBE':
-            echo 'No content or YouTube link found';
-            break;
-        case 'CREATE_POST_FAILED':
-            echo 'Post creation failed';
-            break;
-        case 'UPLOAD_FAILED':
-            echo 'Upload failed';
-            break;
-        
-        default:
-            break;
-    }
-
-    wp_die();
-}
-
 /**
  * User submitted post
  */
@@ -80,7 +36,7 @@ function user_post_submit() {
     if (!isset($_POST)) {
         wp_die();
     }
-
+    
     $content = $_POST['content'];
     $media_type = $_POST['media-type'];
     $youtube = $_POST['youtube'];
@@ -137,10 +93,59 @@ function user_post_submit() {
     }
 
     echo json_encode([
-        'post_id' => $post_id,
-        'attachment_id' => isset($attachment_id) ? $attachment_id : '',
-        'image_url' => isset($image_url) ? $image_url : ''
+        'message' => 'success',
+        'error' => null,
     ]);
     
     wp_die(); // this is required to terminate immediately and return a proper response
+}
+
+function validate_image($image) {
+    $validextensions = array("jpeg", "jpg", "png", "gif");
+    $temporary = explode(".", $image["name"]);
+    $file_extension = end($temporary);
+
+    return (
+        (
+            $image["type"] == "image/png, jpg, jpeg, gif" ||
+            $image["type"] == "image/png, jpg, jpeg, gif" ||
+            $image["type"] == "image/png, jpg, jpeg, gif" ||
+            $image["type"] == "image/png, jpg, jpeg, gif"
+        ) &&
+        $image["size"] < 4194304 && // ~ 4 MB 
+        // $image["size"] < 194304 && // ~ 0,2 MB 
+        in_array($file_extension, $validextensions)
+    );
+}
+
+function sent_error($error_key) {
+    $error = '';
+
+    switch ($error_key) {
+        case 'NO_CONTENT_OR_IMAGE':
+            $error ='No content or image found';
+            break;
+        case 'IMAGE_TO_BIG_OR_WRONG_FORMAT':
+            $error ='Image to big (max 4 MB) or wrong format (only png, jpg, jpeg, gif)';
+            break;
+        case 'NO_CONTENT_OR_YOUTUBE':
+            $error ='No content or YouTube link found';
+            break;
+        case 'CREATE_POST_FAILED':
+            $error ='Post creation failed';
+            break;
+        case 'UPLOAD_FAILED':
+            $error ='Upload failed';
+            break;
+        
+        default:
+            break;
+    }
+
+    echo json_encode([
+        'message' => 'error',
+        'error' => $error,
+    ]);
+
+    wp_die();
 }
