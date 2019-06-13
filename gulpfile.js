@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const del = require('del');
-const watch = require('gulp-watch');
+// const watch = require('gulp-watch');
 
 const imagemin = require('gulp-imagemin');
 const sass = require('gulp-sass');
@@ -33,7 +33,7 @@ function copyStatic() {
     const source = dirs.src + '/root';
 
     return gulp.src(source + '/**/*', { base: source })
-        .pipe(watch(source, { base: source }))
+        // .pipe(watch(source, { base: source }))
         .pipe(gulp.dest(dirs.build));
 }
 
@@ -46,7 +46,10 @@ function images() {
 
 // Compile SASS (SCSS)
 function styles() {
-    return gulp.src(dirs.src + '/styles/*.scss')
+    const source = dirs.src + '/styles';
+
+    return gulp.src(source + '/*.scss', { base: source })
+        // .pipe(watch(source, { base: source }))
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer())
