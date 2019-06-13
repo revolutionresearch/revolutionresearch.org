@@ -35,25 +35,22 @@ function appendRating(parent, postId) {
         let fetchOptions;
         
         if (ratings[postId]) {
-            const old_value = ratings[postId];
-            const new_value = value;
+            const old_value = parseInt(ratings[postId], 10);
+            const new_value = parseInt(value, 10);
 
-            if (parseInt(value, 10) === 0) {
-                // delete rating
+            if (new_value === 0) {
+                // delete old rating
                 rating.classList.remove('set');
                 fetchOptions = {
                     method: 'DELETE',
-                    body: JSON.stringify({ value })
+                    body: JSON.stringify({ value: old_value })
                 };
                 delete ratings[postId];
             } else {
                 // update rating
                 fetchOptions = {
                     method: 'PUT',
-                    body: JSON.stringify({
-                        old_value: ratings[postId],
-                        new_value: value
-                    })
+                    body: JSON.stringify({ old_value, new_value })
                 };
                 ratings[postId] = value;
             }
