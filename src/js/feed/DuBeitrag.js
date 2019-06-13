@@ -1,6 +1,6 @@
 const appendRating = require('./rating');
-const { SharingComponent } = require('./components');
-const { urlify, withLineBreaks } = require('../utils');
+const { DebugInfosComponent, SharingComponent } = require('./components');
+const { formatDateTime, urlify, withLineBreaks } = require('../utils');
 
 class DuBeitrag {
     constructor(post) {
@@ -10,6 +10,11 @@ class DuBeitrag {
         this.type = this.post.post_type;
         this.content = this.post.post_content;
         this.imageUrl = this.post.post_thumbnail_url;
+        this.ratingValue = this.post.rating.value || 0;
+        this.ratingCount = this.post.rating.count || 0;
+
+        this.timeCreated = this.post.post_date;
+        this.timeCreatedFormatted = formatDateTime(this.timeCreated);
 
         if (this.post.youtube_url.length) {
             const urlParts = this.post.youtube_url.split('?v=');
@@ -31,6 +36,12 @@ class DuBeitrag {
 
     generateHtml() {
         return `
+            ${DebugInfosComponent({
+                ratingValue: this.ratingValue,
+                ratingCount: this.ratingCount,
+                timeCreatedFormatted: this.timeCreatedFormatted
+            })}
+
             ${(this.youtubeId && !this.imageUrl) ? `
                 <a class="feedItem__imageLink feedItem__imageLink--youtube" href="${this.post.youtube_url}" target="_blank">    
                     <iframe
