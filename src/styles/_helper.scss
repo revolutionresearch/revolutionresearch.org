@@ -56,12 +56,19 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
             .elementor-divider-separator {
                 border: none !important;
                 height: 12px;
+                // background: repeating-linear-gradient(
+                //     49deg,
+                //     $yellow,
+                //     $yellow 1px,
+                //     #000 1px,
+                //     #000 3px
+                // );
                 background: repeating-linear-gradient(
                     49deg,
                     $yellow,
-                    $yellow 1px,
-                    #000 1px,
-                    #000 3px
+                    $yellow 2px,
+                    #000 2px,
+                    #000 5px
                 );
             }
         }
