@@ -6,7 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 require_once(__DIR__ . '/utils.php');
-require_once(__DIR__ . '/controller.php');
+require_once(__DIR__ . '/social_wall_controller.php');
+require_once(__DIR__ . '/rating_controller.php');
 
 
 /** ROUTES */
@@ -22,7 +23,7 @@ add_action('rest_api_init', function () {
 		'callback' => 'add_rating',
 	));
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
-		'methods' => '\DELETE',
+		'methods' => 'delete',
 		'callback' => 'remove_rating',
 	));
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(

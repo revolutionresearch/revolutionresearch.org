@@ -5,61 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-function add_rating_controller($value, $id) {
-    $posts = get_posts(array(
-		'post_type' => FLOCKLER_POST_TYPE_NAME,
-		'p' => $id // p = post id
-	));
-	 
-	if ( empty($posts) ) {
-		return null;
-	}
-
-	$post_id = $posts[0]->ID;
-
-	$current_rating_value = get_field('rating_value', $post_id);
-	$current_rating_count = get_field('rating_count', $post_id);
-	
-	update_field('rating_value', $current_rating_value + (int)$value, $post_id);
-	update_field('rating_count', $current_rating_count + 1, $post_id);
-}
-
-function remove_rating_controller($value, $id) {
-  $posts = get_posts(array(
-		'post_type' => FLOCKLER_POST_TYPE_NAME,
-		'p' => $id // p = post id
-	));
-	 
-	if ( empty($posts) ) {
-		return null;
-	}
-
-	$post_id = $posts[0]->ID;
-
-	$current_rating_value = get_field('rating_value', $post_id);
-	$current_rating_count = get_field('rating_count', $post_id);
-	
-	update_field('rating_value', $current_rating_value - (int)$value, $post_id);
-	update_field('rating_count', $current_rating_count - 1, $post_id);
-}
-
-function update_rating_controller($old_value, $new_value, $id) {
-    $posts = get_posts(array(
-		'post_type' => FLOCKLER_POST_TYPE_NAME,
-		'p' => $id // p = post id
-	));
-	 
-	if ( empty($posts) ) {
-		return null;
-	}
-
-	$post_id = $posts[0]->ID;
-
-	$current_rating_value = get_field('rating_value', $post_id);
-	update_field('rating_value', $current_rating_value - (int)$old_value + $new_value, $post_id);
-}
-
-
+/**
+ * GET SOCIAL WALL POSTS
+ */
 function social_wall_controller($page) {
 	if ($page > 3) {
 		return [
@@ -187,7 +135,7 @@ function social_wall_controller($page) {
 
 	// shuffle flockler- and du-posts
 	$page_posts = array_merge($page_posts, $flockler_page_posts);
-	shuffle($page_posts);
+	// shuffle($page_posts);
 
 
 	/********************************/
