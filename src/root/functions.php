@@ -66,7 +66,7 @@ function custom_wp_trim_excerpt($custom_excerpt) {
 add_filter( 'login_message', 'password_reset_message_text_change' );
 function password_reset_message_text_change( $message ) {
     if ($_REQUEST['action'] == 'lostpassword')  {
-        $message = "<p class='message'>Bitte gib Deinen Benutzernamen oder Deine E-Mail-Adresse hier ein. Du bekommst eine E-Mail zugesandt, mit deren Hilfe Du ein neues Passwort erstellen kannst.<p>";
+        $message = "<p class='message'>Bitte gebe Deinen Benutzernamen oder Deine E-Mail-Adresse hier ein. Du bekommst eine E-Mail zugesandt, mit deren Hilfe Du ein neues Passwort erstellen kannst.<p>";
     }
     return $message;
 }
