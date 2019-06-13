@@ -22,9 +22,6 @@ body {
 
 /* Show fullscreen notive popup only for specific screen sizes */
 #elementor-popup-modal-2438 {
-	display: none !important;
-
-	@media(min-width: 1024px) and (max-width: 1680px) {
-		display: flex !important;
-	}
+	@media(max-width: 1024px) { display: none !important; }
+	@media(min-width: 1440px) { display: none !important; }
 }
