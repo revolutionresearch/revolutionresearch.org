@@ -65,10 +65,11 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
                 // );
                 background: repeating-linear-gradient(
                     49deg,
-                    $yellow,
+                    #000,
+                    $yellow 0.3px,
                     $yellow 2px,
-                    #000 2px,
-                    #000 5px
+                    #000 2.3px,
+                    #000 5.5px
                 );
             }
         }
