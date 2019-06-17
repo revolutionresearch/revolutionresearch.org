@@ -25,8 +25,9 @@ function appendRating(parent, postId) {
     nouiRating.querySelector('.noUi-base').appendChild(fakeFill);
 
     function handleRatingSet([ value ]) {
-        console.log({ postId, value: parseInt(value, 10) });
         const rating = this;
+        const _value = parseInt(value, 10);
+        console.log({ postId, value: _value });
 
         // get previous value from local storage
         let ratings = localStorage.getItem('projekt-zukunft-ratings');
@@ -36,7 +37,7 @@ function appendRating(parent, postId) {
         
         if (ratings[postId]) {
             const old_value = parseInt(ratings[postId], 10);
-            const new_value = parseInt(value, 10);
+            const new_value = _value;
 
             if (new_value === 0) {
                 // delete old rating
@@ -52,16 +53,16 @@ function appendRating(parent, postId) {
                     method: 'PUT',
                     body: JSON.stringify({ old_value, new_value })
                 };
-                ratings[postId] = value;
+                ratings[postId] = new_value;
             }
-        } else {
+        } else if (_value !== 0) {
             // create rating
             rating.classList.add('set');
             fetchOptions = {
                 method: 'POST',
-                body: JSON.stringify({ value })
+                body: JSON.stringify({ value: _value })
             };
-            ratings[postId] = value;
+            ratings[postId] = _value;
         }
 
         // update database

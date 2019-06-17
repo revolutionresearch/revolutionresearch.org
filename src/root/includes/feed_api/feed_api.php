@@ -23,7 +23,7 @@ add_action('rest_api_init', function () {
 		'callback' => 'add_rating',
 	));
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
-		'methods' => 'delete',
+		'methods' => 'DELETE',
 		'callback' => 'remove_rating',
 	));
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(

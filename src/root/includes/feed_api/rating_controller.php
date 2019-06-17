@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function validate_rating($value) {
     $rating = (int)$value;
-    return -4 <= $rating && $rating <= 4;
+    return $rating !== 0 && -4 <= $rating && $rating <= 4;
 }
 
 

@@ -42,7 +42,6 @@ class Feed {
 
         // binding
         this.reloadPage = this.reloadPage.bind(this);
-        this.updateRating = this.updateRating.bind(this);
         
         // INIT
         if (this.root) {
@@ -52,8 +51,6 @@ class Feed {
 
    async  init() {
        // event listeners
-       this.root.addEventListener('change', this.updateRating);
-
        if (this.reloadButton) {
            this.reloadButton.addEventListener('click', this.reloadPage);
         }
@@ -107,7 +104,6 @@ class Feed {
         const json = await results.json();
         const parsed_json = JSON.parse(json);
 
-        // const json = socialWallTestData[this.page];
         this.isFetching = false;
 
         console.log(parsed_json);
@@ -154,38 +150,6 @@ class Feed {
         this.itemsElements.push(itemElement);
 
         this.colcade.append(itemElement);
-    }
-
-    async updateRating({ target }) {
-        if (target.classList.contains('rating__input')) {
-            // read post id and rating value from dom
-            const id = parseInt(target.dataset.id, 10);
-            const value = parseInt(target.value, 10);
-            
-            // validate rating value
-            if (value !== 0 && value >= -4 && value <= 4) {
-                // post request
-                // const res = await fetch(`${PHP_VARS.API_URL}/flockler/${id}/rating`, {
-                //     credentials: 'include',
-                //     headers: {
-                //         'Accept': 'application/json',
-                //         'Content-Type': 'application/json'
-                //     },    
-                //     method: 'POST',
-                //     body: JSON.stringify({ value })
-                // });
-                // const newRatingString = await res.json();
-
-
-                // update dom
-                // target.disabled = true;
-                // target.parentNode.style.display = 'none';
-                // target.parentNode.previousElementSibling.style.display = 'none';
-                // const feedItem = target.closest('.feedItem');
-                // const itemIndex = this.itemsElements.indexOf(feedItem);
-                // this.items[itemIndex].updateRating(newRatingString);
-            }
-        }
     }
 }
 
