@@ -14,6 +14,7 @@ class FlocklerPost {
         this.postId = this.post.post_id;
         this.type = this.post.post_type;
         this.title = this.post.post_title;
+        this.orderType = this.post.order_type;
         this.ratingValue = this.post.rating.value || 0;
         this.ratingCount = this.post.rating.count || 0;
 
@@ -111,7 +112,8 @@ class FlocklerPost {
             ${DebugInfosComponent({
                 ratingValue: this.ratingValue,
                 ratingCount: this.ratingCount,
-                timeCreatedFormatted: this.timeCreatedFormatted
+                timeCreatedFormatted: this.timeCreatedFormatted,
+                orderType : this.orderType
             })}
 
             ${(this.mediaUrl) ? `

@@ -14,13 +14,14 @@ function SharingComponent(postUrl) {
 function DebugInfosComponent({
     ratingValue,
     ratingCount,
-    timeCreatedFormatted
+    timeCreatedFormatted,
+    orderType
 }) {
     return `
     <div class="feedItem__debugInfos">
         Rating: <span class="rating-value">${ratingValue}</span>,
         Count: <span class="rating-count">${ratingCount}</span>,
-        Created: ${timeCreatedFormatted}
+        Created: ${timeCreatedFormatted}${orderType ? `, order: ${orderType}` : ''}
     </div>
     `;
 }
