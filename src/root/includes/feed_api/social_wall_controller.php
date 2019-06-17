@@ -23,18 +23,14 @@ function social_wall_controller($page) {
 	$page_posts = [];
 		
 
-	/********************************/
-	/************ DU POST ***********/
-	/********************************/
+	/************ DU POSTS **********/
 
 	$du_posts_max_count = 6;
-	
-	// get questions
 	$du_posts = get_posts([
 		'post_type' => 'post',
 		'posts_per_page' => $du_posts_max_count,
 		'category_name' => 'du-beitrag',
-		'orderby ' => 'date',
+		'orderby' => 'date',
 		'order' => 'DESC',
   ]);
 		
@@ -43,9 +39,7 @@ function social_wall_controller($page) {
 	}
     
 
-	/********************************/
 	/*********** FLOCKLER ***********/
-	/********************************/
 
 	$flockler_posts_configs = [
 		'flockler_best_rated' => [
@@ -54,7 +48,7 @@ function social_wall_controller($page) {
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
 				'meta_key' => 'rating_value',
-				'orderby ' => 'meta_value_num',
+				'orderby' => 'meta_value_num',
 				'order' => 'DESC'
 			]
 		],
@@ -64,7 +58,7 @@ function social_wall_controller($page) {
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
 				'meta_key' => 'rating_value',
-				'orderby ' => 'meta_value_num',
+				'orderby' => 'meta_value_num',
 				'order' => 'ASC'
 			]
 		],
@@ -89,12 +83,12 @@ function social_wall_controller($page) {
 				'post_type' => FLOCKLER_POST_TYPE_NAME,
 				'posts_per_page' => -1,
 				'order' => 'DESC',
-				'orderby ' => 'date'
+				'orderby' => 'date'
 			]
 		]
 	];
 
-  $flockler_posts_per_page = 39 - 3 - 3 - 2 - count($page_posts); // 3 acts, 3 questions, 2 forms, (max 6) du_posts
+    $flockler_posts_per_page = 39 - 3 - 3 - 2 - count($page_posts); // 3 acts, 3 questions, 2 forms, (max 6) du_posts
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
@@ -129,20 +123,17 @@ function social_wall_controller($page) {
 				$flockler_posts_count += 1;
 			}
 		}
-	}
+    }
 
 	$flockler_page_posts = array_slice($flockler_posts, -1 * $flockler_posts_per_page, $flockler_posts_per_page);
 
 	// shuffle flockler- and du-posts
 	$page_posts = array_merge($page_posts, $flockler_page_posts);
-	// shuffle($page_posts);
+	shuffle($page_posts);
 
 
-	/********************************/
 	/************* ACTS *************/
-	/********************************/
 
-  // get acts
 	$acts = [
 		'one'   => get_posts([ 'post_type' => 'post', 'category_name' => 'act-one'   ])[0],
 		'two'   => get_posts([ 'post_type' => 'post', 'category_name' => 'act-two'   ])[0],
@@ -156,20 +147,17 @@ function social_wall_controller($page) {
 	array_splice( $page_posts, floor($posts_count / 3 * 2), 0, [ get_post_data($acts['three']) ]);
 
 
-	/********************************/
 	/*********** QUESTION ***********/
-	/********************************/
 	
-	// get questions
 	$questions = get_posts([
 		'post_type' => 'post',
 		'posts_per_page' => 3,
 		'category_name' => 'frage',
-		'orderby ' => 'date',
+		'orderby' => 'date',
 		'order' => 'DESC',
-  ]);
+    ]);
     
-  $question = get_post_data($questions[0]);
+    $question = get_post_data($questions[0]);
 
     // insert question at position 4, middle, -4
 	array_splice( $page_posts, 4, 0, [ $question ]);
@@ -177,12 +165,10 @@ function social_wall_controller($page) {
 	array_splice( $page_posts, -4, 0, [ $question ]);
     
 
-	/********************************/
 	/************* FORM *************/
-	/********************************/
 
-		// insert 2 forms starting from the end
-		$form_number = 2;
+    // insert 2 forms starting from the end
+    $form_number = 2;
     $interval = floor(count($page_posts) / $form_number);
     for ($i = 0; $i < $form_number; $i++) { 
         $form = [ 'post_type' => 'user_submitted_posts_form' ];
