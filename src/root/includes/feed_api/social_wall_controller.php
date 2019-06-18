@@ -29,11 +29,12 @@ function social_wall_controller($page) {
 	$du_posts = get_posts([
 		'post_type' => 'post',
 		'posts_per_page' => $du_posts_max_count,
+		'paged' => $page + 1,
 		'category_name' => 'du-beitrag',
 		'orderby' => 'date',
 		'order' => 'DESC',
-  ]);
-		
+	]);
+
 	foreach ($du_posts as $du_post) {
 		array_push($page_posts, get_post_data($du_post));
 	}
@@ -126,6 +127,7 @@ function social_wall_controller($page) {
     }
 
 	$flockler_page_posts = array_slice($flockler_posts, -1 * $flockler_posts_per_page, $flockler_posts_per_page);
+
 
 	// shuffle flockler- and du-posts
 	$page_posts = array_merge($page_posts, $flockler_page_posts);
