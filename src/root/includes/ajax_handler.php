@@ -43,8 +43,8 @@ function user_post_submit() {
     $image = $_FILES['image'];
 
     // validation
-    if (!sizeof($content)) {
-        if ($media_type === 'image' && !$image) {
+    if (!strlen($content)) {
+        if ($media_type === 'image' && $image['size'] === 0) {
             sent_error('NO_CONTENT_OR_IMAGE');
         } else if ($media_type === 'image' && !validate_image($image)) {
             sent_error('IMAGE_TO_BIG_OR_WRONG_FORMAT');
@@ -54,12 +54,26 @@ function user_post_submit() {
         }
     }
 
+    // create post title
+    $title = 'DU-Beitrag';
+    if ($media_type === 'image' && $image['size'] > 0) {
+        $title .= ' [Bild]';
+    } else if ($media_type === 'youtube' && $youtube){
+        $title .= ' [YouTube]';
+    }
+    if (strlen($content) > 0) {
+        $max_content_length = 50;
+        $content_excerpt = substr($content, 0, $max_content_length);
+        $title .= ": \"$content_excerpt";
+        $title .= (strlen($content) > $max_content_length) ? '..."' : '"';
+    }
+
     // create new post
     $post_data = array(
         'post_type' => 'post',
         'post_status' => 'pending', // post is pending review
         'post_category' => [21], // 21: du-beitrag
-        'post_title' => 'DU-Beitrag',
+        'post_title' => $title,
         'post_content' => isset($content) ? $content : '',
         'meta_input' => [
             'youtube_url' => $media_type === 'youtube' ? $youtube : ''
@@ -72,14 +86,14 @@ function user_post_submit() {
         sent_error('CREATE_POST_FAILED');
     }
 
-    if ($media_type === 'image') {
+    if ($media_type === 'image' && $image['size'] > 0) {
         // These files need to be included as dependencies when on the front end.
         require_once( ABSPATH . 'wp-admin/includes/image.php' );
         require_once( ABSPATH . 'wp-admin/includes/file.php' );
         require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
         // upload image
-        $image_files_key = 'image';
+        $image_files_key = 'image'; // name of the image input field and key in $_FILES object
         $attachment_id = media_handle_upload( $image_files_key, 0 );
 		
         if ( is_wp_error( $attachment_id ) ) {
