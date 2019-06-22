@@ -4,6 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+/**
+ * Helper functions to log something to the browser console
+ */
+function console_log($message, $encode = true) {
+    echo "<script>console.log('[Backend Log]', " . ($encode ? json_encode($message) : "$message") . ")</script>";
+}
+
 
 /*** Includes ***/
 require_once(__DIR__ . '/includes/elementor_hello_theme_setup.php');
@@ -12,7 +19,8 @@ require_once(__DIR__ . '/includes/custom_post_queries.php');
 
 // shortcodes
 require_once(__DIR__ . '/includes/shortcodes/berlin_manifesto_shortcodes.php');
-require_once(__DIR__ . '/includes/shortcodes/events_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/events_date_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/events_filter_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/wolfram_alpha_shortcodes.php');
 
 // ajax handler
