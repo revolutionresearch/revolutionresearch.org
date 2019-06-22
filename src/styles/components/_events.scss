@@ -1,9 +1,9 @@
 .event-list {
-    .event:not(:first-child) {
+    .activism:not(:first-child) {
         border-top: 2px solid #fff;
     }
 
-    .event:hover {
+    .activism:hover {
         &,
         & + .event {
             border-color: $pink;
@@ -80,7 +80,5 @@
         max-height: 0;
         overflow: hidden;
         transition: 0.2s linear;
-
-        &--open {}
     }
 }
