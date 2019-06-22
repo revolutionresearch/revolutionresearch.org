@@ -25,7 +25,7 @@ function project_zukunft_scripts() {
 	wp_localize_script(
         'projekt_zukunft_scripts',
         'PHP_VARS', [
-            'API_URL' => 'http://projekt-zukunft.hhc-duesseldorf.de/wp-json/zukunft/v1',
+            'API_URL' => get_site_url() . '/wp-json/zukunft/v1',
             'AJAX_URL' => admin_url( 'admin-ajax.php' ) // accesses as ajax_object.ajax_url in JavaScript
         ]
     );

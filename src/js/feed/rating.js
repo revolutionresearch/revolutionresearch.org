@@ -3,7 +3,7 @@ const noUiSlider = require('nouislider');
 function appendRating(parent, postId) {
     const nouiRating = document.createElement('div');
 
-    let ratings = localStorage.getItem('projekt-zukunft-ratings');
+    let ratings = localStorage.getItem('revolutionresearch-ratings');
     ratings = ratings ? JSON.parse(ratings) : {};
 
     noUiSlider.create(nouiRating, {
@@ -30,7 +30,7 @@ function appendRating(parent, postId) {
         console.log({ postId, value: _value });
 
         // get previous value from local storage
-        let ratings = localStorage.getItem('projekt-zukunft-ratings');
+        let ratings = localStorage.getItem('revolutionresearch-ratings');
         ratings = ratings ? JSON.parse(ratings) : {};
 
         let fetchOptions;
@@ -76,7 +76,7 @@ function appendRating(parent, postId) {
         });
 
         // update local storage
-        localStorage.setItem('projekt-zukunft-ratings', JSON.stringify(ratings));
+        localStorage.setItem('revolutionresearch-ratings', JSON.stringify(ratings));
     }
 
     function handleFakeFillOnUpdate(values, handle, unencoded, tap, positions) {
