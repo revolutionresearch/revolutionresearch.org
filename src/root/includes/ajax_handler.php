@@ -43,14 +43,18 @@ function user_post_submit() {
     $image = $_FILES['image'];
 
     // validation
-    if (!strlen($content)) {
+    if (strlen($content) <= 0) {
         if ($media_type === 'image' && $image['size'] === 0) {
             sent_error('NO_CONTENT_OR_IMAGE');
-        } else if ($media_type === 'image' && !validate_image($image)) {
+        }
+        else if ($media_type === 'image' && !validate_image($image)) {
             sent_error('IMAGE_TO_BIG_OR_WRONG_FORMAT');
         }
         else if ($media_type === 'youtube' && !$youtube) {
             sent_error('NO_CONTENT_OR_YOUTUBE');
+        }
+        else if (!in_array($media_type, ['image', 'youtube'])) {
+            sent_error('UNSUPPORTED_MEDIA_TYPE');
         }
     }
 
@@ -61,11 +65,21 @@ function user_post_submit() {
     } else if ($media_type === 'youtube' && $youtube){
         $title .= ' [YouTube]';
     }
+
+    $clean_content = '';
     if (strlen($content) > 0) {
+        // escape content
+        $clean_content = sanitize_textarea_field($content);
+
         $max_content_length = 50;
-        $content_excerpt = substr($content, 0, $max_content_length);
+        $content_excerpt = substr($clean_content, 0, $max_content_length);
         $title .= ": \"$content_excerpt";
-        $title .= (strlen($content) > $max_content_length) ? '..."' : '"';
+        $title .= (strlen($clean_content) > $max_content_length) ? '..."' : '"';
+    }
+
+    $clean_youtube_url = '';
+    if ($media_type === 'youtube') {
+        $clean_youtube_url = sanitize_text_field($youtube);
     }
 
     // create new post
@@ -74,9 +88,9 @@ function user_post_submit() {
         'post_status' => 'pending', // post is pending review
         'post_category' => [21], // 21: du-beitrag
         'post_title' => $title,
-        'post_content' => isset($content) ? $content : '',
+        'post_content' => $clean_content,
         'meta_input' => [
-            'youtube_url' => $media_type === 'youtube' ? $youtube : ''
+            'youtube_url' => $clean_youtube_url
         ]
     );
 
@@ -121,10 +135,9 @@ function validate_image($image) {
 
     return (
         (
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif" ||
-            $image["type"] == "image/png, jpg, jpeg, gif"
+            $image["type"] == "image/png" ||
+            $image["type"] == "image/jpeg" ||
+            $image["type"] == "image/gif"
         ) &&
         $image["size"] < 4194304 && // ~ 4 MB 
         // $image["size"] < 194304 && // ~ 0,2 MB 
@@ -150,6 +163,9 @@ function sent_error($error_key) {
             break;
         case 'UPLOAD_FAILED':
             $error ='Upload failed';
+            break;
+        case 'UNSUPPORTED_MEDIA_TYPE':
+            $error ='Unsupported media type';
             break;
         
         default:

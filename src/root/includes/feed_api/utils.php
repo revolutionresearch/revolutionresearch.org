@@ -53,13 +53,13 @@ function get_post_data($post) {
 		'post_status' => $post->post_status,
 		'guid' => $post->guid,
 		'post_type' => $post->post_type,
-		'post_thumbnail_url' => wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'single-post-thumbnail' )[0],
+		'post_thumbnail_url' => esc_url(wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'single-post-thumbnail' )[0]),
 		'categories' => $categories,
 		'rating' => [
 			'value' =>  get_field('rating_value', $post->ID),
 			'count' => get_field('rating_count', $post->ID)
 		],
-		'youtube_url' => get_field('youtube_url', $post->ID),
+		'youtube_url' => esc_url(get_field('youtube_url', $post->ID)),
 		'author' => [
 			'display_name' => $author->display_name,
 			'user_login' => $author->user_login

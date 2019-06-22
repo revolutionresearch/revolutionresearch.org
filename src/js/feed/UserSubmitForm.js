@@ -58,8 +58,8 @@ class QuestionPost {
                 </select>
                 
                 <div class='image-wrapper' id='image-wrapper-${index}'>
-                    <label id='image-label-${index}'>Bitte lade eine Bilddatei hoch</label>
-                    <input type='file' accept='image/*' name='image' id='image-${index}' style='display: none;'/>
+                    <label id='image-label-${index}'>Bitte lade eine Bilddatei hoch (png/jpg/jpeg/gif)</label>
+                    <input type='file' accept='.png, .jpg, .jpeg, .gif' name='image' id='image-${index}' style='display: none;'/>
                     <input class='image-button' type='button' value='Bild auswählen...' onclick='document.getElementById(\"image-${index}\").click();' />
                 </div>
 
@@ -72,7 +72,8 @@ class QuestionPost {
                 <input type='checkbox' name='check' id='check' /> -->
 
                 <div class="error-message">
-                    Bitte schreibe einen Text (max. 280 Zeichen), lade ein Bild hoch (max. 4 MB) oder verlinke ein YouTube-Video!
+                    <h4>Fehler</h4>
+                    Bitte schreibe einen Text (max. 280 Zeichen), lade ein Bild hoch (max. 4 MB, png/jpg/jpeg/gif) oder verlinke ein YouTube-Video!
                 </div>
 
                 <button type='submit'>Senden!</button>
@@ -137,7 +138,7 @@ class QuestionPost {
         const mediaType = formData.get('media-type');
         const image = formData.get('image');
         const youtube = formData.get('youtube');
-
+        
         return (
             (content.length > 0 && content.length < 280) ||
             (mediaType === 'image' && image.size > 0 && image.size < 4194304) || // ~ 4 MB
