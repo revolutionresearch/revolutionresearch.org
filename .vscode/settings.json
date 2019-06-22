@@ -6,4 +6,5 @@
             "savePath": "/build/"
         }
     ],
+    "editor.tabSize": 4
 }
