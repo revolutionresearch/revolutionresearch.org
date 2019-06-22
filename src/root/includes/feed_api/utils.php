@@ -42,7 +42,8 @@ function get_post_data($post) {
 	}, $category_ids);
 	
 	// author
-	$author = get_field('author', $post->ID)->data;
+	$author_object = get_field('author', $post->ID);
+	$author = $author_object ? $author_object->data : null;
 
 	$data = [
 		'post_id' => $post->ID,
@@ -61,8 +62,8 @@ function get_post_data($post) {
 		],
 		'youtube_url' => esc_url(get_field('youtube_url', $post->ID)),
 		'author' => [
-			'display_name' => $author->display_name,
-			'user_login' => $author->user_login
+			'display_name' => $author ? $author->display_name : '',
+			'user_login' => $author ? $author->user_login : ''
 		],
 		'flockler' => get_post_meta($post->ID, 'flockler_post_full_data', true)
 	];
