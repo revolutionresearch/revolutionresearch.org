@@ -7,10 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /*** Includes ***/
 require_once(__DIR__ . '/includes/elementor_hello_theme_setup.php');
-require_once(__DIR__ . '/includes/shortcodes.php');
-require_once(__DIR__ . '/includes/ajax_handler.php');
 require_once(__DIR__ . '/includes/feed_api/feed_api.php');
 require_once(__DIR__ . '/includes/custom_post_queries.php');
+
+// shortcodes
+require_once(__DIR__ . '/includes/shortcodes/berlin_manifesto_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/events_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/wolfram_alpha_shortcodes.php');
+
+// ajax handler
+require_once(__DIR__ . '/includes/ajax_handler/user_post_submit_ajax_handler.php');
+require_once(__DIR__ . '/includes/ajax_handler/wolfram_alpha_ajax_handler.php');
 
 
 /*** Load JS files ***/
@@ -37,7 +44,6 @@ add_action( 'login_enqueue_scripts', 'project_zukunft_login_style' );
 function project_zukunft_login_style() {
     wp_enqueue_style( 'project_zukunft_login_style', get_stylesheet_directory_uri() . '/style-login.css' );
 }
-
 
 
 /*** Allow line breaks and html tags in post excerpt ***/
