@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/social_wall_controller.php');
+require_once(__DIR__ . '/social_post_controller.php');
 require_once(__DIR__ . '/rating_controller.php');
 
 
@@ -16,6 +17,23 @@ add_action('rest_api_init', function () {
 	register_rest_route('zukunft/v1', '/social-wall', array(
 		'methods' => 'GET',
 		'callback' => 'get_posts_for_social_wall',
+	));
+
+	register_rest_route('revolutionresearch/v1', '/social-posts/flockler-posts', array(
+		'methods' => 'GET',
+		'callback' => 'get_all_flockler_posts',
+	));
+	register_rest_route('revolutionresearch/v1', '/social-posts/events', array(
+		'methods' => 'GET',
+		'callback' => 'get_all_events',
+	));
+	register_rest_route('revolutionresearch/v1', '/social-posts/user-submitted-posts', array(
+		'methods' => 'GET',
+		'callback' => 'get_all_user_submitted_posts',
+	));
+	register_rest_route('revolutionresearch/v1', '/social-posts/berlin-manifesto-revisions', array(
+		'methods' => 'GET',
+		'callback' => 'get_all_berlin_manifesto_revisions',
 	));
 
 	register_rest_route('zukunft/v1', '/flockler/(?P<id>\d+)/rating', array(
