@@ -105,12 +105,14 @@ function social_wall_controller($page) {
 		// looper over all order types
 		foreach ( $flockler_posts_configs as $key => $config ) {
 			// get current post and increase next index
+			if (!array_key_exists($config['next_index'], $config['posts'])) {
+				continue;
+			}
 			$post = $config['posts'][$config['next_index']];
 			$flockler_posts_configs[$key]['next_index'] += 1;
 
 			// validation
 			if ( $flockler_posts_count >= $flockler_max_count ) { break; }
-			if ( !isset($post) ) { continue; }
 			if ( !in_array($post->ID, $flockler_post_ids) ) {
 				// get post meta fields
 				$post_data = get_post_data($post);
