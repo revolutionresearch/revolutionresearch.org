@@ -53,9 +53,15 @@ add_action( 'elementor/query/events_filtered', function( $query ) {
         ];
     }
     
-    $query->set( 'meta_query', $meta_query );
-
     // filter by date
-    // if (isset($_GET['date']) && $_GET['date'] !== '') {
-    // }
+    if (isset($_GET['date']) && $_GET['date'] !== '') {
+        $date_regex = $_GET['date'] . '[0-9]{1,2}';
+        $meta_query[] = [
+            'key' => 'date',
+            'value' => $date_regex,
+            'compare' => 'REGEXP'
+        ];
+    }
+
+    $query->set( 'meta_query', $meta_query );
 });
