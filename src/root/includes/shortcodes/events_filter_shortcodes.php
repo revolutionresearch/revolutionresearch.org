@@ -74,7 +74,6 @@ function events_filter_func( $attributes, $content ){
     $date_options = generate_options($dates);
 
     return "
-        <script>console.log('dates', ". json_encode($dates) .")</script>
         <form action='/activism/#activism' id='events-filter'>
             <div class='input-group'>
                 <label for='event-filter-categories'>Nach Thema filtern</label>
