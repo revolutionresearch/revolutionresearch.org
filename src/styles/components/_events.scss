@@ -33,13 +33,14 @@
         font-family: "Anton";
         display: flex;
         align-items: center;
-
+        
         &-left {
             padding-right: 0.75rem;
         }
-
+        
         &-day {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            line-height: 1;
         }
 
         &-wekday,
