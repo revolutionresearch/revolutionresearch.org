@@ -27,6 +27,7 @@ function events_filter_func( $attributes, $content ){
             $categories = array_merge($categories, $_categories);
         }
     }
+    natsort($categories);
     $category_options = generate_options(array_filter(array_unique($categories)));
     
     // artists
@@ -40,6 +41,7 @@ function events_filter_func( $attributes, $content ){
             array_push($artists, $artist);
         }
     }
+    natsort($artists);
     $artist_options = generate_options(array_unique($artists));
     
     
@@ -54,6 +56,7 @@ function events_filter_func( $attributes, $content ){
             array_push($cities, $city);
         }
     }
+    natsort($cities);
     $city_options = generate_options(array_unique($cities));
 
 
@@ -66,7 +69,7 @@ function events_filter_func( $attributes, $content ){
         $date = get_field('date', $post_id);
         if ($date) {
             $timestamp = strtotime($date);
-            $date_formatted = utf8_encode(strftime("%G, %B", $timestamp)); // e.g. '2019, Januar'
+            $date_formatted = utf8_encode(strftime("%b. %G", $timestamp)); // e.g. 'Jan. 2019'
             $date_key = date("Ym", $timestamp); // e.g. '201901'
             $dates[$date_key] = ['value' => $date_key, 'label' => $date_formatted];
         }
@@ -106,6 +109,7 @@ function events_filter_func( $attributes, $content ){
         </form>
     ";
 }
+
 
 /**
  * Query events based on the GEt parameters
