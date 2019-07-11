@@ -20,7 +20,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'FontAwesome';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             line-height: 1;
             font-size: 0.75em;
         }
@@ -92,7 +93,8 @@
 
         &:before {
             content: '\f004';
-            font-family: 'FontAwesome';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             font-size: 1.8em;
             transition: transform 0.15s ease-in-out;
             text-shadow:

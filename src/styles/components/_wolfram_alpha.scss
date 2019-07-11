@@ -64,7 +64,8 @@
 
             .wa__form--loading & {
                 content: '\f110';
-                font-family: 'FontAwesome';
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
                 animation: rotate 0.5s infinite linear;
 
                 @keyframes rotate {
