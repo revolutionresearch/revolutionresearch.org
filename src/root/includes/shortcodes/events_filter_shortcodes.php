@@ -86,9 +86,9 @@ function events_filter_func( $attributes, $content ){
                 </select>
             </div>
             <div class='input-group'>
-                <label for='event-filter-artists'>Nach Künstler filtern</label>
+                <label for='event-filter-artists'>Nach Aktivist filtern</label>
                 <select name='artist' id='event-filter-artists'>
-                    <option value=''>Alle Künstler</option>
+                    <option value=''>Alle Aktivisten</option>
                     $artist_options
                 </select>
             </div>
