@@ -9,12 +9,12 @@
             border-color: $pink;
         }
 
-        .event-loop__title {
+        .event-loop__trigger {
             .elementor-heading-title {
                 color: $pink !important;
             }
             
-            &:after {
+            .elementor-widget-wrap:after {
                 color: $pink;
             }
         }
@@ -53,7 +53,7 @@
         }
     }
 
-    &__title {
+    &__trigger .elementor-widget-wrap {
         display: flex;
         align-items: center;
 
