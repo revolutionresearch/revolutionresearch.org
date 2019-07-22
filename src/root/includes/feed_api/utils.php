@@ -9,7 +9,7 @@ function extract_unique_posts($posts, $start_index, $target_count, $post_ids, $k
 	$unique_posts = [];
 	$current_index =  $start_index;
 	$current_count = 0;
-	$posts_count = count($posts);
+	$posts_count = $posts ? count($posts) : 0;
 	
 	while (($current_count < $target_count) && ($current_index < $posts_count)) {
 		$post = $posts[$current_index];

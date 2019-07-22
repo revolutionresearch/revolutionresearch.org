@@ -36,7 +36,7 @@ function get_all_flockler_posts() {
     }, $posts);
     
 	return [
-        'post_count' => count($posts_data),
+        'post_count' => $posts_data ? count($posts_data) : 0,
         'data' => $posts_data,
         'error' => null
     ];
@@ -92,7 +92,7 @@ function get_all_events() {
     }, $posts);
     
 	return [
-        'post_count' => count($posts_data),
+        'post_count' => $posts_data ? count($posts_data) : 0,
         'data' => $posts_data,
         'error' => null
     ];
@@ -146,7 +146,7 @@ function get_all_user_submitted_posts() {
     }, $posts);
     
 	return [
-        'post_count' => count($posts_data),
+        'post_count' => $posts_data ? count($posts_data) : 0,
         'data' => $posts_data,
         'error' => null
     ];
@@ -163,7 +163,7 @@ function get_all_berlin_manifesto_revisions() {
     $revisions = wp_get_post_revisions($POST_ID);
 
 	return [
-        'post_count' => count($revisions),
+        'post_count' => $revisions ? count($revisions) : 0,
         'data' => $revisions,
         'error' => null
     ];

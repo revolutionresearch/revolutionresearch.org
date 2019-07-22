@@ -89,7 +89,7 @@ function social_wall_controller($page) {
 		]
 	];
 
-    $flockler_posts_per_page = 39 - 3 - 3 - 2 - count($page_posts); // 3 acts, 3 questions, 2 forms, (max 6) du_posts
+    $flockler_posts_per_page = 39 - 3 - 3 - 2 - ($page_posts ? count($page_posts) : 0); // 3 acts, 3 questions, 2 forms, (max 6) du_posts
 	$flockler_max_count = $flockler_posts_per_page * ($page + 1);
 	$flockler_posts_count = 0;
 	$flockler_post_ids = [];
@@ -145,7 +145,7 @@ function social_wall_controller($page) {
 	];
 
 	// insert acts with meta fields at index 0, 1/3 and 2/3
-	$posts_count = count($page_posts);
+	$posts_count = $page_posts ? count($page_posts) : 0;
 	array_splice( $page_posts, 0, 						    0, [ get_post_data($acts['one'])   ]);
 	array_splice( $page_posts, floor($posts_count / 3), 	0, [ get_post_data($acts['two'])   ]);
 	array_splice( $page_posts, floor($posts_count / 3 * 2), 0, [ get_post_data($acts['three']) ]);
@@ -165,7 +165,7 @@ function social_wall_controller($page) {
 
     // insert question at position 4, middle, -4
 	array_splice( $page_posts, 4, 0, [ $question ]);
-	array_splice( $page_posts, ceil(count($page_posts) / 2), 0, [ $question ]);
+	array_splice( $page_posts, ceil(($page_posts ? count($page_posts) : 0) / 2), 0, [ $question ]);
 	array_splice( $page_posts, -4, 0, [ $question ]);
     
 
@@ -173,14 +173,14 @@ function social_wall_controller($page) {
 
     // insert 2 forms starting from the end
     $form_number = 2;
-    $interval = floor(count($page_posts) / $form_number);
+    $interval = floor(($page_posts ? count($page_posts) : 0) / $form_number);
     for ($i = 0; $i < $form_number; $i++) { 
         $form = [ 'post_type' => 'user_submitted_posts_form' ];
         array_splice( $page_posts, -1 * ($interval * $i + 1), 0, [ $form ]);
     }
 
 	return json_encode([
-        'post_count' => count($page_posts),
+        'post_count' => $page_posts ? count($page_posts) : 0,
         'post_types' => array_map(function($post) {
             return $post['post_type'];
         }, $page_posts),

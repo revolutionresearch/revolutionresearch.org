@@ -23,7 +23,7 @@ function events_filter_func( $attributes, $content ){
             return $category->slug !== 'featured-event' ? $category->slug : null;
         }, $raw_categories);
 
-        if (count($_categories) > 0) {
+        if (!empty($_categories)) {
             $categories = array_merge($categories, $_categories);
         }
     }
