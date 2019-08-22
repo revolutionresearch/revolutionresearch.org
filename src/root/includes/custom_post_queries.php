@@ -65,3 +65,29 @@ add_action( 'elementor/query/events_filtered', function( $query ) {
 
     $query->set( 'meta_query', $meta_query );
 });
+
+
+/**
+ * Order wiki articles by order meta field
+ * source: https://wordpress.stackexchange.com/a/301163
+ */
+add_action( 'elementor/query/query_wiki_articles', function( $query ) {
+    $key = 'order';
+
+    // Setting just `meta_key` is not sufficient, as this 
+    // will ignore posts that do not yet, or never will have 
+    // a value for the specified key. This meta query will 
+    // register the `meta_key` for ordering, but will not 
+    // ignore those posts without a value for this key.
+    $query->set( 'meta_query', [
+        'relation' => 'OR',
+        [ 'key' => $key, 'compare' => 'EXISTS' ],
+        [ 'key' => $key, 'compare' => 'NOT EXISTS' ]
+    ]);
+
+    // Order by the meta value, then by the title if multiple 
+    // posts share the same value for the provided meta key.
+    // Use `meta_value_num` if the meta values are numeric.
+    $query->set( 'orderby', 'meta_value_num title ' );
+    $query->set( 'order', 'ASC' );
+});
