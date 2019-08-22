@@ -6,9 +6,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /**
- * Order events by custom date field
+ * Get featured events and order by custom date field
  */
-add_action( 'elementor/query/events_by_date', function( $query ) {
+add_action( 'elementor/query/featured_events', function( $query ) {   
+    // filter by featured meta field
+    $query->set( 'meta_query', [[
+        'key' => 'featured',
+        'value' => '1',
+    ]] );
+    
+    // order by date
     $query->set( 'meta_key', 'date' );
     $query->set( 'meta_type', 'DATE' );
     $query->set( 'orderby', 'meta_value' );
