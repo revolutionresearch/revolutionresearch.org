@@ -22,6 +22,7 @@ require_once(__DIR__ . '/includes/shortcodes/berlin_manifesto_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_date_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_filter_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/wolfram_alpha_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/table_of_contents_shortcode.php');
 
 // ajax handler
 require_once(__DIR__ . '/includes/ajax_handler/user_post_submit_ajax_handler.php');

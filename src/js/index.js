@@ -6,3 +6,4 @@ require('./feed/Feed');
 require('./wolfram_alpha');
 require('./fullscreen');
 require('./events_filter');
+require('./table_of_contents');
