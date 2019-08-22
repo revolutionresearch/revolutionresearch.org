@@ -116,6 +116,7 @@ function events_filter_func( $attributes, $content ){
  * but ignore the paramater for the current
  * select input name
  */
+$memorized_queries = [];
 function query_options_data($name) {
     $query_key = '';
 
