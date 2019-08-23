@@ -18,10 +18,11 @@ require_once(__DIR__ . '/includes/feed_api/feed_api.php');
 require_once(__DIR__ . '/includes/custom_post_queries.php');
 
 // shortcodes
-require_once(__DIR__ . '/includes/shortcodes/berlin_manifesto_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_date_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_filter_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/wolfram_alpha_shortcodes.php');
+require_once(__DIR__ . '/includes/shortcodes/wiki_articles_revisions_shortcode.php');
+require_once(__DIR__ . '/includes/shortcodes/wiki_articles_by_categories_shortcode.php');
 require_once(__DIR__ . '/includes/shortcodes/table_of_contents_shortcode.php');
 
 // ajax handler

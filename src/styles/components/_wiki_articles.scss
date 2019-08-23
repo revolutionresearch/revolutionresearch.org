@@ -1,0 +1,71 @@
+.wiki-articles-by-categories {
+    $counter-width: 2.5rem;
+
+    %counter {
+        min-width: $counter-width;
+        flex-shrink: 0;
+        padding-right: 0.5rem;
+        display: inline-block;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    counter-reset: category; 
+
+    .category {
+        display: flex;
+        flex-wrap: wrap;
+
+        &:before {
+            @extend %counter;
+            counter-increment: category;
+            content: counter(category, upper-latin) '.'; 
+        }
+
+        &.expanded {
+            .articles {
+                display: block;
+            }
+
+            .category-title:after {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .category-title {
+        color: $yellow;
+        cursor: pointer;
+        user-select: none;
+
+        &:after {
+            content: '\f078';
+            display: inline-block;
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+            color: inherit;
+        }
+    }
+
+    .articles {
+        display: none;
+        width: 100%;
+        counter-reset: article; 
+        margin-left: $counter-width;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .article {
+        display: flex;
+
+        &:before {
+            @extend %counter;
+            counter-increment: article;
+            content: counter(article, upper-roman) '.'; 
+        }
+    }
+}
+
