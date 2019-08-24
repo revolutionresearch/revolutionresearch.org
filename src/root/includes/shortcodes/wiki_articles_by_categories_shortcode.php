@@ -27,30 +27,34 @@ function wiki_articles_by_categories_func( $attributes, $content ) {
     ]);
 
     foreach ($categories as $category) {
-        $html .= "
-        <div class='category'>
-        <div class='category-title'>$category->name</div>
-        <div class='articles'>
-        ";
-        
-        // get wiki articles for each category ordered by order meta value
+        // get wiki articles for each category ordered by the order meta value
         $articles = get_posts([
             'post_type' => 'wiki_article',
             'posts_per_page' => -1,
-            'meta_query' => [
-                'relation' => 'AND',
-                [ 'key' => 'category', 'value' => $category->term_id ],
-                [
-                    'relation' => 'OR',
-                    [ 'key' => 'order', 'compare' => 'EXISTS' ],
-                    [ 'key' => 'order', 'compare' => 'NOT EXISTS' ]
-                ]
-            ],
+            'meta_key' => 'order',
             'orderby' => 'meta_value_num title',
-            'order' => 'ASC'
+            'order' => 'ASC',
+            'meta_query' => [[
+                'key' => 'category',
+                'value' => $category->term_id
+            ]]
         ]);
 
-        // print_r(sizeof($articles));
+        $article_count = sizeof($articles);
+        $article_count_string = '' . $article_count . ' ' . ($article_count > 1 ? 'Bände' : 'Band');
+
+        $html .= "
+            <div class='category'>
+                <div class='category-header'>
+                    <div class='category-header-content'>
+                        <span class='category-title'>
+                            $category->name&nbsp;
+                        </span>
+                        <span class='article-count'>($article_count_string)</span>
+                 </div>
+                </div>
+            <div class='articles'>
+        ";
 
         foreach ($articles as $article) {
             $permalink = get_permalink($article->ID);

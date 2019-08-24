@@ -59,11 +59,13 @@ function wiki_articles_revisions_func( $attributes, $content ) {
         // create html string
         $name = $author->display_name;
         $title = $rev->post_title;
+        $max_len = 68;
+        $title_shortened = trim(substr($title, 0, $max_len)) . (strlen($title) > $max_len ? '&hellip;' : '');
         $permalink = get_permalink($rev->post_parent);
         $html_string = "
             <span style='color: #ffff00;'><em>$name</em></span>&nbsp;
             am $date um $time Uhr&nbsp;
-            (<a href='$permalink'>$title</a>)
+            (<a href='$permalink'>$title_shortened</a>)
         ";
         array_push($results, $html_string);
 

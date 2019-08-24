@@ -13,13 +13,8 @@
     counter-reset: category; 
 
     .category {
-        display: flex;
-        flex-wrap: wrap;
-
-        &:before {
-            @extend %counter;
-            counter-increment: category;
-            content: counter(category, upper-latin) '.'; 
+        &:not(:last-child) {
+            margin-bottom: 0.35rem;
         }
 
         &.expanded {
@@ -33,10 +28,30 @@
         }
     }
 
+    .category-header {
+        display: flex;
+
+        &:before {
+            @extend %counter;
+            counter-increment: category;
+            content: counter(category, upper-latin) '.'; 
+            color: #fff;
+        }
+    }
+
+    .category-header-content {
+
+    }
+
     .category-title {
         color: $yellow;
         cursor: pointer;
         user-select: none;
+        font-size: 1.2rem;
+
+        @media(max-width: $big-phone-width) {
+            font-size: 1.1rem;
+        }
 
         &:after {
             content: '\f078';
@@ -49,13 +64,20 @@
         }
     }
 
+    .article-count {
+        display: inline-flex;
+        color: $light-grey;
+        white-space: nowrap;
+        margin-left: 0.5rem;
+    }
+
     .articles {
         display: none;
         width: 100%;
         counter-reset: article; 
-        margin-left: $counter-width;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
+        padding-left: calc(#{$counter-width} + 1rem);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
     .article {
@@ -64,7 +86,16 @@
         &:before {
             @extend %counter;
             counter-increment: article;
-            content: counter(article, upper-roman) '.'; 
+            content: 'Band ' counter(article, upper-roman) '.'; 
+            min-width: calc(#{$counter-width} + 2.5rem); // 2.5rem ≈ 'Band ';
+        }
+
+        @media(max-width: $big-phone-width) {
+            flex-wrap: wrap;
+
+            &:before {
+                width: 100%;
+            }
         }
     }
 }
