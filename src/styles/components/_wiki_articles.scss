@@ -26,41 +26,37 @@
                 transform: rotate(180deg);
             }
         }
-    }
 
-    .category-header {
-        display: flex;
+        &-header {
+            display: flex;
+    
+            &:before {
+                @extend %counter;
+                counter-increment: category;
+                content: counter(category, upper-latin) '.'; 
+                color: #fff;
+            }
+        }
 
-        &:before {
-            @extend %counter;
-            counter-increment: category;
-            content: counter(category, upper-latin) '.'; 
+        &-title {
             color: #fff;
-        }
-    }
-
-    .category-header-content {
-
-    }
-
-    .category-title {
-        color: $yellow;
-        cursor: pointer;
-        user-select: none;
-        font-size: 1.2rem;
-
-        @media(max-width: $big-phone-width) {
-            font-size: 1.1rem;
-        }
-
-        &:after {
-            content: '\f078';
-            display: inline-block;
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            font-size: 0.85rem;
-            margin-left: 0.5rem;
-            color: inherit;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.2rem;
+    
+            @media(max-width: $big-phone-width) {
+                font-size: 1.1rem;
+            }
+    
+            &:after {
+                content: '\f078';
+                display: inline-block;
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                font-size: 0.85rem;
+                margin-left: 0.5rem;
+                color: inherit;
+            }
         }
     }
 
@@ -95,6 +91,14 @@
 
             &:before {
                 width: 100%;
+            }
+        }
+
+        &-title {
+            color: $yellow;
+
+            &:hover {
+                color: $pink;
             }
         }
     }
