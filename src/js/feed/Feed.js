@@ -106,7 +106,6 @@ class Feed {
 
         this.isFetching = false;
 
-        console.log(parsed_json);
         return parsed_json.data;
     }
 

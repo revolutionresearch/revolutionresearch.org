@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         '.wiki-articles-by-categories .category-title'
     );
 
-    console.log(category_titles);
-    
     category_titles.forEach(category_title => {
         category_title.addEventListener('click', toggleCategoryExpansion)
     });

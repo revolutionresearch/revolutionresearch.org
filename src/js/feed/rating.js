@@ -27,7 +27,6 @@ function appendRating(parent, postId) {
     function handleRatingSet([ value ]) {
         const rating = this;
         const _value = parseInt(value, 10);
-        console.log({ postId, value: _value });
 
         // get previous value from local storage
         let ratings = localStorage.getItem('revolutionresearch-ratings');

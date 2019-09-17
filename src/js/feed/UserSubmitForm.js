@@ -113,7 +113,6 @@ class QuestionPost {
             })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 this.element.classList.remove('sending');
                 
                 if (res.error) {

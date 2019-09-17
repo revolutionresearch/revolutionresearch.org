@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return xmlDocument;
             })
             .then(xmlDocument => {
-                console.log({ xmlDocument });
-
+                
                 form.classList.remove('wa__form--loading');
                 input.disabled = false;
                 button.disabled = false;
