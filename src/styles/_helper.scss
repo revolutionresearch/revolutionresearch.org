@@ -113,3 +113,19 @@ $pattern__diagonal-lines--yellow: url(data:image/png;base64,iVBORw0KGgoAAAANSUhE
         }
     }
 }
+
+/**
+ * Spinner Icon
+ * Needs to be placed inside a before or after element
+ */
+%spinner {
+    content: '\f110';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    animation: rotate 0.75s infinite linear;
+
+    @keyframes rotate {
+        from { transform: rotate(0deg) }
+        to { transform: rotate(360deg) }
+    }
+}
