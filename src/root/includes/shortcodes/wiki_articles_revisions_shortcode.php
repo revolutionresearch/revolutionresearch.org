@@ -63,9 +63,11 @@ function wiki_articles_revisions_func( $attributes, $content ) {
         $title_shortened = trim(substr($title, 0, $max_len)) . (strlen($title) > $max_len ? '&hellip;' : '');
         $permalink = get_permalink($rev->post_parent);
         $html_string = "
-            <span style='color: #ffff00;'><em>$name</em></span>&nbsp;
-            am $date um $time Uhr&nbsp;
-            (<a href='$permalink'>$title_shortened</a>)
+            <span class='wiki-articles-revision'>
+                <span class='author'>$name</span>&nbsp;
+                am $date um $time Uhr&nbsp;
+                (<a href='$permalink'>$title_shortened</a>)
+            </span>
         ";
         array_push($results, $html_string);
 
@@ -80,7 +82,13 @@ function wiki_articles_revisions_func( $attributes, $content ) {
 		if (count($results) >= $max_count) {
             break;
         }
-	}
+    }
+    
+    $final_html_string = "
+        <div class='wiki-articles-revisions'>
+            " . join(',<br />', $results) . "
+        </div>
+    ";
 	
-	return join(',<br />', $results);
+	return $final_html_string;
 }
