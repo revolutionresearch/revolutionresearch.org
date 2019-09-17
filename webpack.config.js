@@ -1,5 +1,5 @@
 module.exports = {
-    mode: 'development',
+    mode: 'production', // development, production
     output: {
         filename: 'main.js',
     },

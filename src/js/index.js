@@ -1,4 +1,4 @@
-require("@babel/polyfill");
+// require("@babel/polyfill");
 
 require('./collapsible');
 require('./event_loop');
