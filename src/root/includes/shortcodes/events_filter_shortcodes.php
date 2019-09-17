@@ -20,15 +20,23 @@ function events_filter_func( $attributes, $content ){
         
         $raw_categories = wp_get_post_terms($post_id, 'event_category');
         $_categories = array_map(function($category) {
-            return $category->slug !== 'featured-event' ? $category->slug : null;
+            $taxonomy_id = $category->taxonomy . '_' . $category->term_id;
+            return [
+                'value' => $category->slug,
+                'label' => $category->name,
+                'order' =>  get_field('order', $taxonomy_id)
+            ];
         }, $raw_categories);
 
         if (!empty($_categories)) {
             $categories = array_merge($categories, $_categories);
         }
     }
-    natsort($categories);
-    $category_options = generate_options(array_filter(array_unique($categories)));
+    $categories_unique = array_unique($categories, SORT_REGULAR);
+    usort($categories_unique, function($a, $b) {
+        return floatval($a['order']) - floatval($b['order']);
+    });
+    $category_options = generate_options($categories_unique);
     
     // artists
     $artist_data = query_options_data('artist');
