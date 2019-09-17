@@ -23,6 +23,10 @@ class Feed {
     constructor(rootSelector, options) {
         this.rootSelector = rootSelector;
         this.root = document.querySelector(this.rootSelector);
+
+        if (!this.root) return;
+
+        this.grid = this.root.querySelector('.grid');
         
         if (options.reloadButton) {
             this.reloadButton = document.querySelector(options.reloadButton);
@@ -44,14 +48,15 @@ class Feed {
         this.reloadPage = this.reloadPage.bind(this);
         
         // INIT
-        if (this.root) {
-            this.init();
-        }
+        this.init();
     }
 
    async  init() {
-       // event listeners
-       if (this.reloadButton) {
+        // set loading
+        this.root.classList.add('feed--loading');
+
+        // event listeners
+        if (this.reloadButton) {
            this.reloadButton.addEventListener('click', this.reloadPage);
         }
 
@@ -71,8 +76,8 @@ class Feed {
         });
 
         // init masonry layout with Colcade
-        this.colcade = new Colcade(this.root, {
-            columns: '.grid-col',
+        this.colcade = new Colcade(this.grid, {
+            columns: '.grid__col',
             items: '.feedItem'
         });
 
@@ -81,7 +86,12 @@ class Feed {
         this.renderItems(firstItems);
     }
 
-    async reloadPage() {       
+    async reloadPage(e) {
+        e.preventDefault();
+
+        // set loading
+        this.root.classList.add('feed--loading');
+  
         // fetch items
         const newItems = await this.fetchItems();
     
@@ -140,6 +150,9 @@ class Feed {
                     break;
             }
         });
+
+        // unset loading
+        this.root.classList.remove('feed--loading');
     }
 
     appendItem(item, index) {
