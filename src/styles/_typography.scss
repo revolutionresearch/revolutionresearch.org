@@ -1,5 +1,30 @@
+/**
+ * CUSTOM FONTS
+ * only used inside the theme and not in Elementor
+ */
+
+/* CarbonType */
+@font-face {
+    font-family: 'CarbonType';
+    src: url('fonts/CarbonType/CarbonType.eot'); // IE9 Compat Modes
+    src: url('fonts/CarbonType/CarbonType.eot?#iefix') format('embedded-opentype'), // IE6-IE8
+         url('fonts/CarbonType/CarbonType.woff2') format('woff2'), // Super Modern Browsers
+         url('fonts/CarbonType/CarbonType.woff') format('woff'), // Pretty Modern Browsers
+         url('fonts/CarbonType/CarbonType.ttf') format('truetype'), // Safari, Android, iOS
+         url('fonts/CarbonType/CarbonType.svg#CarbonType') format('svg'); // Legacy iOS
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; // show text before font is loaded
+}
+
+
+/**
+ * Basic Text Styling
+ * Other styling e.g. for headers can be found in the reset folder
+ */
+
 body {
-    font-family: "Avenir", sans-serif;
+    font-family: 'Avenir', sans-serif;
     font-weight: 400;
     color: #fff;
 }
