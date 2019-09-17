@@ -26,6 +26,7 @@ require_once(__DIR__ . '/includes/backend/backend_columns_activism.php');
 require_once(__DIR__ . '/includes/backend/backend_columns_wiki_article.php');
 
 // shortcodes
+require_once(__DIR__ . '/includes/shortcodes/revolutionresearch.php');
 require_once(__DIR__ . '/includes/shortcodes/events_date_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_filter_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/wolfram_alpha_shortcodes.php');

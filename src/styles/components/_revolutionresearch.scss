@@ -1,0 +1,15 @@
+.revolutionresearch {
+    font-size: inherit;
+    line-height: inherit;
+    
+    font-family: "CarbonType", "Avenir", sans-serif;
+    font-weight: normal;
+    
+    &, &:link, &:visited, &:hover, &:active {
+        color: #fff;
+    }
+    
+    span {
+        color: $light-grey;
+    }
+}
