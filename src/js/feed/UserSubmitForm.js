@@ -48,8 +48,8 @@ class QuestionPost {
                 <button class="hide-form-button" type="button">
                     <i class="fa fa-close"></i>
                 </button>
-                <label for='content-${index}'>Text (<span class='content-chars'>0</span> von 280 Zeichen)</label>
-                <textarea class='field' name='content' id='content-${index}' rows='10' maxlength='280'></textarea>
+                <label for='content-${index}'>Text</label>
+                <textarea class='field' name='content' id='content-${index}' rows='10' maxlength='6000'></textarea>
 
                 <label for='media-type-${index}'>Bild oder YouTube-Video</label>
                 <select class='field' name='media-type' id='media-type-${index}' data-id='${index}'>
@@ -73,7 +73,7 @@ class QuestionPost {
 
                 <div class="error-message">
                     <h4>Fehler</h4>
-                    Bitte schreibe einen Text (max. 280 Zeichen), lade ein Bild hoch (max. 4 MB, png/jpg/jpeg/gif) oder verlinke ein YouTube-Video!
+                    Bitte schreibe einen Text (max. 6.000 Zeichen), lade ein Bild hoch (max. 4 MB, png/jpg/jpeg/gif) oder verlinke ein YouTube-Video!
                 </div>
 
                 <button type='submit'>Senden!</button>
@@ -139,7 +139,7 @@ class QuestionPost {
         const youtube = formData.get('youtube');
         
         return (
-            (content.length > 0 && content.length < 280) ||
+            (content.length > 0 && content.length <= 6000) ||
             (mediaType === 'image' && image.size > 0 && image.size < 4194304) || // ~ 4 MB
             (mediaType === 'youtube' && youtube.length > 0)
         );
