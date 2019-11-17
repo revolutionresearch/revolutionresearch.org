@@ -27,11 +27,13 @@
 
     form {
         background: transparent;
+        border: none;
 
         input {
             border: 1px solid $yellow !important;
             background-color: transparent !important;
             color: #fff;
+            border-radius: 0;
 
             &[type=checkbox]:checked:before {
                 color: $yellow;
@@ -53,6 +55,10 @@
             &:hover {
                 background-color: $pink !important;
                 color: #fff !important;
+            }
+
+            &.wp-hide-pw > span {
+                line-height: 0.75;
             }
         }
         
