@@ -114,3 +114,9 @@
         }
     }
 }
+
+
+// disable outline for donate button
+.paypal-donations input {
+    outline: 0;
+}
