@@ -77,7 +77,7 @@ function events_filter_func( $attributes, $content ){
         $date = get_field('date', $post_id);
         if ($date) {
             $timestamp = strtotime($date);
-            $date_formatted = utf8_encode(strftime("%b. %G", $timestamp)); // e.g. 'Jan. 2019'
+            $date_formatted = utf8_encode(strftime("%b %G", $timestamp)); // e.g. 'Jan. 2019'
             $date_key = date("Ym", $timestamp); // e.g. '201901'
             $dates[$date_key] = ['value' => $date_key, 'label' => $date_formatted];
         }
