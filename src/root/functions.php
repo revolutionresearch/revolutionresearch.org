@@ -96,3 +96,14 @@ function password_reset_message_text_change( $message ) {
     }
     return $message;
 }
+
+
+/*** Change sender name and adress in emails ***/
+add_filter( 'wp_mail_from', 'wpb_sender_email' );
+function wpb_sender_email( $original_email_address ) {
+    return 'noreply@revolutionresearch.org';
+} 
+add_filter( 'wp_mail_from_name', 'wpb_sender_name' );
+function wpb_sender_name( $original_email_from ) {
+    return 'Revolution Research';
+}
