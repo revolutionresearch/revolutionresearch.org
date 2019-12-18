@@ -17,7 +17,7 @@ class FlocklerPost {
         this.orderType = this.post.order_type;
         this.ratingValue = this.post.rating.value || 0;
         this.ratingCount = this.post.rating.count || 0;
-
+    
         this.timeCreated = '';
         this.timeCreatedFormatted = '';
         this.text = '';
@@ -78,6 +78,9 @@ class FlocklerPost {
                 this.timeCreatedFormatted = formatDateTime(article.published_at);
                 this.text = article.body;
                 this.author = article.author;
+                this.mediaUrl = article.cover_url;
+                this.mediaSourceUrl = article.cover_url;
+                this.mediaType = 'image';
                 this.postUrl = article.url;
                 break;
             }
