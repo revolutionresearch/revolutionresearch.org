@@ -100,8 +100,14 @@ function social_wall_controller($page) {
 		$flockler_posts_configs[$key]['posts'] = get_posts($config['query']);
 	}
 
+	// get number of available flockler posts
+	$available_flockler_posts = sizeof($flockler_posts_configs['flockler_newests']['posts']);
+
 	// loop over all flockler posts until the max count is reached
-	while ( $flockler_posts_count < $flockler_max_count ) {
+	while (
+		$flockler_posts_count < $available_flockler_posts &&
+		$flockler_posts_count < $flockler_max_count
+	) {
 		// looper over all order types
 		foreach ( $flockler_posts_configs as $key => $config ) {
 			// get current post and increase next index
@@ -117,7 +123,7 @@ function social_wall_controller($page) {
 				// get post meta fields
 				$post_data = get_post_data($post);
 				$post_data['order_type'] = $key;
-				
+
 				// push post and post id
 				array_push($flockler_posts, $post_data);
 				array_push($flockler_post_ids, $post->ID);
@@ -126,7 +132,7 @@ function social_wall_controller($page) {
 				$flockler_posts_count += 1;
 			}
 		}
-    }
+	}
 
 	$flockler_page_posts = array_slice($flockler_posts, -1 * $flockler_posts_per_page, $flockler_posts_per_page);
 
