@@ -1,4 +1,4 @@
-# Amazoner
+# RevolutionResearch
 
 WordPress theme for ProjektZukunft based on the [elementor-hello](https://github.com/elementor/elementor-hello-theme) theme
 
