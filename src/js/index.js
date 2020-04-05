@@ -7,4 +7,4 @@ require('./wolfram_alpha');
 require('./fullscreen');
 require('./events_filter');
 require('./wiki_articles');
-require('./table_of_contents');
+require('./wiki_single');
