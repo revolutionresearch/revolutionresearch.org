@@ -21,7 +21,8 @@ function toggleEventDetails(e) {
 
     if (
         target.closest('.event-loop__button') ||
-        document.body.classList.contains('.elementor-editor.active')
+        document.body.classList.contains('.elementor-editor.active') ||
+        target.tagName === 'A'
     ) {
        return; 
     }
