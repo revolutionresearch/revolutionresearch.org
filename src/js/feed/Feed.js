@@ -12,7 +12,7 @@ const DuBeitrag = require('./DuBeitrag');
     - brick.js: some errors (?)
     - salvattore: columns are not well recalculated and have often very different heights
     - macy.js: some overlapping issues with image content
-    - colcade.js: needs column placeholders but seems to work fine
+    - colcade.js: needs column placeholders but seems to work fine (currently used)
 */
 
 
