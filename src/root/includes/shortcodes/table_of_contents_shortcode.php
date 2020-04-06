@@ -11,6 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_shortcode( 'table_of_contents', 'table_of_contents_func' );
 function table_of_contents_func( $attributes, $content ){    
     return "
-        <div class='wiki-toc'></div>
+        <div id='wiki-toc'></div>
     ";
 }

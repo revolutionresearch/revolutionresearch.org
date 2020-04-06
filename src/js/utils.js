@@ -38,9 +38,49 @@ function withLineBreaks(string) {
 }
 
 
+/**
+ * Checks if a DOM element is a heading tag
+ */
+function isHeadingElement(element) {
+    const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+    return headings.indexOf(element.tagName) != -1;
+}
+
+
+/**
+ * Return array for url paramaters
+ * source: https://html-online.com/articles/get-url-parameters-javascript/
+ */
+function getUrlParameters() {
+    const vars = {};
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+
+/**
+ * Return the value of the url paramater or the defaultValue
+ * source: https://html-online.com/articles/get-url-parameters-javascript/
+ * @param {string} parameter
+ * @param {any} defaultvalue
+ */
+function getUrlParameter(parameter, defaultValue){
+    const urlParameter = defaultValue;
+    if (window.location.href.indexOf(parameter) > -1){
+        urlParameter = getUrlParameters()[parameter];
+    }
+    return urlParameter;
+}
+
+
 module.exports = {
     randomIntFromInterval,
     formatDateTime,
     urlify,
     withLineBreaks,
+    isHeadingElement,
+    getUrlParameters,
+    getUrlParameter,
 };
