@@ -65,7 +65,7 @@ function scripts() {
         .pipe(webpackStream(webpackConfig), webpack)
         .on('error', e => {
             console.log('>>> ERROR', e);
-            this.emit('end');
+            // this.emit('end');
         })
         // .pipe(uglify())
         .pipe(gulp.dest(dirs.build + '/js'));
