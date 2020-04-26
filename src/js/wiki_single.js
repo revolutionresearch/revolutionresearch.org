@@ -1,43 +1,31 @@
-const uuid4 = require('uuid/v4');
 const { isHeadingElement, getUrlParameter } = require('./utils');
 
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const MAX_PAGE_LENGTH = 1000; // number of characters including whitespace
 
-    const wikiTOC = document.getElementById('wiki-toc'); 
     const wikiContent = document.getElementById('wiki-content');
     const wikiPagination = document.getElementById('wiki-pagination');
+    const wikiTOC = document.getElementById('wiki-toc'); 
+
+    if ( !wikiContent || !wikiPagination || !wikiTOC ) {
+        // console.error('No element(s) with id #wiki-content, #wiki-pagination and/or #wiki-toc found!')
+        return;
+    }
 
     const pageElements = Array.from(wikiContent.querySelector('.elementor-widget-container').children);
     const pages = [];
 
-    /**
-     * Generate table of contents (toc) from headings (without h1)
-     */
-    function generateTOC () {
-        const headings = wikiContent.querySelectorAll('h2, h3, h4, h5, h6');
-        headings.forEach(heading => {
-            // generate random id
-            const id = uuid4();
+    // Generate pages
+    generatePages();
 
-            // create target element with the id above the
-            // heading to compensate for the nav menu
-            const target = document.createElement('div');
-            target.className = 'toc-target';
-            target.id = id;
-            heading.appendChild(target);
-            
-            // create table-of-contents entry
-            const entry = document.createElement('a');
-            entry.classList.add('toc-entry');
-            entry.classList.add('toc-entry--' + heading.tagName.toLowerCase());
-            entry.textContent = heading.textContent;
-            entry.href = '#' + id;
-            wikiTOC.appendChild(entry);
-        });
-    }
+    // Display current page
+    displayCurrentPage();
+
+    // Generate pagination and table of contents
+    wikiPagination && generatePaginagtion();
+    wikiTOC && generateTOC();
+
 
     /**
      * Divide Content in pages
@@ -74,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.dataset.page = pages.length -1;
         });
 
-        console.log('pages:', pages);
+        // console.log('pages:', pages);
 
         function addToCurrentPage(element) {
             if (pages.length > 0) {
@@ -93,17 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function getPageIndex() {
-        let pageIndex = 0;
+        // let pageIndex = 0;
 
-        // search for page number in body class
-        for (let i = 0; i < pages.length; i++) {
-            if (document.body.classList.contains(`paged-${i + 1}`)) {
-                pageIndex = i;
-                break;
-            }       
-        }
+        // // search for page number in body class
+        // for (let i = 0; i < pages.length; i++) {
+        //     if (document.body.classList.contains(`paged-${i + 1}`)) {
+        //         pageIndex = i;
+        //         break;
+        //     }       
+        // }
 
-        return pageIndex;
+        // return pageIndex;
+
+        // get page number form url
+        return parseInt(getUrlParameter('pageindex', 1)) - 1;
+
     }
 
 
@@ -114,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayCurrentPage() {
         const pageIndex = getPageIndex();
 
-        console.log('pageIndex:', pageIndex);
+        // console.log('pageIndex:', pageIndex);
 
         // reset page content
         wikiContent.innerHTML = '';
@@ -130,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Creates pagination items and sets the current one
      */
     function generatePaginagtion() {
-        console.log('pages.length', pages.length);
+        // console.log('pages.length', pages.length);
         if (pages.length <= 1) {
             const wikiPaginationSection = document.getElementById('wiki-pagination-section');
             if (wikiPaginationSection) {
@@ -147,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemLink = item.querySelector('a');
                 const itemText = item.querySelector('.elementor-icon-list-text')
                 
-                itemLink.href = `${itemLink.href}${page}/`;
+                // itemLink.href = `${itemLink.href}${page}/`;
+                itemLink.href = `?pageindex=${page}`;
                 itemText.textContent = page;
 
                 list.appendChild(item);
@@ -164,10 +157,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (wikiTOC && wikiContent) {
-        generateTOC();
-        generatePages();
-        displayCurrentPage();
-        generatePaginagtion();
+    /**
+     * Generate table of contents (toc) from headings (without h1)
+     * Warning: needs to run after page generation 
+     */
+    function generateTOC () {
+        const headings = pageElements.filter(el => ['H2', 'H3', 'H4', 'H5', 'H6'].includes(el.tagName));
+        headings.forEach((heading, index) => {
+            // generate random id
+            const id = `toc${index}`;
+            const page = parseInt(heading.dataset.page, 10) + 1;
+
+            // create target element with the id above the
+            // heading to compensate for the nav menu
+            const target = document.createElement('div');
+            target.className = 'toc-target';
+            target.id = id;
+            heading.appendChild(target);
+            
+            // create table-of-contents entry
+            const entry = document.createElement('a');
+            entry.classList.add('toc-entry');
+            entry.classList.add('toc-entry--' + heading.tagName.toLowerCase());
+            entry.textContent = heading.textContent;
+            entry.href = `?pageindex=${page}/#${id}`;
+            wikiTOC.appendChild(entry);
+        });
     }
 });

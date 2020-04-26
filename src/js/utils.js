@@ -67,7 +67,7 @@ function getUrlParameters() {
  * @param {any} defaultvalue
  */
 function getUrlParameter(parameter, defaultValue){
-    const urlParameter = defaultValue;
+    let urlParameter = defaultValue;
     if (window.location.href.indexOf(parameter) > -1){
         urlParameter = getUrlParameters()[parameter];
     }

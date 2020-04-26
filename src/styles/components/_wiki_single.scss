@@ -1,0 +1,25 @@
+#wiki {
+    &-content {
+        h2, h3, h4, h5, h6 {
+            position: relative;
+
+            .toc-target {
+                position: absolute;
+                left: 0;
+                top: -4.5rem // ~ nav menu height
+            }
+        }
+    }
+
+    &-toc {
+        .toc-entry {
+            display: block;
+    
+            &--h2 { margin-left: 0rem; }
+            &--h3 { margin-left: 1rem; }
+            &--h4 { margin-left: 2rem; }
+            &--h5 { margin-left: 3rem; }
+            &--h6 { margin-left: 4rem; }
+        }
+    }
+}
