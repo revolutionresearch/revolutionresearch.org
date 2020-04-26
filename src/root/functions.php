@@ -107,3 +107,16 @@ add_filter( 'wp_mail_from_name', 'wpb_sender_name' );
 function wpb_sender_name( $original_email_from ) {
     return 'Revolution Research';
 }
+
+
+/**
+ * Enable nested comments
+ * source: https://www.collectiveray.com/wordpress-threaded-comments
+ */
+add_action('get_header', 'revolution_research_enable_nested_comments');
+function revolution_research_enable_nested_comments(){
+    if (!is_admin()) {
+        if (is_singular() AND comments_open() AND (get_option('thread_comments') == 1))
+            wp_enqueue_script('comment-reply');
+        }
+}
