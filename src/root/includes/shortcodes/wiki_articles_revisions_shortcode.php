@@ -59,16 +59,14 @@ function wiki_articles_revisions_func( $attributes, $content ) {
         // create html string
         $name = $author->display_name;
         $title = $rev->post_title;
-        $max_len = 68;
+        $max_len = 99;
         $title_shortened = trim(substr($title, 0, $max_len)) . (strlen($title) > $max_len ? '&hellip;' : '');
         $permalink = get_permalink($rev->post_parent);
         $html_string = "
             <span class='wiki-articles-revision'>
                 <span class='author'>$name</span>&nbsp;
                 am $date um $time Uhr&nbsp;
-                (<a href='$permalink'>$title_shortened</a>)
-            </span>
-        ";
+                (<a href='$permalink'>$title_shortened</a>)</span>";
         array_push($results, $html_string);
 
         // store dates by username to exclude multiple edits on the same day
