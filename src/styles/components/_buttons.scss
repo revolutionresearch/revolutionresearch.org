@@ -120,3 +120,23 @@
 .paypal-donations input {
     outline: 0;
 }
+
+a.logout-button {
+    background-color: transparent;
+    font-weight: 300;
+    color: $yellow;
+    border: 1px solid $yellow;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1;
+    padding: 0.65em 1.2em;
+    border-radius: 0;
+    text-align: center;
+    transition: 0.3s;
+    text-transform: uppercase;
+
+    &:hover {
+        background-color: $yellow;
+        color: #000;
+    }
+}

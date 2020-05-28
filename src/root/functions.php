@@ -27,6 +27,7 @@ require_once(__DIR__ . '/includes/backend/backend_columns_wiki_article.php');
 
 // shortcodes
 require_once(__DIR__ . '/includes/shortcodes/revolutionresearch.php');
+require_once(__DIR__ . '/includes/shortcodes/logout_button_shortcode.php');
 require_once(__DIR__ . '/includes/shortcodes/events_date_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/events_filter_shortcodes.php');
 require_once(__DIR__ . '/includes/shortcodes/feed_shortcode.php');
@@ -64,6 +65,13 @@ add_action( 'login_enqueue_scripts', 'project_zukunft_login_style' );
 function project_zukunft_login_style() {
     wp_enqueue_style( 'project_zukunft_login_style', get_stylesheet_directory_uri() . '/style-login.css' );
 }
+
+
+/*** Filter for Ele Conditions ***/
+add_filter( "eleconditions_vars",function($custom_vars){	
+	$custom_vars['is_logged_in'] = is_user_logged_in();
+	return $custom_vars;
+});
 
 
 /*** Allow line breaks and html tags in post excerpt ***/
