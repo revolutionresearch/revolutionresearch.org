@@ -4,6 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+/**
+ * Helper function
+ */
+function comments_html($count) {
+    $comments_count_string = '' . $count . ' ' . ($count > 1 ? 'Peer Reviews' : 'Peer Review');
+    return $count == 0 ? '' :
+        "<span class='comment-count'>($comments_count_string)</span>";
+}
+
 
 /**
  * Wiki Articles by Categories
@@ -42,6 +51,31 @@ function wiki_articles_by_categories_func( $attributes, $content ) {
 
         $article_count = sizeof($articles);
         $article_count_string = '' . $article_count . ' ' . ($article_count > 1 ? 'Bände' : 'Band');
+        $comments_count_for_categories = 0;
+
+        $articles_html = '';
+        
+        foreach ($articles as $article) {
+            $permalink = get_permalink($article->ID);
+            $comments_count = get_comments_number($article->ID);
+            $comments_html = comments_html($comments_count);
+
+            $comments_count_for_categories += $comments_count;
+
+            $articles_html .= "
+                <div class='article'>
+                    <a href='$permalink' class='article-title'>
+                        <span class='article-title'>
+                            $article->post_title&nbsp;
+                        </span>
+                        $comments_html
+                    </a>
+                </div>
+            ";
+        }
+
+        $comments_count_for_categories_html = comments_html($comments_count_for_categories);
+
 
         $html .= "
             <div class='category'>
@@ -51,23 +85,11 @@ function wiki_articles_by_categories_func( $attributes, $content ) {
                             $category->name&nbsp;
                         </span>
                         <span class='article-count'>($article_count_string)</span>
-                 </div>
+                        $comments_count_for_categories_html
+                    </div>
                 </div>
-            <div class='articles'>
-        ";
-
-        foreach ($articles as $article) {
-            $permalink = get_permalink($article->ID);
-            $html .= "
-                <div class='article'>
-                    <a href='$permalink' class='article-title'>
-                        $article->post_title
-                    </a>
-                </div>
-            ";
-        }
-
-        $html .= "
+                <div class='articles'>
+                    $articles_html
                 </div>
             </div>
         ";
