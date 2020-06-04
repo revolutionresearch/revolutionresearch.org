@@ -23,3 +23,129 @@
         }
     }
 }
+
+
+// Comments
+.comment-reply-title {
+    margin-top: 3rem;
+    color: #fff;
+    font-size: 1.5rem;
+    font-family: "Anton", Sans-serif;
+    font-weight: 400;
+}
+
+.post-comments {
+    &, ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .comment {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        padding-right: 0;
+        padding-bottom: 0;
+        margin-bottom: 1rem;
+
+        .comment-reply-title {
+            margin-top: 0;
+        }
+
+        .form-submit {
+            padding-bottom: 1rem;
+        }
+    }
+
+    .comment-author,
+    .comment-metadata {
+        font-size: 0.85rem;
+    }
+    
+    .comment-author .says {
+        display: none;
+    }
+    
+    .comment-meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+	
+	.comment-awaiting-moderation {
+		width: 100%;
+		margin: 0.75rem 0;
+		opacity: 0.5;
+	}
+    
+    .comment-metadata {
+        flex: 1;
+        margin-left: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .edit-link {
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+    
+    a.comment-edit-link {
+        color: yellow;
+        border: 1px solid yellow;
+        padding: 0.25em 0.5em;
+        font-size: 0.75rem;
+        font-weight: 300;
+        opacity: 0.5;
+        margin-left: 0.5rem;
+    }
+    
+    .comment-edit-link:hover {
+        opacity: 1;
+    }
+    
+    .comment-content {
+        padding-right: 1rem;
+    }
+    
+    .reply {
+        padding-bottom: 1rem;
+    }
+}   
+
+.comment-form {
+    textarea,
+    input:not([type=submit]) {
+        border-radius: 0;
+        border: 1px solid $yellow;
+        background-color: transparent;
+        color: #fff;
+
+        &::placeholder {
+            color: $yellow;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+    }
+
+    textarea#comment {
+        margin-bottom: 1rem;  
+    }
+    
+    .acf-comment-fields {
+        display: none;
+    }
+
+    input#submit {
+        font-weight: 300;
+        color: $pink;
+        background-color: transparent;
+        border: 1px solid $pink;
+        border-radius: 0;
+        padding: 12px 24px;
+
+        &:hover {
+            color: #fff;
+            background-color: $pink;
+        }
+    } 
+}

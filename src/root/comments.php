@@ -3,13 +3,18 @@
 /**
  * COMMENTS
  */
-// $comments_query = new WP_Comment_Query;
-// $comments = $comments_query->query([
-//     'post_ID'  => get_the_ID(),
-//     'status' => 'approve' 
-// ]);
 
-if (have_comments()) : ?>
+if (!comments_open()) return; ?>
+
+<div class="elementor-widget-heading" style="margin-bottom: 32px;">
+    <div class="elementor-widget-container">
+        <h2 class="elementor-heading-title elementor-size-default" style="color: #fff;">
+            Peer Reviews
+        </h2>
+    </div>
+</div>
+
+<?php if (have_comments()) : ?>
     <ul class="post-comments">
         <?php
             wp_list_comments(array(
@@ -18,11 +23,11 @@ if (have_comments()) : ?>
             ));
         ?>
     </ul>
-<?php else:
-    echo __('Noch keine Peer Reviews vorhanden.');
-endif;
+<?php else: ?>
+    <?php _e('Noch keine Peer Reviews vorhanden.'); ?>
+<?php endif; ?>
 
-
+<?php
 /**
  * FORM
  */
