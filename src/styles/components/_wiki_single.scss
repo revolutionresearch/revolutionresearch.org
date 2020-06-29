@@ -60,9 +60,13 @@
     .comment-metadata {
         font-size: 0.85rem;
     }
-    
-    .comment-author .says {
-        display: none;
+
+    .comment-author {
+        margin-right: 0.5rem;
+
+        .says {
+            display: none;
+        }
     }
     
     .comment-meta {
@@ -79,9 +83,13 @@
     
     .comment-metadata {
         flex: 1;
-        margin-left: 0.5rem;
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+
+        time {
+            white-space: nowrap;
+        }
     }
     
     .edit-link {
@@ -109,6 +117,19 @@
     
     .reply {
         padding-bottom: 1rem;
+    }
+
+    @media(max-width: $big-phone-width) {
+        .comment-meta {
+            position: relative; 
+            padding-top: 1.75rem;
+        }
+
+        .comment-edit-link {
+            position: absolute;
+            right: 1rem;
+            top: 0;
+        }
     }
 }   
 
