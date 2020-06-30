@@ -118,7 +118,7 @@
 
 // disable outline for donate button
 .paypal-donations input {
-    outline: 0;
+    outline: 0 !important;
 }
 
 a.logout-button {

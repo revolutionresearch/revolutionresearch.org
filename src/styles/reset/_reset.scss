@@ -134,7 +134,7 @@ a {
 	}
 
 	&:not([href]):not([tabindex]):focus {
-		outline: 0;
+		outline: 0 !important;
 	}
 }
 
