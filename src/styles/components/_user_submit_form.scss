@@ -53,11 +53,11 @@
         border: 1px solid $text-color;
         border-radius: 0;
         padding: 0.5em 1em;
+        outline: 0 !important;
     }
 
     [name=content],
-    [name=media-type],
-    .image-wrapper {
+    [name=media-type] {
         margin-bottom: 1em;
     }
 
@@ -68,6 +68,8 @@
     }
 
     .approval-wrapper {
+        margin-top: 1em;
+
         input[type=checkbox] {
             display: none;
 
