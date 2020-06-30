@@ -48,7 +48,7 @@
         outline: none;
     }
 
-    input:not([type=file]), select, textarea {
+    input[type=text], input[type=url], select, textarea {
         width: 100%;
         border: 1px solid $text-color;
         border-radius: 0;
@@ -56,8 +56,62 @@
     }
 
     [name=content],
-    [name=media-type] {
+    [name=media-type],
+    .image-wrapper {
         margin-bottom: 1em;
+    }
+
+    label {
+        font-size: 0.85em;
+        opacity: 0.5;
+        margin-bottom: 0.2941em; // 0.25 / 0.85
+    }
+
+    .approval-wrapper {
+        input[type=checkbox] {
+            display: none;
+
+            &:checked + label {
+                &:before {
+                    background-color: $text-color;
+                }
+
+                &:after {
+                    display: block;
+                }
+            }
+        }
+
+        label {
+            opacity: 1;
+            line-height: 1.5;
+            user-select: none;
+            position: relative;
+
+            &:before {
+                content: '';
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+                border: 1px solid $text-color;
+                border-radius: 0;
+                margin-right: 0.5em;
+            }
+
+            &:after {
+                content: '\f00c';
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                position: absolute;
+                top: 0;
+                left: 0.2em;
+                font-size: 0.7em;
+                display: none;
+                color: #fff;
+            }
+        }
+
+        
     }
 
     button,
@@ -67,7 +121,7 @@
         border: 1px solid $text-color;
         border-radius: 0;
         padding: 0.5em 1em;
-        outline: 0;
+        outline: 0 !important;
 
         &:hover {
             color: #fff;
@@ -77,12 +131,6 @@
 
     button[type=submit] {
         margin-top: 2em;
-    }
-
-    label {
-        font-size: 0.85em;
-        opacity: 0.5;
-        margin-bottom: 0.2941em; // 0.25 / 0.85
     }
     
     .error-message {
@@ -97,7 +145,7 @@
 
         h4 {
             margin: 0.2em 0 0.3em;
-            font-size: 2em;
+            font-size: 1.75em;
         }
     }
 }

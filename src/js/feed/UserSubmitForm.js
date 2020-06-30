@@ -67,13 +67,15 @@ class QuestionPost {
                     <label id='youtube-label-${index}'>Bitte füge einen YouTube-Link ein</label>
                     <input type='url' name='youtube' id='youtube-${index}' placeholder='https://www.youtube.com/watch?v=HZhFC11uB3Q' />
                 </div>
-
-                <!-- <label htmlFor='check'>Ich versichere, dass ich alle Rechte an dem Text und/oder Bild habe und diese auf unserer Webseite und unseren Social Media Kanälen veröffentlicht werden dürfen.</label>
-                <input type='checkbox' name='check' id='check' /> -->
+                
+                <div class='approval-wrapper' id='approval-wrapper-${index}'>
+                    <input type='checkbox' name='approval' id='approval-${index}' required />
+                    <label for='approval-${index}'>Ich versichere, dass ich alle Rechte an dem Text und/oder Bild habe und diese auf unserer Webseite und unseren Social Media Kanälen veröffentlicht werden dürfen. Es gelten unsere <a href="/datenschutz" target="_blank">Datenschutzbestimmungen</a>.</label>
+                </div>
 
                 <div class="error-message">
                     <h4>Fehler</h4>
-                    Bitte schreibe einen Text (max. 6.000 Zeichen), lade ein Bild hoch (max. 4 MB, png/jpg/jpeg/gif) oder verlinke ein YouTube-Video!
+                    Bitte schreibe einen Text (max. 6.000 Zeichen), lade ein Bild hoch (max. 4 MB, png/jpg/jpeg/gif) oder verlinke ein YouTube-Video und stimme der Verwendung der eingebenen Daten zu!
                 </div>
 
                 <button type='submit'>Senden!</button>
@@ -85,7 +87,7 @@ class QuestionPost {
         return `
             <div class="feedItem__form-success-message">
                 <h3>Vielen Dank für Deinen Beitrag!</h3>
-                <p>Deine Eingabe wird von unseren Mitarbeiten überprüft und zeitnah veröffentlicht.</p>
+                <p>Deine Eingabe wird von uns überprüft und zeitnah veröffentlicht.</p>
             </div>
         `;
     }
@@ -137,11 +139,13 @@ class QuestionPost {
         const mediaType = formData.get('media-type');
         const image = formData.get('image');
         const youtube = formData.get('youtube');
-        
+        const approval = formData.get('approval');
+
         return (
             (content.length > 0 && content.length <= 6000) ||
             (mediaType === 'image' && image.size > 0 && image.size < 4194304) || // ~ 4 MB
-            (mediaType === 'youtube' && youtube.length > 0)
+            (mediaType === 'youtube' && youtube.length > 0) ||
+            (approval !== 'on')
         );
     }
     
