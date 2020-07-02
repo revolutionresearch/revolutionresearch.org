@@ -41,6 +41,11 @@ require_once(__DIR__ . '/includes/ajax_handler/user_post_submit_ajax_handler.php
 require_once(__DIR__ . '/includes/ajax_handler/wolfram_alpha_ajax_handler.php');
 
 
+// Disable JSON API
+add_filter('json_enabled', '__return_false');
+add_filter('json_jsonp_enabled', '__return_false');
+
+
 /*** Load JS files ***/
 add_action( 'wp_enqueue_scripts', 'project_zukunft_scripts');
 function project_zukunft_scripts() {
