@@ -2,7 +2,7 @@ const { isHeadingElement, getUrlParameter } = require('./utils');
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const MAX_PAGE_LENGTH = 1800; // number of characters including whitespace
+    const MAX_PAGE_LENGTH = 3439; // number of characters including whitespace
 
     const wikiContent = document.getElementById('wiki-content');
     const wikiPagination = document.getElementById('wiki-pagination');
