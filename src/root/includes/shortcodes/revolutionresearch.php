@@ -16,7 +16,7 @@ function revolutionresearch_shortcode( $attributes = [], $content = null, $tag =
  
     // override default attributes with user attributes
     $attributes = shortcode_atts([
-        'link' => '/stiftungszweck/',
+        'link' => '/zweck/',
         'newtab' => '0'
     ], $attributes, $tag);
 
