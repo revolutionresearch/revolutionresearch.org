@@ -37,8 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
         pageElements.forEach(element => {
 
             if (element.tagName === 'P') {
+                // TODO: respect nested tags inside a paragraph
+                // (e.g. pictures, latex or something like
+                // "<b>some text <i>more text <u>and more</u> so </i> much text</b>")
+                
                 // split paragraphs by wors
-                const words = element.textContent.split(' ');
+                const words = element.innerHTML.split(' ');
+                // console.log(element.childNodes);
                 let currentPageWords = [];
                 let __currentPageLength = currentPageLength;
 
@@ -48,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         __currentPageLength += (word.length + 1); // word with 1 space
                     } else {
                         const newElement = element.cloneNode();
-                        newElement.textContent = currentPageWords.join(' ');
+                        newElement.innerHTML = currentPageWords.join(' ');
                         addToCurrentPage(newElement);
                         createNewPage();
 
@@ -59,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // last words on current page
                 const newElement = element.cloneNode();
-                newElement.textContent = currentPageWords.join(' ');
+                newElement.innerHTML = currentPageWords.join(' ');
                 addToCurrentPage(newElement);
                 
             } else {
@@ -80,95 +85,24 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 pages[pages.length - 1].push(element);
                 element.dataset.page = pages.length -1;
-                currentPageLength += element.textContent.length;
+                currentPageLength += element.innerHTML.length;
             }
         }
      
         function createNewPage(element = null) {
             if (element) {
                 pages.push([element]);
-                currentPageLength = element.textContent.length;
+                currentPageLength = element.innerHTML.length;
                 element.dataset.page = pages.length -1;
             } else {
                 pages.push([]);
                 currentPageLength = 0;
             }
         }
-    
-
-        return;
-
-
-        pageElements.forEach((element, index) => {
-
-            // add element to current or next page
-            if (currentPageLength >= MAX_PAGE_LENGTH) {
-                // max page length reached -> new page
-                createNewPage(element);
-            } else {
-                if ((currentPageLength + element.textContent.length) < MAX_PAGE_LENGTH) {
-                    //  max page length not reached -> current page
-                    addToCurrentPage(element);
-                    
-                    // save page as data-page attribute
-                    element.dataset.page = pages.length -1;
-                } else {
-                    if (element.tagName === 'P') {
-                        // max page length would have been reached with the new element.
-                        // -> add part to current and part to next page
-                        const words = element.textContent.split(' ');
-    
-                        let pageWords = [];
-                        let __currentPageLength = currentPageLength;
-                        
-                        words.forEach(word => {
-                            if (__currentPageLength < MAX_PAGE_LENGTH) {
-                                pageWords.push(word);
-                                __currentPageLength += (word.length + 1); // add 1 space for each word
-                            } else {
-                                element.textContent = pageWords.join(' ');
-                                addToCurrentPage(element);
-
-                                pageWords = [word]
-                                __currentPageLength = word.length + 1; // reset to 0 and add 1 space for each word
-                            }
-                            console.log('length', __currentPageLength);
-                        });
-
-                        
-                        
-                        const newPageElement = document.createElement('p');
-                        newPageElement.className = element.className;
-                        newPageElement.textContent = newPageWords.join(' ');
-                        createNewPage(newPageElement);
-
-                        // save page as data-page attribute
-                        element.dataset.page = pages.length -2;
-                        newPageElement.dataset.page = pages.length -2;
-                    } else {
-                        addToCurrentPage(element);
-                        // save page as data-page attribute
-                        element.dataset.page = pages.length -1;
-                    }
-                }
-            }
-        });
     }
 
 
     function getPageIndex() {
-        // let pageIndex = 0;
-
-        // // search for page number in body class
-        // for (let i = 0; i < pages.length; i++) {
-        //     if (document.body.classList.contains(`paged-${i + 1}`)) {
-        //         pageIndex = i;
-        //         break;
-        //     }       
-        // }
-
-        // return pageIndex;
-
         // get page number form url
         return parseInt(getUrlParameter('pageindex', 1)) - 1;
 
