@@ -6,6 +6,8 @@ const QuestionPost = require('./QuestionPost');
 const UserSubmitForm = require('./UserSubmitForm');
 const DuBeitrag = require('./DuBeitrag');
 
+const { getUrlParameter } = require('../utils');
+
 /*
     Tested masonry plugins:
     - masonry.js: does not always work and has often overlapping issues
@@ -37,7 +39,7 @@ class Feed {
         }
 
         // dynamic propteries
-        this.page = 0;
+        this.page = parseInt(getUrlParameter('_page', 1)) - 1; // start with 0
         this.hasMoreItems = true;
         this.isFetching = false;
         this.items = [];
@@ -58,13 +60,6 @@ class Feed {
         // event listeners
         if (this.reloadButton) {
            this.reloadButton.addEventListener('click', this.reloadPage);
-        }
-
-        // get page from url
-        const urlParts = window.location.pathname.split('/');
-        const page = urlParts[urlParts.length - 2];
-        if (!isNaN(page) && page !== '') {
-            this.page = parseInt(page, 10) - 1;
         }
 
         // set current pageination item
