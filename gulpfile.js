@@ -68,6 +68,7 @@ function scripts() {
             // this.emit('end');
         })
         // .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(dirs.build + '/js'));
 };
     
