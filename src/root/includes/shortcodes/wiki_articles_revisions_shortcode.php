@@ -52,9 +52,9 @@ function wiki_articles_revisions_func( $attributes, $content ) {
         $time = date('H:i', $timestamp);
         
         // only show one entry for each user at the same day
-        if (isset($dates_by_user[$username]) && in_array($date, $dates_by_user[$username])) {
-            continue;
-        }
+        // if (isset($dates_by_user[$username]) && in_array($date, $dates_by_user[$username])) {
+        //     continue;
+        // }
         
         // create html string
         $name = $author->display_name;
